@@ -1,59 +1,255 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Informasi Pengajuan dan Persetujuan Cuti Karyawan Berbasis PWA
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> **Status proyek:** Dalam tahap pengembangan awal.
 
-## About Laravel
+Proyek capstone ini dikerjakan oleh tim beranggotakan lima orang. Aplikasi dirancang sebagai sistem mandiri untuk mengelola pengajuan dan persetujuan cuti karyawan melalui web yang dapat dipasang sebagai Progressive Web App (PWA).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Kondisi Proyek Saat Ini
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Repository saat ini masih berupa kerangka awal Laravel 13. Fitur pengajuan cuti, alur persetujuan, pembagian hak akses, struktur database bisnis, dan kemampuan PWA **belum tersedia** dan masih berada dalam tahap perencanaan serta pengembangan.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Yang sudah tersedia:
 
-## Learning Laravel
+- Kerangka aplikasi Laravel 13.
+- Konfigurasi dasar Blade, JavaScript, Vite, dan Tailwind CSS dari kerangka proyek.
+- Migration bawaan Laravel untuk pengguna, cache, dan jobs.
+- Struktur pengujian awal bawaan Laravel.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Deskripsi Singkat
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Sistem ini direncanakan untuk membantu karyawan mengajukan cuti, atasan memberikan persetujuan awal, dan Admin HR memberikan keputusan akhir. Sistem juga akan mencatat tanggal cuti, riwayat keputusan, hari libur, dan saldo cuti secara terpusat.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Aplikasi ini khusus menangani proses cuti dan tidak terhubung dengan PIKMA, sistem absensi, API eksternal, maupun backend lain.
 
-## Agentic Development
+## Latar Belakang Masalah
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Proses pengajuan cuti yang dilakukan melalui formulir kertas atau percakapan pribadi dapat menyebabkan data tercecer, status pengajuan sulit dipantau, dan riwayat persetujuan tidak terdokumentasi dengan baik. Pemeriksaan saldo serta tanggal cuti secara manual juga berisiko menimbulkan kesalahan.
+
+Karena itu, diperlukan aplikasi yang menyatukan proses pengajuan, pemeriksaan, persetujuan, dan pencatatan saldo cuti. Pendekatan PWA dipilih agar aplikasi nyaman digunakan melalui komputer maupun perangkat seluler dan dapat dipasang dari browser yang mendukung.
+
+## Tujuan Pengembangan
+
+- Membuat proses pengajuan dan persetujuan cuti lebih terstruktur.
+- Memudahkan karyawan memantau status pengajuan dan saldo cuti.
+- Membantu atasan dan Admin HR mengambil keputusan berdasarkan data yang tercatat.
+- Menyimpan riwayat pengajuan serta persetujuan secara terpusat.
+- Menghasilkan aplikasi web responsif yang dapat dikembangkan menjadi PWA.
+- Menjadi sarana penerapan Laravel, basis data, kolaborasi GitHub, dan pengujian perangkat lunak dalam proyek capstone.
+
+## Manfaat Aplikasi
+
+- Mengurangi penggunaan formulir manual.
+- Mempercepat penyampaian dan pemeriksaan pengajuan cuti.
+- Meningkatkan keterlacakan status dan riwayat keputusan.
+- Membantu menjaga ketepatan pencatatan saldo cuti.
+- Memberikan pengalaman penggunaan yang konsisten pada desktop dan perangkat seluler.
+
+## Ruang Lingkup
+
+Ruang lingkup yang direncanakan meliputi:
+
+- Autentikasi pengguna dan pembatasan akses berdasarkan peran.
+- Pengelolaan data pegawai, jenis cuti, saldo cuti, dan hari libur.
+- Pengajuan cuti untuk satu atau beberapa tanggal.
+- Validasi tanggal pengajuan dan ketersediaan saldo.
+- Persetujuan berjenjang oleh atasan dan Admin HR.
+- Pencatatan alasan penolakan serta riwayat keputusan.
+- Pembaruan saldo setelah pengajuan memperoleh persetujuan akhir.
+- Penyajian status dan riwayat pengajuan kepada pengguna terkait.
+- Penyediaan kemampuan dasar PWA setelah komponen PWA dikembangkan.
+
+## Batasan Sistem
+
+- Aplikasi hanya menangani pengajuan dan persetujuan cuti karyawan.
+- Aplikasi tidak terhubung dengan PIKMA, sistem absensi, API eksternal, penggajian, atau backend lain.
+- Data pegawai dan aturan cuti dikelola di dalam aplikasi ini.
+- Keputusan akhir pengajuan berada pada Admin HR setelah keputusan atasan.
+- Perhitungan saldo mengikuti jenis cuti dan kebijakan yang nantinya ditetapkan oleh tim.
+- Notifikasi melalui email, WhatsApp, atau layanan pihak ketiga belum termasuk ruang lingkup awal.
+- Kemampuan offline terbatas dan tidak berarti seluruh proses bisnis dapat dijalankan tanpa internet.
+
+## Aktor dan Hak Akses
+
+| Aktor | Hak akses yang direncanakan |
+| --- | --- |
+| Karyawan | Melihat profil dan saldo cuti sendiri, membuat pengajuan, melihat status, serta melihat riwayat pengajuan sendiri. |
+| Atasan | Melihat pengajuan dari karyawan yang menjadi tanggung jawabnya, lalu menyetujui atau menolak pada tahap awal. |
+| Admin HR | Mengelola data pendukung, meninjau pengajuan yang telah diproses atasan, memberikan keputusan akhir, dan memantau data cuti. |
+
+Setiap aktor hanya boleh mengakses data dan tindakan sesuai perannya. Rincian kebijakan akses akan ditetapkan dan diuji pada tahap pengembangan.
+
+## Alur Utama Pengajuan Cuti
+
+1. Karyawan mengisi dan mengirim pengajuan cuti.
+2. Sistem memvalidasi tanggal yang dipilih, hari libur yang tercatat, dan ketersediaan saldo cuti.
+3. Atasan memeriksa pengajuan lalu menyetujui atau menolaknya.
+4. Jika disetujui atasan, Admin HR memeriksa dan memberikan keputusan akhir.
+5. Setelah persetujuan akhir diberikan, sistem memperbarui saldo cuti sesuai jumlah hari yang disetujui.
+6. Jika pengajuan ditolak pada salah satu tahap, saldo cuti tidak dikurangi dan alasan penolakan dicatat.
+
+Alur tersebut merupakan rancangan awal dan belum diimplementasikan pada kondisi repository saat ini.
+
+## Rencana Fitur Utama
+
+### Karyawan
+
+- Masuk dan keluar dari aplikasi.
+- Melihat profil serta saldo cuti.
+- Membuat pengajuan cuti beserta alasan dan tanggal yang dipilih.
+- Melihat status dan riwayat pengajuan.
+- Membatalkan pengajuan selama belum diproses, apabila aturan bisnis mengizinkan.
+
+### Atasan
+
+- Melihat daftar pengajuan dari karyawan yang berada di bawah tanggung jawabnya.
+- Melihat detail pengajuan dan saldo yang berkaitan.
+- Menyetujui atau menolak pengajuan pada tahap awal.
+- Memberikan catatan atau alasan keputusan.
+- Melihat riwayat keputusan yang pernah diberikan.
+
+### Admin HR
+
+- Mengelola data pengguna dan pegawai.
+- Mengelola jenis cuti, saldo cuti, dan hari libur.
+- Memeriksa pengajuan yang telah mendapat keputusan atasan.
+- Memberikan persetujuan atau penolakan akhir.
+- Melihat serta menyaring riwayat pengajuan dan persetujuan.
+- Memantau perubahan saldo cuti.
+
+## Teknologi yang Digunakan
+
+| Teknologi | Kegunaan |
+| --- | --- |
+| Laravel 13 | Framework utama aplikasi web. |
+| PHP 8.3 | Bahasa pemrograman backend. |
+| MySQL | Basis data aplikasi yang direncanakan. |
+| Blade | Pembuatan tampilan pada sisi server. |
+| JavaScript | Interaksi pada antarmuka dan dukungan PWA. |
+| Tailwind CSS | Penyusunan gaya antarmuka; sudah tersedia pada kerangka proyek. |
+| Vite | Pengembangan dan bundling aset frontend. |
+| Node.js dan npm | Pengelolaan dependensi serta proses build frontend. |
+| Progressive Web App | Pendekatan agar aplikasi dapat dipasang dan memiliki kemampuan web modern. |
+| Git dan GitHub | Kolaborasi kode, riwayat perubahan, dan dokumentasi. |
+| PHPUnit | Pengujian otomatis aplikasi Laravel. |
+
+## Konsep PWA dan Penggunaan Offline
+
+Progressive Web App adalah aplikasi web yang dapat memberikan pengalaman menyerupai aplikasi perangkat, misalnya dapat dipasang dari browser, memiliki ikon aplikasi, dan memanfaatkan penyimpanan sementara melalui service worker.
+
+Komponen PWA **belum dibuat**. Pada tahap pengembangan, PWA direncanakan mencakup web app manifest, service worker, ikon aplikasi, dan strategi cache untuk aset dasar.
+
+Batasan offline yang direncanakan:
+
+- Mode offline hanya ditujukan untuk membuka aset dasar atau halaman tertentu yang sebelumnya telah disimpan dalam cache.
+- Data yang ditampilkan saat offline dapat merupakan data terakhir yang tersimpan dan belum tentu paling baru.
+- Pengiriman pengajuan, pemberian persetujuan, pembaruan saldo, autentikasi, dan sinkronisasi data tetap membutuhkan koneksi internet, kecuali kelak dibuat serta diuji mekanisme sinkronisasi khusus.
+- Aplikasi harus menampilkan informasi yang jelas ketika koneksi tidak tersedia.
+
+## Rencana Struktur Database
+
+Nama tabel bisnis direncanakan menggunakan bahasa Indonesia agar mudah dipahami oleh tim.
+
+| Tabel | Rencana fungsi |
+| --- | --- |
+| `pengguna` | Menyimpan akun, informasi autentikasi, dan peran pengguna. |
+| `pegawai` | Menyimpan identitas pegawai serta hubungan pegawai dengan atasan dan akun pengguna. |
+| `jenis_cuti` | Menyimpan kategori cuti dan ketentuan dasarnya. |
+| `saldo_cuti` | Menyimpan saldo cuti setiap pegawai berdasarkan jenis dan periode. |
+| `pengajuan_cuti` | Menyimpan data utama pengajuan, alasan, status, dan ringkasan durasi. |
+| `tanggal_pengajuan_cuti` | Menyimpan rincian setiap tanggal yang diajukan dalam satu pengajuan. |
+| `persetujuan_cuti` | Menyimpan tahap, keputusan, pemberi keputusan, catatan, dan waktu keputusan. |
+| `hari_libur` | Menyimpan tanggal libur yang digunakan dalam validasi hari cuti. |
+
+Struktur kolom, relasi, indeks, serta aturan penghapusan data akan dirancang lebih lanjut sebelum migration bisnis dibuat. Tabel teknis Laravel, seperti `migrations`, `cache`, `cache_locks`, `jobs`, `job_batches`, dan tabel teknis lain, boleh tetap menggunakan nama bawaan framework.
+
+## Rencana Pembagian Tanggung Jawab Tim
+
+Pembagian berikut merupakan titik awal dan dapat disesuaikan berdasarkan kesepakatan tim.
+
+| Anggota | Tanggung jawab utama |
+| --- | --- |
+| Anggota 1 | Analisis sistem dan koordinasi: kebutuhan, ruang lingkup, jadwal, dan koordinasi integrasi. |
+| Anggota 2 | Backend dan database: rancangan data, migration, model, validasi, dan logika pengajuan. |
+| Anggota 3 | Alur persetujuan dan hak akses: peran, otorisasi, tahapan keputusan, dan riwayat persetujuan. |
+| Anggota 4 | Frontend dan UI/UX: rancangan antarmuka, Blade, responsivitas, dan pengalaman pengguna. |
+| Anggota 5 | PWA, pengujian, dan dokumentasi: manifest, service worker, skenario uji, serta dokumentasi proyek. |
+
+Walaupun memiliki fokus masing-masing, seluruh anggota tetap melakukan ulasan kode dan membantu pengujian fitur yang terintegrasi.
+
+## Tahapan Pengembangan
+
+1. **Analisis kebutuhan** — menyepakati aktor, aturan cuti, kebutuhan data, dan kriteria keberhasilan.
+2. **Perancangan sistem** — menyusun alur proses, rancangan UI/UX, struktur database, dan hak akses.
+3. **Persiapan proyek** — menyamakan lingkungan kerja, strategi branch, dan aturan kontribusi.
+4. **Pengembangan dasar** — membangun autentikasi, data pengguna, pegawai, jenis cuti, saldo, dan hari libur.
+5. **Pengembangan proses bisnis** — membangun pengajuan, validasi, persetujuan berjenjang, dan pembaruan saldo.
+6. **Pengembangan frontend dan PWA** — menyelesaikan tampilan responsif serta komponen PWA.
+7. **Pengujian dan perbaikan** — menguji fungsi, hak akses, alur utama, tampilan, dan perilaku PWA.
+8. **Dokumentasi dan presentasi** — merapikan panduan, bukti pengujian, laporan, dan bahan demonstrasi.
+
+## Instalasi Lokal
+
+### Prasyarat
+
+- PHP 8.3 atau versi kompatibel yang dipersyaratkan proyek.
+- Composer.
+- MySQL.
+- Node.js dan npm.
+- Git.
+
+### Langkah Singkat
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <alamat-repository>
+cd cuti-pwa
+composer install
+npm install
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Salin file konfigurasi lingkungan tanpa membagikan isinya:
 
-## Contributing
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Pada Windows PowerShell, penyalinan dapat dilakukan dengan:
 
-## Code of Conduct
+```powershell
+Copy-Item .env.example .env
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Buat database MySQL lokal, lalu atur koneksi database pada `.env` milik masing-masing anggota. Jangan memasukkan `.env`, kata sandi, token, atau data rahasia ke Git.
 
-## Security Vulnerabilities
+Setelah koneksi siap, jalankan:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan migrate
+php artisan serve
+```
 
-## License
+Pada terminal lain, jalankan frontend development server:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# cuti-pwa-kelompok-b
+```bash
+npm run dev
+```
+
+Perintah migration saat ini hanya membuat tabel bawaan Laravel. Tabel bisnis cuti akan tersedia setelah tahap perancangannya selesai dan migration terkait dikembangkan.
+
+## Aturan Kontribusi Dasar
+
+1. Perbarui branch utama lokal sebelum mulai bekerja.
+2. Buat branch baru untuk setiap tugas, misalnya `feature/pengajuan-cuti`, `fix/validasi-tanggal`, atau `docs/perbarui-readme`.
+3. Kerjakan hanya perubahan yang berkaitan dengan tugas pada branch tersebut.
+4. Gunakan pesan commit yang singkat dan menjelaskan perubahan.
+5. Dorong branch ke GitHub dan buat pull request menuju branch utama.
+6. Jelaskan tujuan, perubahan, serta cara menguji pada deskripsi pull request.
+7. Minta sedikitnya satu anggota tim meninjau pull request sebelum digabungkan.
+8. Selesaikan konflik dan pastikan pengujian yang berkaitan berhasil sebelum merge.
+9. Jangan melakukan commit langsung ke branch utama, kecuali tim telah menyepakati pengecualian.
+
+## Status Pengembangan
+
+🚧 **Proyek masih dalam tahap pengembangan awal.**
+
+Isi README ini menjelaskan tujuan dan rencana aplikasi. Daftar fitur bukan pernyataan bahwa seluruh fitur telah tersedia. Status akan diperbarui secara bertahap seiring implementasi, pengujian, dan kesepakatan tim.
