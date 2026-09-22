@@ -236,6 +236,18 @@ npm run dev
 
 Perintah migration saat ini hanya membuat tabel bawaan Laravel. Tabel bisnis cuti akan tersedia setelah tahap perancangannya selesai dan migration terkait dikembangkan.
 
+## Dokumentasi
+
+Dokumen berikut berisi rancangan awal dan belum menyatakan bahwa fitur telah diimplementasikan:
+
+1. [Kebutuhan Sistem](docs/01-kebutuhan-sistem.md)
+2. [Alur Bisnis](docs/02-alur-bisnis.md)
+3. [Hak Akses](docs/03-hak-akses.md)
+4. [Rancangan Database](docs/04-rancangan-database.md)
+5. [Rancangan Progressive Web App](docs/05-rancangan-pwa.md)
+6. [Rencana Pengujian](docs/06-rencana-pengujian.md)
+7. [Pembagian Tugas Tim](docs/07-pembagian-tugas.md)
+
 ## Aturan Kontribusi Dasar
 
 1. Perbarui branch utama lokal sebelum mulai bekerja.
