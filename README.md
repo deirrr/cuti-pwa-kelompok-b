@@ -1,4 +1,4 @@
-# Sistem Informasi Pengajuan dan Persetujuan Cuti Karyawan Berbasis PWA
+# Rancang Bangun Sistem Informasi Pengajuan dan Persetujuan Cuti Karyawan Berbasis Progressive Web App di PT Medika Antapani
 
 > **Status proyek:** Dalam tahap pengembangan awal.
 
