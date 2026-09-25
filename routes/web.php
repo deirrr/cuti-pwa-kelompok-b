@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SesiController;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/login');
+Route::get('/', fn (): RedirectResponse => redirect()->route('login'));
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [SesiController::class, 'create'])->name('login');
