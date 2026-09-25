@@ -35,6 +35,12 @@ Data tersebut dibuat khusus di lingkungan pengujian dan tidak menggunakan data p
 | AUT-002 | Kredensial masuk salah | Akun aktif tersedia | Kirim kata sandi yang salah | Akses ditolak, sesi tidak dibuat, dan pesan aman ditampilkan | Feature - autentikasi |
 | AUT-003 | Pengguna belum masuk membuka halaman internal | Tidak ada sesi | Buka dashboard | Pengguna diarahkan ke halaman masuk | Feature - autentikasi |
 | AUT-004 | Akun tidak aktif mencoba masuk | Akun tidak aktif tersedia | Kirim kredensial yang benar | Sesi aplikasi tidak diberikan dan pesan yang sesuai ditampilkan | Feature - autentikasi |
+| DBH-001 | Karyawan melihat ringkasan pada dashboard | Karyawan memiliki saldo dan beberapa pengajuan | Buka dashboard Karyawan | Saldo dan ringkasan status hanya menampilkan data miliknya | Feature - dashboard |
+| DFT-001 | Karyawan menyimpan pengajuan sebagai draf | Karyawan aktif dan jenis cuti tersedia | Isi data awal lalu simpan tanpa mengirim | Pengajuan tersimpan sebagai `draf` dan belum dapat diproses Atasan | Feature - pengajuan |
+| DFT-002 | Karyawan mengubah draf miliknya | Draf dan pengajuan terkirim tersedia | Ubah keduanya sebagai pemilik | Draf dapat diperbarui, sedangkan pengajuan terkirim tidak dapat diubah | Feature - status/otorisasi |
+| RWT-001 | Karyawan melihat riwayat pribadinya | Dua Karyawan dengan beberapa pengajuan tersedia | Buka riwayat sebagai salah satu Karyawan | Hanya detail, status, dan riwayat milik pengguna yang ditampilkan | Feature - kepemilikan |
+| RWT-002 | Atasan melihat riwayat keputusan yang diberikannya | Keputusan dari dua Atasan tersedia | Buka riwayat keputusan salah satu Atasan | Hanya keputusan dalam cakupannya yang ditampilkan | Feature - kepemilikan |
+| RWT-003 | Admin HR melihat jejak keputusan | Pengajuan dengan keputusan lengkap tersedia | Buka detail riwayat sebagai Admin HR | Pemberi keputusan, tahap, keputusan, catatan, dan waktu ditampilkan dengan benar | Feature - audit |
 | AKS-001 | Karyawan membuka pengajuan milik Karyawan lain | Dua Karyawan dan satu pengajuan tersedia | Ubah ID pada URL detail | Data tidak ditampilkan; respons tidak membocorkan keberadaan data | Feature - otorisasi |
 | AKS-002 | Atasan melihat daftar pengajuan bawahan | Atasan memiliki satu bawahan dan satu nonbawahan | Buka daftar pengajuan | Hanya pengajuan bawahan dalam cakupan yang ditampilkan | Feature - otorisasi |
 | AKS-003 | Atasan mencoba memproses pengajuan sendiri | Atasan memiliki pengajuan `menunggu_atasan` | Kirim keputusan setuju | Akses ditolak, status dan saldo tidak berubah, keputusan tidak tercatat | Feature - otorisasi |
@@ -58,6 +64,7 @@ Data tersebut dibuat khusus di lingkungan pengujian dan tidak menggunakan data p
 | SLD-002 | Saldo berubah menjadi tidak cukup sebelum keputusan akhir | Pengajuan `menunggu_hr`; saldo dikurangi oleh proses sah lain | Setujui pengajuan | Transaksi ditolak, status tetap `menunggu_hr`, dan tidak ada pengurangan tambahan | Feature - transaksi |
 | SLD-003 | Permintaan persetujuan akhir dikirim dua kali | Pengajuan dapat disetujui | Kirim permintaan yang sama dua kali | Hanya satu keputusan tersimpan dan saldo hanya berkurang satu kali | Feature - idempotensi |
 | SLD-004 | Dua persetujuan bersamaan menggunakan saldo yang sama | Dua pengajuan `menunggu_hr` dengan saldo hanya cukup untuk satu | Jalankan kedua proses secara terkendali | Maksimal satu proses berhasil dan saldo tidak negatif | Integration - konkurensi |
+| SLD-005 | Admin HR menyesuaikan saldo dengan alasan | Saldo pegawai dan Admin HR tersedia | Simpan penyesuaian saldo yang valid | Saldo berubah sesuai input sah dan alasan perubahan dapat ditelusuri | Feature - pengelolaan saldo |
 | BTL-001 | Karyawan membatalkan draf miliknya | Draf tersedia | Kirim pembatalan | Status menjadi `dibatalkan` dan saldo tidak berubah | Feature - pembatalan |
 | BTL-002 | Karyawan membatalkan sebelum keputusan Atasan | Pengajuan `menunggu_atasan` tersedia | Kirim pembatalan | Status menjadi `dibatalkan` dan tidak dapat diproses Atasan | Feature - pembatalan |
 | BTL-003 | Karyawan mencoba membatalkan setelah masuk tahap HR | Pengajuan `menunggu_hr` tersedia | Kirim pembatalan sebagai Karyawan | Tindakan ditolak dan status tidak berubah | Feature - otorisasi |
@@ -66,9 +73,14 @@ Data tersebut dibuat khusus di lingkungan pengujian dan tidak menggunakan data p
 | LIB-001 | Admin HR membuat hari libur baru | Admin HR terautentikasi | Simpan tanggal dan nama valid | Hari libur tersimpan dan digunakan pada validasi berikutnya | Feature - pengelolaan |
 | LIB-002 | Admin HR membuat tanggal hari libur duplikat | Tanggal hari libur sudah ada | Simpan tanggal yang sama | Validasi gagal dan hanya satu data tanggal tersimpan | Feature - validasi |
 | LIB-003 | Pengguna non-HR mengubah hari libur | Hari libur dan akun non-HR tersedia | Kirim perubahan | Akses ditolak dan data tidak berubah | Feature - otorisasi |
+| DAT-001 | Admin HR mengelola pengguna dan pegawai | Admin HR terautentikasi | Buat atau perbarui data yang valid | Data tersimpan, akun terhubung dengan satu pegawai, dan field terlarang tidak berubah | Feature - pengelolaan data |
+| DAT-002 | Admin HR menetapkan hubungan Atasan | Data pegawai tersedia | Tetapkan Atasan valid lalu coba Atasan diri sendiri atau rantai melingkar | Hubungan valid tersimpan; hubungan diri sendiri atau melingkar ditolak | Feature - validasi data |
+| JCT-001 | Admin HR mengelola jenis cuti | Admin HR dan jenis cuti tersedia | Buat, ubah, lalu nonaktifkan jenis cuti | Data tersimpan dan jenis tidak aktif tidak dapat dipilih pada pengajuan baru | Feature - pengelolaan data |
 | SEC-001 | Alasan mengandung skrip berbahaya | Pengajuan dengan teks `<script>` dibuat | Buka halaman detail | Teks ditampilkan dalam bentuk aman dan skrip tidak dijalankan | Feature - keamanan tampilan |
 | SEC-002 | Payload memuat `status`, `pegawai_id`, atau `saldo` yang tidak boleh dikendalikan | Karyawan aktif tersedia | Kirim field tambahan pada formulir | Field tidak dipercaya; kepemilikan, status, dan saldo tetap ditentukan server | Feature - mass assignment |
 | SEC-003 | Filter rekap berisi kolom urut yang tidak diizinkan | Admin HR terautentikasi | Kirim nama kolom buatan atau input injeksi | Permintaan ditolak atau memakai nilai aman tanpa menjalankan query berbahaya | Feature - keamanan query |
+| SEC-004 | Kata sandi akun disimpan dengan aman | Akun baru akan dibuat | Buat akun dengan kata sandi contoh | Database menyimpan hash yang dapat diverifikasi dan tidak menyimpan teks asli | Feature - keamanan autentikasi |
+| SEC-005 | Lingkungan produksi menggunakan koneksi aman | Konfigurasi lingkungan produksi atau staging tersedia | Periksa HTTPS, pengalihan HTTP, dan atribut cookie sesi | Aplikasi dilayani melalui HTTPS dan cookie sesi memakai pengaturan aman yang disepakati | Pengujian keamanan konfigurasi |
 | RKP-001 | Admin HR mengekspor rekap dengan filter | Data lintas periode dan departemen tersedia | Terapkan filter lalu ekspor | Hanya data sesuai filter dan hak akses yang diekspor | Feature - rekap |
 | RSP-001 | Formulir dan daftar digunakan pada layar ponsel | Aplikasi berjalan dan data contoh tersedia | Uji ukuran layar ponsel yang disepakati | Kontrol dapat digunakan, teks terbaca, dan tidak ada elemen utama terpotong | Manual responsif |
 | RSP-002 | Tabel digunakan pada tablet dan desktop | Data cukup untuk tabel tersedia | Uji ukuran tablet dan desktop | Tabel atau pola penggantinya dapat dibaca dan dioperasikan | Manual responsif |
@@ -77,6 +89,10 @@ Data tersebut dibuat khusus di lingkungan pengujian dan tidak menggunakan data p
 | PWA-003 | Pengajuan dicoba saat offline | Karyawan masuk sebelum jaringan dimatikan | Matikan jaringan lalu kirim pengajuan | Tidak ada pesan sukses palsu; pengguna diminta kembali online | Manual PWA |
 | PWA-004 | Cache diperbarui setelah versi aplikasi berubah | Cache versi lama tersedia | Pasang versi baru dan muat ulang | Aset baru digunakan dan cache lama yang tidak diperlukan dibersihkan | Manual PWA |
 | PWA-005 | Pengguna keluar lalu akun lain memakai perangkat sama | Dua akun dan PWA terpasang tersedia | Buka data akun pertama, keluar, lalu masuk akun kedua | Cache tidak menampilkan data pribadi akun pertama kepada akun kedua | Manual keamanan PWA |
+| PRF-001 | Halaman utama merespons pada beban capstone | Data uji dengan jumlah yang disepakati tersedia | Ukur halaman daftar dan dashboard pada lingkungan uji | Waktu respons memenuhi batas yang disepakati dan query bermasalah dicatat | Pengujian performa |
+| CMP-001 | Alur utama berjalan pada browser sasaran | Daftar browser modern telah disepakati | Jalankan alur utama pada setiap browser | Tampilan dan fungsi wajib dapat digunakan tanpa kesalahan penghalang | Manual kompatibilitas |
+| OPS-001 | Cadangan database dapat dipulihkan | Database uji dan prosedur cadangan tersedia | Buat cadangan lalu pulihkan ke lingkungan uji terpisah | Data penting kembali konsisten tanpa menyentuh lingkungan produksi | Pengujian operasional |
+| REV-001 | Perubahan memenuhi standar pemeliharaan | Pull request fitur tersedia | Jalankan review kode, formatter, dan pengujian relevan | Konvensi proyek dipenuhi dan tidak ada temuan wajib tersisa | Review dan pemeriksaan otomatis |
 
 ## Cakupan Policy dan Endpoint
 

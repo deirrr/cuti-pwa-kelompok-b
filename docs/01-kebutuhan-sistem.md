@@ -95,7 +95,7 @@ Poin berikut masih merupakan **asumsi awal** dan perlu dikonfirmasi bersama pemb
 
 ## Batasan Sistem
 
-- Sistem berdiri sendiri dan tidak terhubung dengan PIKMA, sistem absensi, API eksternal, backend lain, atau data slip gaji.
+- Sistem berdiri sendiri dan tidak bergantung pada sistem, API, atau backend eksternal.
 - Pengajuan dan keputusan persetujuan memerlukan koneksi internet.
 - Push notification dan background sync bukan fitur wajib tahap awal.
 - Sistem tidak menghitung kehadiran, lembur, penggajian, atau potongan gaji.
@@ -122,7 +122,6 @@ Poin berikut masih merupakan **asumsi awal** dan perlu dikonfirmasi bersama pemb
 
 - Push notification.
 - Background sync.
-- Notifikasi email atau WhatsApp.
 - Ekspor rekap dengan format tambahan seperti PDF atau XLSX.
 - Persetujuan pengganti ketika Atasan tidak tersedia.
 - Kalender cuti bersama dengan pengaturan privasi.
@@ -130,8 +129,8 @@ Poin berikut masih merupakan **asumsi awal** dan perlu dikonfirmasi bersama pemb
 
 ### Di Luar Ruang Lingkup
 
-- Integrasi PIKMA dan sistem absensi.
-- Integrasi backend atau API eksternal.
+- Integrasi sistem absensi, backend lain, atau API eksternal.
+- Notifikasi melalui email, WhatsApp, atau layanan pihak ketiga.
 - Penggajian dan data slip gaji.
 - Penilaian kinerja pegawai.
 - Rekrutmen dan modul sumber daya manusia lainnya.

@@ -61,11 +61,11 @@ Rancangan strategi cache:
 | Jenis sumber daya | Strategi awal | Alasan |
 | --- | --- | --- |
 | Aset hasil build dengan nama berversi | Cache first | Nama berkas berubah ketika isi berubah. |
-| Navigasi halaman terautentikasi | Network first atau hanya network | Mengutamakan data terbaru dan mencegah tampilan sensitif lama. |
+| Navigasi halaman terautentikasi | Network only | Data pribadi dan transaksi harus berasal dari server. |
 | Permintaan transaksi | Network only | Pengajuan dan keputusan harus diproses server. |
 | Halaman offline | Cache first | Harus tersedia ketika jaringan tidak ada. |
 
-Data pribadi atau halaman terautentikasi tidak boleh dicache secara sembarangan. Keputusan detail mengenai cache perlu melalui peninjauan keamanan.
+Data pribadi dan halaman terautentikasi tidak dimasukkan ke cache offline. Cache wajib dibatasi pada aset statis serta halaman offline khusus dan tetap melalui peninjauan keamanan.
 
 ### Halaman Offline
 
@@ -153,7 +153,6 @@ flowchart TD
 
 - Push notification untuk pengajuan yang perlu diproses atau keputusan baru.
 - Background sync setelah rancangan konflik, keamanan, dan umpan balik pengguna tersedia.
-- Penyimpanan data baca tertentu untuk pengalaman offline, setelah kajian privasi.
 - Shortcut aplikasi menuju halaman yang sering dipakai.
 - Pembaruan aplikasi yang lebih halus dengan pemberitahuan versi.
 

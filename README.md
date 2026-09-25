@@ -19,7 +19,7 @@ Yang sudah tersedia:
 
 Sistem ini direncanakan untuk membantu karyawan mengajukan cuti, atasan memberikan persetujuan awal, dan Admin HR memberikan keputusan akhir. Sistem juga akan mencatat tanggal cuti, riwayat keputusan, hari libur, dan saldo cuti secara terpusat.
 
-Aplikasi ini khusus menangani proses cuti dan tidak terhubung dengan PIKMA, sistem absensi, API eksternal, maupun backend lain.
+Aplikasi ini berdiri sendiri dan khusus menangani proses cuti. Aplikasi tidak bergantung pada sistem, API, atau backend eksternal.
 
 ## Latar Belakang Masalah
 
@@ -61,11 +61,11 @@ Ruang lingkup yang direncanakan meliputi:
 ## Batasan Sistem
 
 - Aplikasi hanya menangani pengajuan dan persetujuan cuti karyawan.
-- Aplikasi tidak terhubung dengan PIKMA, sistem absensi, API eksternal, penggajian, atau backend lain.
+- Aplikasi tidak mencakup integrasi dengan sistem lain, absensi, penggajian, atau layanan eksternal.
 - Data pegawai dan aturan cuti dikelola di dalam aplikasi ini.
 - Keputusan akhir pengajuan berada pada Admin HR setelah keputusan atasan.
 - Perhitungan saldo mengikuti jenis cuti dan kebijakan yang nantinya ditetapkan oleh tim.
-- Notifikasi melalui email, WhatsApp, atau layanan pihak ketiga belum termasuk ruang lingkup awal.
+- Notifikasi melalui email, WhatsApp, atau layanan pihak ketiga berada di luar ruang lingkup proyek.
 - Kemampuan offline terbatas dan tidak berarti seluruh proses bisnis dapat dijalankan tanpa internet.
 
 ## Aktor dan Hak Akses
@@ -140,9 +140,9 @@ Komponen PWA **belum dibuat**. Pada tahap pengembangan, PWA direncanakan mencaku
 
 Batasan offline yang direncanakan:
 
-- Mode offline hanya ditujukan untuk membuka aset dasar atau halaman tertentu yang sebelumnya telah disimpan dalam cache.
-- Data yang ditampilkan saat offline dapat merupakan data terakhir yang tersimpan dan belum tentu paling baru.
-- Pengiriman pengajuan, pemberian persetujuan, pembaruan saldo, autentikasi, dan sinkronisasi data tetap membutuhkan koneksi internet, kecuali kelak dibuat serta diuji mekanisme sinkronisasi khusus.
+- Mode offline hanya ditujukan untuk memuat aset statis dan menampilkan halaman offline khusus.
+- Data pengajuan, saldo, dan data pribadi tidak dirancang untuk tersedia dari cache ketika offline.
+- Pengiriman pengajuan, pemberian persetujuan, pembaruan saldo, dan autentikasi tetap membutuhkan koneksi internet.
 - Aplikasi harus menampilkan informasi yang jelas ketika koneksi tidak tersedia.
 
 ## Rencana Struktur Database
@@ -247,6 +247,9 @@ Dokumen berikut berisi rancangan awal dan belum menyatakan bahwa fitur telah dii
 5. [Rancangan Progressive Web App](docs/05-rancangan-pwa.md)
 6. [Rencana Pengujian](docs/06-rencana-pengujian.md)
 7. [Pembagian Tugas Tim](docs/07-pembagian-tugas.md)
+8. [Pedoman Pengembangan](docs/08-pedoman-pengembangan.md)
+9. [Keputusan Proyek](docs/09-keputusan-proyek.md)
+10. [Matriks Ketertelusuran](docs/10-matriks-ketertelusuran.md)
 
 ## Aturan Kontribusi Dasar
 

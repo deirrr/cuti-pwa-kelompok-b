@@ -30,7 +30,7 @@ Keterangan: **Ya** berarti diizinkan, **Terbatas** berarti hanya pada data atau 
 | Mengelola saldo | Tidak | Tidak | Ya |
 | Mengelola hari libur | Tidak | Tidak | Ya |
 | Melihat rekap | Riwayat pribadi | Terbatas, data bawahan | Ya |
-| Mengekspor rekap | Tidak | Terbatas, jika fitur diberikan pada tahap implementasi | Ya |
+| Mengekspor rekap | Tidak | Tidak | Ya |
 | Melihat jejak persetujuan | Terbatas, pengajuan sendiri | Terbatas, pengajuan bawahan yang berwenang dilihat | Ya |
 
 ## Rincian per Aktor
@@ -95,5 +95,4 @@ Perubahan manual saldo harus memiliki alasan dan dapat ditelusuri. Penghapusan d
 
 - Hubungan organisasi awal hanya menggunakan satu Atasan langsung per pegawai.
 - Admin HR dapat melihat seluruh data pengajuan untuk kebutuhan operasional dan audit.
-- Hak ekspor untuk Atasan dapat diaktifkan bila memang diperlukan; fitur wajib hanya mewajibkan Admin HR mengekspor rekap.
 - Pengguna dapat memiliki fungsi Atasan atau Admin HR sekaligus tetap memiliki profil pegawai. Hak untuk pengajuan pribadi selalu mengikuti aturan Karyawan.
