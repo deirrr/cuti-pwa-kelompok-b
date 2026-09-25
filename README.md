@@ -1,19 +1,23 @@
 # Rancang Bangun Sistem Informasi Pengajuan dan Persetujuan Cuti Karyawan Berbasis Progressive Web App di PT Medika Antapani
 
-> **Status proyek:** Dalam tahap pengembangan awal.
+> **Status proyek:** Dalam tahap pengembangan.
 
 Proyek capstone ini dikerjakan oleh tim beranggotakan lima orang. Aplikasi dirancang sebagai sistem mandiri untuk mengelola pengajuan dan persetujuan cuti karyawan melalui web yang dapat dipasang sebagai Progressive Web App (PWA).
 
 ## Kondisi Proyek Saat Ini
 
-Repository saat ini masih berupa kerangka awal Laravel 13. Fitur pengajuan cuti, alur persetujuan, pembagian hak akses, struktur database bisnis, dan kemampuan PWA **belum tersedia** dan masih berada dalam tahap perencanaan serta pengembangan.
+Repository saat ini telah memiliki fondasi database bisnis, autentikasi berbasis NIK, dan pembatasan akses dasar berdasarkan peran. Fitur pengajuan cuti, alur persetujuan, pengelolaan data, dan kemampuan PWA masih dalam tahap perencanaan serta pengembangan.
 
 Yang sudah tersedia:
 
-- Kerangka aplikasi Laravel 13.
-- Konfigurasi dasar Blade, JavaScript, Vite, dan Tailwind CSS dari kerangka proyek.
-- Migration bawaan Laravel untuk pengguna, cache, dan jobs.
-- Struktur pengujian awal bawaan Laravel.
+- Kerangka aplikasi Laravel 13 beserta Blade, JavaScript, Vite, dan Tailwind CSS.
+- Migration, model, factory, dan seeder untuk fondasi data cuti.
+- Autentikasi menggunakan NIK dan kata sandi, termasuk pembatasan percobaan masuk dan tindakan keluar.
+- Pemeriksaan akun aktif dan middleware pembatasan akses Karyawan, Atasan, serta Admin HR.
+- Halaman masuk dan dashboard dasar yang responsif.
+- Pengujian otomatis untuk fondasi database, autentikasi, dan hak akses dasar.
+
+Yang masih direncanakan antara lain formulir pengajuan, validasi tanggal dan saldo, proses persetujuan berjenjang, pengelolaan data oleh Admin HR, serta komponen PWA.
 
 ## Deskripsi Singkat
 
@@ -48,7 +52,7 @@ Karena itu, diperlukan aplikasi yang menyatukan proses pengajuan, pemeriksaan, p
 
 Ruang lingkup yang direncanakan meliputi:
 
-- Autentikasi pengguna dan pembatasan akses berdasarkan peran.
+- Autentikasi pengguna dengan NIK dan pembatasan akses berdasarkan peran.
 - Pengelolaan data pegawai, jenis cuti, saldo cuti, dan hari libur.
 - Pengajuan cuti untuk satu atau beberapa tanggal.
 - Validasi tanggal pengajuan dan ketersediaan saldo.
@@ -76,7 +80,7 @@ Ruang lingkup yang direncanakan meliputi:
 | Atasan | Melihat pengajuan dari karyawan yang menjadi tanggung jawabnya, lalu menyetujui atau menolak pada tahap awal. |
 | Admin HR | Mengelola data pendukung, meninjau pengajuan yang telah diproses atasan, memberikan keputusan akhir, dan memantau data cuti. |
 
-Setiap aktor hanya boleh mengakses data dan tindakan sesuai perannya. Rincian kebijakan akses akan ditetapkan dan diuji pada tahap pengembangan.
+Setiap aktor hanya boleh mengakses data dan tindakan sesuai perannya. Pembatasan peran dasar telah tersedia, sedangkan policy berbasis kepemilikan, hubungan Atasan-bawahan, dan status pengajuan akan diterapkan bersama modul bisnis terkait.
 
 ## Alur Utama Pengajuan Cuti
 
@@ -87,13 +91,15 @@ Setiap aktor hanya boleh mengakses data dan tindakan sesuai perannya. Rincian ke
 5. Setelah persetujuan akhir diberikan, sistem memperbarui saldo cuti sesuai jumlah hari yang disetujui.
 6. Jika pengajuan ditolak pada salah satu tahap, saldo cuti tidak dikurangi dan alasan penolakan dicatat.
 
-Alur tersebut merupakan rancangan awal dan belum diimplementasikan pada kondisi repository saat ini.
+Alur bisnis pengajuan tersebut masih berupa rancangan dan belum diimplementasikan. Autentikasi serta pembatasan akses dasar telah tersedia sebagai fondasinya.
 
-## Rencana Fitur Utama
+## Fitur Utama
+
+Fitur masuk dengan NIK, keluar, pemeriksaan akun aktif, dan dashboard dasar sesuai peran sudah tersedia. Fitur bisnis berikut masih direncanakan.
 
 ### Karyawan
 
-- Masuk dan keluar dari aplikasi.
+- Masuk menggunakan NIK dan kata sandi serta keluar dari aplikasi. **Sudah tersedia.**
 - Melihat profil serta saldo cuti.
 - Membuat pengajuan cuti beserta alasan dan tanggal yang dipilih.
 - Melihat status dan riwayat pengajuan.
@@ -145,12 +151,13 @@ Batasan offline yang direncanakan:
 - Pengiriman pengajuan, pemberian persetujuan, pembaruan saldo, dan autentikasi tetap membutuhkan koneksi internet.
 - Aplikasi harus menampilkan informasi yang jelas ketika koneksi tidak tersedia.
 
-## Rencana Struktur Database
+## Struktur Database
 
-Nama tabel bisnis direncanakan menggunakan bahasa Indonesia agar mudah dipahami oleh tim.
+Nama tabel bisnis menggunakan bahasa Indonesia agar mudah dipahami oleh tim. Migration dan model fondasinya sudah tersedia.
 
 | Tabel | Rencana fungsi |
 | --- | --- |
+| `departemen` | Menyimpan unit kerja pegawai. |
 | `pengguna` | Menyimpan akun, informasi autentikasi, dan peran pengguna. |
 | `pegawai` | Menyimpan identitas pegawai serta hubungan pegawai dengan atasan dan akun pengguna. |
 | `jenis_cuti` | Menyimpan kategori cuti dan ketentuan dasarnya. |
@@ -160,7 +167,7 @@ Nama tabel bisnis direncanakan menggunakan bahasa Indonesia agar mudah dipahami 
 | `persetujuan_cuti` | Menyimpan tahap, keputusan, pemberi keputusan, catatan, dan waktu keputusan. |
 | `hari_libur` | Menyimpan tanggal libur yang digunakan dalam validasi hari cuti. |
 
-Struktur kolom, relasi, indeks, serta aturan penghapusan data akan dirancang lebih lanjut sebelum migration bisnis dibuat. Tabel teknis Laravel, seperti `migrations`, `cache`, `cache_locks`, `jobs`, `job_batches`, dan tabel teknis lain, boleh tetap menggunakan nama bawaan framework.
+Struktur kolom, relasi, indeks, serta aturan penghapusan dasar sudah diterapkan melalui migration. Tabel teknis Laravel, seperti `migrations`, `cache`, `cache_locks`, `jobs`, `job_batches`, dan tabel teknis lain, tetap boleh menggunakan nama bawaan framework.
 
 ## Rencana Pembagian Tanggung Jawab Tim
 
@@ -228,17 +235,23 @@ php artisan migrate
 php artisan serve
 ```
 
+Data contoh untuk lingkungan lokal dapat dibuat dengan:
+
+```bash
+php artisan db:seed
+```
+
 Pada terminal lain, jalankan frontend development server:
 
 ```bash
 npm run dev
 ```
 
-Perintah migration saat ini hanya membuat tabel bawaan Laravel. Tabel bisnis cuti akan tersedia setelah tahap perancangannya selesai dan migration terkait dikembangkan.
+Perintah migration membuat tabel teknis Laravel dan tabel fondasi bisnis cuti. Data produksi tetap harus disiapkan melalui proses yang disepakati tim, bukan menggunakan data contoh lokal.
 
 ## Dokumentasi
 
-Dokumen berikut berisi rancangan awal dan belum menyatakan bahwa fitur telah diimplementasikan:
+Dokumen berikut menjadi sumber rancangan dan keputusan proyek. Status implementasi tetap dibedakan dari rancangan pada README dan pengujian terkait:
 
 1. [Kebutuhan Sistem](docs/01-kebutuhan-sistem.md)
 2. [Alur Bisnis](docs/02-alur-bisnis.md)
@@ -266,6 +279,6 @@ Dokumen berikut berisi rancangan awal dan belum menyatakan bahwa fitur telah dii
 
 ## Status Pengembangan
 
-🚧 **Proyek masih dalam tahap pengembangan awal.**
+🚧 **Proyek masih dalam tahap pengembangan.**
 
 Isi README ini menjelaskan tujuan dan rencana aplikasi. Daftar fitur bukan pernyataan bahwa seluruh fitur telah tersedia. Status akan diperbarui secara bertahap seiring implementasi, pengujian, dan kesepakatan tim.

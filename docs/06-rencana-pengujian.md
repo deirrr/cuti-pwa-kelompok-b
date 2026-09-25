@@ -31,7 +31,7 @@ Data tersebut dibuat khusus di lingkungan pengujian dan tidak menggunakan data p
 
 | ID pengujian | Skenario | Prasyarat | Langkah ringkas | Hasil yang diharapkan | Jenis pengujian |
 | --- | --- | --- | --- | --- | --- |
-| AUT-001 | Pengguna aktif masuk dengan kredensial benar | Akun aktif tersedia | Kirim formulir masuk yang valid | Pengguna terautentikasi dan diarahkan ke dashboard yang sesuai | Feature - autentikasi |
+| AUT-001 | Pengguna aktif masuk dengan NIK dan kata sandi benar | Akun aktif tersedia | Kirim formulir masuk menggunakan NIK yang valid | Pengguna terautentikasi dan diarahkan ke dashboard yang sesuai | Feature - autentikasi |
 | AUT-002 | Kredensial masuk salah | Akun aktif tersedia | Kirim kata sandi yang salah | Akses ditolak, sesi tidak dibuat, dan pesan aman ditampilkan | Feature - autentikasi |
 | AUT-003 | Pengguna belum masuk membuka halaman internal | Tidak ada sesi | Buka dashboard | Pengguna diarahkan ke halaman masuk | Feature - autentikasi |
 | AUT-004 | Akun tidak aktif mencoba masuk | Akun tidak aktif tersedia | Kirim kredensial yang benar | Sesi aplikasi tidak diberikan dan pesan yang sesuai ditampilkan | Feature - autentikasi |

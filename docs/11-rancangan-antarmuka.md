@@ -85,7 +85,7 @@ Atasan dan Admin HR tetap memiliki menu pengajuan pribadi karena keduanya juga m
 |--------------------------------------------------|
 | Masuk                                            |
 |                                                  |
-| Email                                            |
+| NIK                                              |
 | [______________________________________________] |
 | Kata sandi                                       |
 | [______________________________________________] |
@@ -96,7 +96,7 @@ Atasan dan Admin HR tetap memiliki menu pengajuan pribadi karena keduanya juga m
 +--------------------------------------------------+
 ```
 
-Tidak ada pilihan peran pada formulir masuk. Peran diperoleh dari akun yang berhasil diautentikasi.
+Tidak ada pilihan peran pada formulir masuk. Pengguna masuk menggunakan NIK dan kata sandi, sedangkan peran diperoleh dari akun yang berhasil diautentikasi. NIK merujuk pada `pegawai.nomor_induk` dan tidak disalin ke tabel `pengguna`.
 
 ## Wireframe Dashboard Karyawan
 

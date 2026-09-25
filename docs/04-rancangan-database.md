@@ -130,7 +130,7 @@ erDiagram
 | Kolom | Tipe konseptual | Boleh kosong | PK | FK | Nilai bawaan | Unik | Penjelasan |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `id` | bigint unsigned | Tidak | Ya | - | otomatis | Ya | Identitas akun. |
-| `email` | varchar(255) | Tidak | Tidak | - | - | Ya | Alamat email untuk masuk. |
+| `email` | varchar(255) | Tidak | Tidak | - | - | Ya | Alamat email akun untuk identitas dan kebutuhan administrasi; bukan kolom login. |
 | `kata_sandi` | varchar(255) | Tidak | Tidak | - | - | Tidak | Hash kata sandi, bukan kata sandi asli. |
 | `peran` | enum | Tidak | Tidak | - | `karyawan` | Tidak | Nilai awal: `karyawan`, `atasan`, atau `admin_hr`. |
 | `aktif` | boolean | Tidak | Tidak | - | true | Tidak | Menentukan apakah akun dapat digunakan. |
@@ -139,7 +139,7 @@ erDiagram
 | `dibuat_pada` | timestamp | Tidak | Tidak | - | waktu saat ini | Tidak | Waktu pembuatan akun. |
 | `diperbarui_pada` | timestamp | Tidak | Tidak | - | waktu saat ini | Tidak | Waktu perubahan terakhir. |
 
-**Aturan:** email dibandingkan secara tidak peka huruf besar-kecil. Satu akun wajib terhubung dengan tepat satu baris `pegawai` melalui aturan unik `pegawai.pengguna_id`.
+**Aturan:** email dibandingkan secara tidak peka huruf besar-kecil. Satu akun wajib terhubung dengan tepat satu baris `pegawai` melalui aturan unik `pegawai.pengguna_id`. Login menggunakan `pegawai.nomor_induk` dan memvalidasi `pengguna.kata_sandi`; NIK tidak diduplikasi ke tabel `pengguna`.
 
 ## Tabel `pegawai`
 
@@ -159,7 +159,7 @@ erDiagram
 | `dibuat_pada` | timestamp | Tidak | Tidak | - | waktu saat ini | Tidak | Waktu pembuatan data. |
 | `diperbarui_pada` | timestamp | Tidak | Tidak | - | waktu saat ini | Tidak | Waktu perubahan terakhir. |
 
-**Aturan:** `atasan_id` tidak boleh sama dengan `id`. Validasi juga harus mencegah rantai Atasan melingkar. Penghapusan pegawai yang telah memiliki riwayat pengajuan tidak diperbolehkan; gunakan `aktif = false`.
+**Aturan:** `nomor_induk` disimpan dalam huruf kapital dan digunakan sebagai NIK untuk login. `atasan_id` tidak boleh sama dengan `id`. Validasi juga harus mencegah rantai Atasan melingkar. Penghapusan pegawai yang telah memiliki riwayat pengajuan tidak diperbolehkan; gunakan `aktif = false`.
 
 ## Tabel `jenis_cuti`
 

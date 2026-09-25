@@ -25,6 +25,7 @@ Dokumen ini mencatat keputusan yang mengikat rancangan dan pengembangan proyek. 
 | KP-017 | 2026-09-26 | Nomor pengajuan menggunakan format `CUTI-YYYY-NNNNNN`. | Format mudah dibaca, unik per tahun, dan cukup untuk skala capstone. | Nomor dibuat server dan nomor urut dimulai kembali setiap tahun tanpa mengubah primary key. | Berlaku |
 | KP-018 | 2026-09-26 | Format ekspor rekap wajib versi awal adalah CSV. | CSV dapat dibuka dengan aplikasi spreadsheet dan tidak memerlukan pengolah dokumen tambahan. | PDF dan XLSX tetap menjadi pengembangan lanjutan, bukan syarat versi awal. | Berlaku |
 | KP-019 | 2026-09-26 | Satuan cuti versi awal adalah satu hari penuh. | Cuti setengah hari memerlukan perhitungan serta antarmuka tambahan yang belum menjadi kebutuhan wajib. | Setiap tanggal valid bernilai satu hari; cuti setengah hari memerlukan keputusan baru. | Berlaku |
+| KP-020 | 2026-09-26 | Autentikasi menggunakan NIK dan kata sandi. | NIK lebih mudah dikenali karyawan sebagai identitas kerja daripada email. | Formulir masuk mencari `pegawai.nomor_induk` yang unik dan memvalidasi kata sandi pada akun `pengguna` yang berelasi tanpa menduplikasi NIK. | Berlaku |
 
 ## Status Keputusan
 

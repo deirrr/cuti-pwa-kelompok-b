@@ -1,6 +1,6 @@
 # Kebutuhan Sistem
 
-Dokumen ini menjabarkan kebutuhan awal untuk proyek **Rancang Bangun Sistem Informasi Pengajuan dan Persetujuan Cuti Karyawan Berbasis Progressive Web App di PT Medika Antapani**. Seluruh kebutuhan masih berupa rancangan dan belum menunjukkan bahwa fitur telah diimplementasikan.
+Dokumen ini menjabarkan kebutuhan untuk proyek **Rancang Bangun Sistem Informasi Pengajuan dan Persetujuan Cuti Karyawan Berbasis Progressive Web App di PT Medika Antapani**. Dokumen kebutuhan tidak dengan sendirinya menjadi bukti implementasi; status aktual dibuktikan melalui kode, pengujian, dan matriks ketertelusuran.
 
 ## Tujuan Sistem
 
@@ -24,7 +24,7 @@ Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah di
 
 | Kode | Kebutuhan |
 | --- | --- |
-| KF-KAR-001 | Karyawan dapat masuk dan keluar dari aplikasi menggunakan akun yang aktif. |
+| KF-KAR-001 | Karyawan dapat masuk menggunakan NIK dan kata sandi dari akun yang aktif, lalu keluar dari aplikasi. |
 | KF-KAR-002 | Karyawan dapat melihat dashboard yang memuat ringkasan saldo dan status pengajuan miliknya. |
 | KF-KAR-003 | Karyawan dapat membuat dan menyimpan pengajuan sebagai `draf`. |
 | KF-KAR-004 | Karyawan dapat memilih jenis cuti, satu atau beberapa tanggal, dan mengisi alasan. |
