@@ -56,6 +56,8 @@ Jika Atasan juga mengajukan cuti sebagai pegawai, kemampuan tersebut mengikuti h
 
 Admin HR dapat mengelola data utama dan melihat pengajuan yang dibutuhkan untuk proses HR. Ketika mengajukan cuti untuk dirinya sendiri, Admin HR mengikuti aturan Karyawan. Keputusan akhir hanya dapat diberikan terhadap pengajuan `menunggu_hr`. Admin HR tidak dapat melewati tahap Atasan dengan langsung menyetujui pengajuan `menunggu_atasan`.
 
+Admin HR tidak boleh memberikan keputusan akhir pada pengajuannya sendiri. Pengajuan tersebut harus diproses oleh akun Admin HR lain.
+
 Perubahan manual saldo harus memiliki alasan dan dapat ditelusuri. Penghapusan data yang telah dipakai pada riwayat sebaiknya diganti dengan penonaktifan agar hubungan data tetap utuh.
 
 ## Batas Kepemilikan Data
@@ -91,8 +93,10 @@ Perubahan manual saldo harus memiliki alasan dan dapat ditelusuri. Penghapusan d
 - Pengguna mengubah ID pada permintaan ekspor: hasil tetap dibatasi sesuai cakupan akses.
 - Permintaan keputusan dikirim dua kali: keputusan kedua tidak mengubah status atau saldo.
 
-## Asumsi yang Perlu Dikonfirmasi
+## Ketentuan Struktur Akses
 
 - Hubungan organisasi awal hanya menggunakan satu Atasan langsung per pegawai.
 - Admin HR dapat melihat seluruh data pengajuan untuk kebutuhan operasional dan audit.
-- Pengguna dapat memiliki fungsi Atasan atau Admin HR sekaligus tetap memiliki profil pegawai. Hak untuk pengajuan pribadi selalu mengikuti aturan Karyawan.
+- Pengguna dengan fungsi Atasan atau Admin HR tetap memiliki profil pegawai. Hak untuk pengajuan pribadi mengikuti aturan Karyawan.
+- Pegawai yang mengajukan cuti wajib memiliki Atasan aktif yang bukan dirinya sendiri.
+- Atasan dan Admin HR tidak dapat memberi keputusan terhadap pengajuannya sendiri.

@@ -80,18 +80,18 @@ Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah di
 | KNF-011 | Cache PWA tidak boleh menyebabkan transaksi atau data sensitif lama dianggap sebagai data terbaru. |
 | KNF-012 | Data aplikasi dapat dicadangkan dan dipulihkan sesuai prosedur lingkungan penerapan yang disepakati tim. |
 
-## Asumsi Sistem
-
-Poin berikut masih merupakan **asumsi awal** dan perlu dikonfirmasi bersama pembimbing atau pihak PT Medika Antapani:
+## Ketentuan Awal Sistem
 
 - Setiap pengguna terhubung dengan tepat satu data pegawai.
 - Setiap pegawai memiliki paling banyak satu Atasan langsung.
-- Admin HR menyiapkan saldo cuti untuk setiap jenis cuti dan tahun yang berlaku.
-- Akhir pekan adalah Sabtu dan Minggu; ketentuan ini perlu dikonfirmasi apabila jadwal kerja berbeda.
+- Admin HR mengelola jenis cuti, jatah bawaan, dan saldo setiap tahun sebagai data, bukan nilai tetap di dalam kode.
+- Saldo tidak otomatis dibawa ke tahun berikutnya pada versi awal.
+- Akhir pekan adalah Sabtu dan Minggu.
 - Satu hari cuti dihitung sebagai satu hari penuh; cuti setengah hari belum direncanakan.
-- Atasan yang juga berstatus pegawai tetap dapat mengajukan cuti, tetapi tidak dapat menyetujui pengajuannya sendiri.
-- Admin HR memiliki kewenangan memproses pembatalan pengajuan yang sudah disetujui.
-- Ekspor rekap awal menggunakan format yang mudah dibuat, misalnya CSV; format akhir perlu disepakati.
+- Atasan dan Admin HR dapat mengajukan cuti sebagai pegawai, tetapi tidak dapat memberi keputusan atas pengajuannya sendiri.
+- Admin HR memproses pembatalan pengajuan yang sudah disetujui hanya sebelum tanggal cuti pertama dan mengembalikan saldo tepat satu kali.
+- Nomor pengajuan dibuat server dengan format `CUTI-YYYY-NNNNNN`.
+- Ekspor rekap wajib versi awal menggunakan CSV.
 
 ## Batasan Sistem
 

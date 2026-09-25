@@ -18,9 +18,10 @@ Urutan acuan ketika ditemukan perbedaan adalah:
 2. [Kebutuhan Sistem](01-kebutuhan-sistem.md).
 3. [Alur Bisnis](02-alur-bisnis.md) dan [Hak Akses](03-hak-akses.md).
 4. [Rancangan Database](04-rancangan-database.md) dan [Rancangan PWA](05-rancangan-pwa.md).
-5. [Rencana Pengujian](06-rencana-pengujian.md).
-6. [Pembagian Tugas](07-pembagian-tugas.md) dan pedoman ini.
-7. [Matriks Ketertelusuran](10-matriks-ketertelusuran.md) sebagai indeks hubungan antardokumen dan implementasi.
+5. [Rancangan Antarmuka](11-rancangan-antarmuka.md).
+6. [Rencana Pengujian](06-rencana-pengujian.md).
+7. [Pembagian Tugas](07-pembagian-tugas.md) dan pedoman ini.
+8. [Matriks Ketertelusuran](10-matriks-ketertelusuran.md) sebagai indeks hubungan antardokumen dan implementasi.
 
 Jika kode berbeda dari keputusan dan kebutuhan yang masih berlaku, perbedaan tersebut harus diselesaikan. Tim tidak boleh diam-diam menjadikan perilaku kode sebagai aturan baru.
 

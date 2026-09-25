@@ -16,6 +16,15 @@ Dokumen ini mencatat keputusan yang mengikat rancangan dan pengembangan proyek. 
 | KP-008 | 2026-09-26 | PWA berfokus pada installability, cache aset statis, dan halaman offline. | Cakupan tersebut memberi pengalaman PWA dasar tanpa risiko sinkronisasi transaksi. | Manifest, ikon, service worker, HTTPS, cache aset, halaman offline, dan responsivitas menjadi fokus; data transaksi tidak dicache untuk operasi offline. | Berlaku |
 | KP-009 | 2026-09-26 | Fitur di luar dokumentasi tidak langsung dikembangkan. | Setiap pekerjaan harus dapat ditelusuri dan diuji agar tim tidak keluar dari ruang lingkup. | Fitur baru harus melewati pembaruan kebutuhan, alur, data, kriteria penerimaan, dan matriks ketertelusuran. | Berlaku |
 | KP-010 | 2026-09-26 | Proyek dibatasi sebagai sistem pengajuan cuti, bukan sistem HR lengkap. | Tim perlu mempertahankan cakupan yang realistis untuk capstone lima orang. | Modul absensi, payroll, slip gaji, rekrutmen, penilaian kinerja, dan modul HR lain tidak dikembangkan. | Berlaku |
+| KP-011 | 2026-09-26 | Sabtu dan Minggu diperlakukan sebagai akhir pekan. | Proyek memerlukan aturan perhitungan awal yang seragam dan sederhana. | Tanggal Sabtu, Minggu, dan hari libur aktif tidak dapat dipilih sebagai hari cuti. | Berlaku |
+| KP-012 | 2026-09-26 | Jenis cuti dan jatah bawaan dikelola Admin HR, bukan ditanam tetap dalam kode. | Kebijakan operasional dapat berubah tanpa memerlukan perubahan program. | Nilai awal jenis dan jatah diisi sebagai data master; validasi menggunakan data aktif pada database. | Berlaku |
+| KP-013 | 2026-09-26 | Saldo tidak otomatis dibawa ke tahun berikutnya pada versi awal. | Aturan carry-over belum menjadi kebutuhan wajib dan dapat menambah kerumitan periode saldo. | Admin HR menerbitkan saldo per tahun; fitur carry-over memerlukan keputusan baru jika kelak dibutuhkan. | Berlaku |
+| KP-014 | 2026-09-26 | Pembatalan pengajuan yang sudah disetujui hanya diproses Admin HR sebelum tanggal cuti pertama. | Batas ini mudah dipahami dan mencegah perubahan saldo setelah cuti mulai digunakan. | Admin HR wajib mencatat alasan; saldo dikembalikan tepat satu kali dalam transaksi. | Berlaku |
+| KP-015 | 2026-09-26 | Atasan dan Admin HR dapat mengajukan cuti sebagai pegawai, tetapi tidak boleh memutus pengajuannya sendiri. | Semua akun terhubung dengan pegawai dan konflik kepentingan harus dicegah. | Pengajuan Atasan diproses Atasan langsungnya; keputusan akhir pengajuan Admin HR harus diberikan akun Admin HR lain. | Berlaku |
+| KP-016 | 2026-09-26 | Setiap pegawai memiliki paling banyak satu Atasan langsung. | Struktur tunggal cukup untuk alur capstone dan menyederhanakan otorisasi. | Pegawai yang akan mengajukan wajib memiliki Atasan aktif yang bukan dirinya; rantai pelaporan melingkar ditolak. | Berlaku |
+| KP-017 | 2026-09-26 | Nomor pengajuan menggunakan format `CUTI-YYYY-NNNNNN`. | Format mudah dibaca, unik per tahun, dan cukup untuk skala capstone. | Nomor dibuat server dan nomor urut dimulai kembali setiap tahun tanpa mengubah primary key. | Berlaku |
+| KP-018 | 2026-09-26 | Format ekspor rekap wajib versi awal adalah CSV. | CSV dapat dibuka dengan aplikasi spreadsheet dan tidak memerlukan pengolah dokumen tambahan. | PDF dan XLSX tetap menjadi pengembangan lanjutan, bukan syarat versi awal. | Berlaku |
+| KP-019 | 2026-09-26 | Satuan cuti versi awal adalah satu hari penuh. | Cuti setengah hari memerlukan perhitungan serta antarmuka tambahan yang belum menjadi kebutuhan wajib. | Setiap tanggal valid bernilai satu hari; cuti setengah hari memerlukan keputusan baru. | Berlaku |
 
 ## Status Keputusan
 
@@ -33,6 +42,6 @@ Dokumen ini mencatat keputusan yang mengikat rancangan dan pengembangan proyek. 
 - Dokumen kebutuhan, alur bisnis, hak akses, database, PWA, pengujian, dan matriks ketertelusuran diperbarui sesuai dampaknya.
 - Keputusan baru harus ditinjau oleh tim sebelum implementasi dimulai.
 
-## Asumsi yang Belum Menjadi Keputusan
+## Data Operasional yang Masih Perlu Diisi
 
-Asumsi seperti definisi akhir pekan, aturan sisa saldo tahunan, batas waktu pembatalan, dan format nomor pengajuan tetap ditandai sebagai asumsi dalam dokumen terkait. Asumsi tersebut tidak boleh dianggap sebagai kebijakan final sebelum dikonfirmasi dan, jika berdampak besar, dicatat sebagai keputusan baru.
+Keputusan rancangan di atas belum menentukan isi data operasional. Sebelum demonstrasi, tim dan pihak terkait masih perlu mengisi daftar departemen, pegawai, hubungan Atasan, jenis cuti, besar jatah, saldo awal, serta hari libur. Perubahan isi data tersebut tidak mengubah keputusan proyek selama tetap mengikuti struktur dan alur yang berlaku.

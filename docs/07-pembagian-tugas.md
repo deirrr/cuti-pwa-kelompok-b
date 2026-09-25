@@ -21,7 +21,7 @@ Pembagian fokus tidak berarti anggota hanya memahami bagiannya. Seluruh anggota 
 - Mengumpulkan dan merapikan kebutuhan sistem.
 - Menjaga ruang lingkup agar sesuai capstone.
 - Mengelola backlog, prioritas, jadwal, dan pembagian pekerjaan.
-- Mencatat asumsi serta keputusan yang perlu dikonfirmasi.
+- Mencatat usulan serta keputusan proyek dan memastikan riwayatnya terpelihara.
 - Memfasilitasi diskusi ketika terjadi perbedaan rancangan.
 - Mengawasi kesiapan integrasi dan demonstrasi.
 

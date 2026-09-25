@@ -219,6 +219,8 @@ erDiagram
 
 **Aturan:** `jumlah_hari` harus sama dengan jumlah rincian tanggal yang sah dan lebih dari nol sebelum pengajuan dikirim. Perubahan status hanya mengikuti tabel transisi pada dokumen alur bisnis.
 
+`nomor_pengajuan` dibuat oleh server dengan format `CUTI-YYYY-NNNNNN`. Nomor urut bersifat unik, menggunakan enam digit, dan dimulai kembali pada setiap tahun. Pembuatan nomor harus dilindungi transaksi serta unique key dan mengulang proses secara aman apabila terjadi benturan.
+
 ## Tabel `tanggal_pengajuan_cuti`
 
 **Tujuan:** menyimpan setiap tanggal cuti dalam satu pengajuan.
@@ -251,7 +253,7 @@ erDiagram
 
 **Aturan unik awal:** kombinasi (`pengajuan_cuti_id`, `tahap`) agar satu tahap tidak diproses dua kali. Jika kelak dibutuhkan beberapa peristiwa pembatalan atau proses ulang, rancangan ini harus ditinjau sebelum migration dibuat.
 
-**Aturan:** pemberi keputusan tidak boleh diambil dari input browser. Sistem mengisinya dari pengguna yang sedang masuk. Untuk tahap Atasan, pemberi keputusan tidak boleh merupakan pemilik pengajuan.
+**Aturan:** pemberi keputusan tidak boleh diambil dari input browser. Sistem mengisinya dari pengguna yang sedang masuk. Pada seluruh tahap keputusan, pemberi keputusan tidak boleh merupakan pemilik pengajuan.
 
 ## Tabel `hari_libur`
 
@@ -308,13 +310,13 @@ erDiagram
 - Kombinasi unik persetujuan (`pengajuan_cuti_id`, `tahap`).
 - `hari_libur.tanggal` unik.
 
-## Keputusan yang Masih Perlu Dikonfirmasi
+## Ketentuan yang Telah Ditetapkan
 
-- Apakah Sabtu dan Minggu selalu menjadi akhir pekan bagi seluruh pegawai.
-- Apakah terdapat jenis cuti yang tidak mengurangi saldo.
-- Apakah saldo dapat dibawa ke tahun berikutnya.
-- Apakah Admin HR boleh mengajukan cuti melalui akun yang sama.
-- Apakah satu pegawai dapat memiliki lebih dari satu Atasan atau pemberi persetujuan pengganti.
-- Batas waktu pembatalan setelah pengajuan disetujui.
-- Format nomor pengajuan dan periode reset nomor.
-- Apakah data perlu menggunakan penghapusan lunak selain status `aktif`.
+- Sabtu dan Minggu diperlakukan sebagai akhir pekan.
+- Jenis cuti serta aturan pengurangan saldo dikelola sebagai data oleh Admin HR.
+- Saldo tidak dibawa otomatis ke tahun berikutnya pada versi awal.
+- Atasan dan Admin HR tetap dapat mengajukan cuti sebagai pegawai, tetapi pemberi keputusan tidak boleh pemilik pengajuan.
+- Seorang pegawai memiliki paling banyak satu Atasan langsung.
+- Pembatalan pengajuan yang disetujui hanya dapat diproses Admin HR sebelum tanggal cuti pertama.
+- Nomor pengajuan menggunakan format `CUTI-YYYY-NNNNNN` dan nomor urut dimulai kembali setiap tahun.
+- Riwayat yang telah digunakan tidak dihapus; data master dinonaktifkan melalui status `aktif`.

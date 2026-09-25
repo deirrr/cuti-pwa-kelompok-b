@@ -63,7 +63,7 @@ Validasi dijalankan di sisi server ketika draf dikirim dan diperiksa kembali seb
 - Saldo tahun dan jenis cuti tersedia serta mencukupi.
 - Pegawai memiliki Atasan yang aktif dan bukan dirinya sendiri.
 
-Pengajuan aktif untuk pemeriksaan tumpang tindih adalah pengajuan berstatus `menunggu_atasan`, `menunggu_hr`, atau `disetujui`. Pengajuan `ditolak` dan `dibatalkan` tidak memblokir tanggal baru. Ketentuan ini merupakan **asumsi awal**.
+Pengajuan aktif untuk pemeriksaan tumpang tindih adalah pengajuan berstatus `menunggu_atasan`, `menunggu_hr`, atau `disetujui`. Pengajuan `ditolak` dan `dibatalkan` tidak memblokir tanggal baru.
 
 ## Persetujuan Atasan
 
@@ -77,7 +77,7 @@ Pengajuan aktif untuk pemeriksaan tumpang tindih adalah pengajuan berstatus `men
 ## Persetujuan Admin HR
 
 1. Admin HR hanya memproses pengajuan berstatus `menunggu_hr`.
-2. Sistem memeriksa ulang tanggal aktif dan saldo di dalam transaksi database.
+2. Sistem memastikan Admin HR bukan pemilik pengajuan, lalu memeriksa ulang tanggal aktif dan saldo di dalam transaksi database.
 3. Jika disetujui, sistem mengunci data saldo yang berkaitan, memastikan saldo mencukupi, mengurangi saldo tepat satu kali, mencatat keputusan, lalu mengubah status menjadi `disetujui`.
 4. Jika ditolak, Admin HR wajib memberikan alasan, mencatat keputusan, dan mengubah status menjadi `ditolak` tanpa mengubah saldo.
 5. Apabila validasi ulang gagal, keputusan tidak disimpan dan Admin HR menerima penjelasan untuk meninjau data.
@@ -96,12 +96,12 @@ Rancangan awal pembatalan adalah sebagai berikut:
 
 - Karyawan dapat membatalkan pengajuan `draf` atau `menunggu_atasan` miliknya.
 - Pengajuan `menunggu_hr` tidak dapat dibatalkan langsung oleh Karyawan karena sudah memiliki keputusan Atasan. Pembatalan perlu diproses Admin HR.
-- Pengajuan `disetujui` hanya dapat diubah menjadi `dibatalkan` oleh Admin HR setelah alasan pembatalan diverifikasi.
+- Pengajuan `disetujui` hanya dapat diubah menjadi `dibatalkan` oleh Admin HR setelah alasan pembatalan diverifikasi dan sebelum tanggal cuti pertama.
 - Pembatalan pengajuan `disetujui` mengembalikan saldo dengan jumlah yang sebelumnya dikurangi, tepat satu kali, dalam transaksi database.
 - Pengajuan `ditolak` atau `dibatalkan` tidak dapat dibatalkan kembali.
 - Aktor, alasan, dan waktu pembatalan harus dicatat dalam jejak keputusan.
 
-Aturan pembatalan setelah persetujuan merupakan **asumsi awal** dan harus dikonfirmasi dengan kebijakan PT Medika Antapani.
+Setelah tanggal cuti pertama tercapai, pengajuan yang sudah disetujui tidak dapat dibatalkan melalui alur versi awal.
 
 ## Perubahan Saldo
 
@@ -124,10 +124,10 @@ Aturan pembatalan setelah persetujuan merupakan **asumsi awal** dan harus dikonf
 | `menunggu_atasan` | `menunggu_hr` | Atasan | Atasan adalah Atasan aktif pemilik, bukan pemilik pengajuan, dan menyetujui. |
 | `menunggu_atasan` | `ditolak` | Atasan | Atasan berwenang menolak dan mengisi alasan. |
 | `menunggu_atasan` | `dibatalkan` | Karyawan | Pemilik membatalkan sebelum ada keputusan Atasan. |
-| `menunggu_hr` | `disetujui` | Admin HR | Validasi ulang berhasil dan saldo dikurangi dalam transaksi. |
-| `menunggu_hr` | `ditolak` | Admin HR | Admin HR menolak dan mengisi alasan; saldo tidak berubah. |
+| `menunggu_hr` | `disetujui` | Admin HR | Admin HR bukan pemilik, validasi ulang berhasil, dan saldo dikurangi dalam transaksi. |
+| `menunggu_hr` | `ditolak` | Admin HR | Admin HR bukan pemilik, menolak, dan mengisi alasan; saldo tidak berubah. |
 | `menunggu_hr` | `dibatalkan` | Admin HR | Permintaan pembatalan diverifikasi sebelum keputusan akhir. |
-| `disetujui` | `dibatalkan` | Admin HR | Pembatalan disetujui dan saldo dikembalikan tepat satu kali. |
+| `disetujui` | `dibatalkan` | Admin HR | Pembatalan diproses sebelum tanggal cuti pertama dan saldo dikembalikan tepat satu kali. |
 
 Tidak ada transisi keluar dari `ditolak` atau `dibatalkan`. Atasan tidak boleh menyetujui pengajuannya sendiri dalam keadaan apa pun.
 
@@ -137,7 +137,7 @@ Tidak ada transisi keluar dari `ditolak` atau `dibatalkan`. Atasan tidak boleh m
 - Satu tanggal hari libur aktif hanya dicatat satu kali.
 - Tanggal hari libur aktif dan akhir pekan tidak dihitung sebagai tanggal cuti.
 - Perubahan hari libur yang bertabrakan dengan pengajuan aktif perlu menampilkan peringatan dan ditinjau Admin HR.
-- **Asumsi awal:** hari libur tidak mengubah otomatis pengajuan yang sudah `disetujui`; Admin HR harus meninjau dan melakukan penyesuaian terkontrol.
+- Hari libur baru tidak mengubah otomatis pengajuan yang sudah `disetujui`; Admin HR harus meninjau dan melakukan penyesuaian terkontrol.
 
 ## Pengelolaan Jenis Cuti
 

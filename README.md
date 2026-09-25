@@ -250,6 +250,7 @@ Dokumen berikut berisi rancangan awal dan belum menyatakan bahwa fitur telah dii
 8. [Pedoman Pengembangan](docs/08-pedoman-pengembangan.md)
 9. [Keputusan Proyek](docs/09-keputusan-proyek.md)
 10. [Matriks Ketertelusuran](docs/10-matriks-ketertelusuran.md)
+11. [Rancangan Antarmuka dan Wireframe](docs/11-rancangan-antarmuka.md)
 
 ## Aturan Kontribusi Dasar
 
