@@ -1,8 +1,8 @@
 # Rancangan Database
 
-Dokumen ini mencatat fondasi database yang sudah tersedia dan arah rancangan berikutnya. Migration fondasi bisnis sudah dibuat, tetapi masih memakai satu jabatan, satu Atasan, dan satu peran per akun. Bagian tersebut merupakan kondisi saat ini, bukan rancangan akhir untuk struktur organisasi terbaru.
+Dokumen ini mencatat fondasi database yang sudah tersedia dan arah rancangan berikutnya. Tabel unit bisnis, jabatan, penugasan jabatan, peran, dan pengguna-peran sudah ditambahkan secara kompatibel. Struktur lama masih dipertahankan sementara selama proses transisi.
 
-> Rancangan target pada [Rancangan Organisasi dan Persetujuan Berjenjang](12-rancangan-organisasi-dan-persetujuan.md) menggantikan asumsi organisasi lama di dokumen ini. Migration, model, dan data belum diubah untuk menerapkan rancangan target.
+> Rancangan target pada [Rancangan Organisasi dan Persetujuan Berjenjang](12-rancangan-organisasi-dan-persetujuan.md) menggantikan asumsi organisasi lama di dokumen ini. Fondasi organisasinya sudah tersedia, sedangkan snapshot rute persetujuan belum diimplementasikan.
 
 ## Prinsip Rancangan
 

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -61,6 +62,17 @@ class Pegawai extends Model
     public function pengajuanCuti(): HasMany
     {
         return $this->hasMany(PengajuanCuti::class);
+    }
+
+    public function penugasanJabatan(): HasMany
+    {
+        return $this->hasMany(PenugasanJabatan::class);
+    }
+
+    public function jabatanOrganisasi(): BelongsToMany
+    {
+        return $this->belongsToMany(Jabatan::class, 'penugasan_jabatan')
+            ->withPivot(['id', 'utama', 'tanggal_mulai', 'tanggal_selesai', 'aktif']);
     }
 
     protected static function booted(): void

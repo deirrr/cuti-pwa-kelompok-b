@@ -1,6 +1,6 @@
 # Hak Akses
 
-Dokumen ini mendefinisikan rancangan hak akses Karyawan, Atasan, dan Admin HR. MO merupakan jabatan dengan kewenangan persetujuan Atasan, bukan peran login keempat. Rancangan peran jamak ini belum diimplementasikan pada fondasi saat ini.
+Dokumen ini mendefinisikan hak akses Karyawan, Atasan, dan Admin HR. MO merupakan jabatan dengan kewenangan persetujuan Atasan, bukan peran login keempat. Relasi peran jamak dan middleware dasarnya sudah tersedia; otorisasi berdasarkan rute pengajuan masih direncanakan.
 
 ## Prinsip Dasar
 
@@ -81,4 +81,4 @@ Saat Admin HR mengajukan cuti, pengajuan mengikuti penugasan utama seperti pegaw
 
 ## Catatan Implementasi
 
-Fondasi saat ini masih menggunakan satu nilai peran per akun dan hubungan Atasan pada data pegawai. Sebelum alur bisnis dibangun, struktur tersebut perlu dikembangkan menjadi peran jamak dan penugasan jabatan sesuai [Rancangan Organisasi dan Persetujuan Berjenjang](12-rancangan-organisasi-dan-persetujuan.md).
+Tabel peran jamak dan penugasan jabatan sudah tersedia. Kolom peran dan struktur lama masih dipertahankan sementara untuk kompatibilitas, lalu akan dihentikan penggunaannya setelah seluruh autentikasi, pengelolaan organisasi, dan alur persetujuan berpindah ke struktur baru.

@@ -16,6 +16,9 @@ class DataAwalPengembanganTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $this->assertDatabaseCount('departemen', 2);
+        $this->assertDatabaseCount('unit_bisnis', 6);
+        $this->assertDatabaseCount('peran', 3);
+        $this->assertDatabaseCount('pengguna_peran', 7);
         $this->assertDatabaseCount('pengguna', 4);
         $this->assertDatabaseCount('pegawai', 4);
         $this->assertDatabaseCount('jenis_cuti', 1);

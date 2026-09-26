@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PeranPengguna;
+use App\Models\Pengguna;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -13,10 +14,17 @@ class DashboardController extends Controller
      */
     public function __invoke(Request $request): RedirectResponse
     {
-        return match ($request->user()->peran) {
-            PeranPengguna::Karyawan => redirect()->route('dashboard.karyawan'),
-            PeranPengguna::Atasan => redirect()->route('dashboard.atasan'),
-            PeranPengguna::AdminHr => redirect()->route('dashboard.admin_hr'),
-        };
+        /** @var Pengguna $pengguna */
+        $pengguna = $request->user();
+
+        if ($pengguna->memilikiPeran(PeranPengguna::AdminHr)) {
+            return redirect()->route('dashboard.admin_hr');
+        }
+
+        if ($pengguna->memilikiPeran(PeranPengguna::Atasan)) {
+            return redirect()->route('dashboard.atasan');
+        }
+
+        return redirect()->route('dashboard.karyawan');
     }
 }

@@ -2,33 +2,28 @@
 
 namespace App\Models;
 
-use Database\Factories\DepartemenFactory;
+use App\Enums\KategoriUnitBisnis;
+use Database\Factories\UnitBisnisFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Table('departemen')]
-#[Fillable(['unit_bisnis_id', 'kode', 'nama', 'aktif'])]
-class Departemen extends Model
+#[Table('unit_bisnis')]
+#[Fillable(['kode', 'nama', 'kategori', 'aktif'])]
+class UnitBisnis extends Model
 {
-    /** @use HasFactory<DepartemenFactory> */
+    /** @use HasFactory<UnitBisnisFactory> */
     use HasFactory;
 
     public const CREATED_AT = 'dibuat_pada';
 
     public const UPDATED_AT = 'diperbarui_pada';
 
-    public function unitBisnis(): BelongsTo
+    public function departemen(): HasMany
     {
-        return $this->belongsTo(UnitBisnis::class);
-    }
-
-    public function pegawai(): HasMany
-    {
-        return $this->hasMany(Pegawai::class);
+        return $this->hasMany(Departemen::class);
     }
 
     public function jabatan(): HasMany
@@ -42,6 +37,7 @@ class Departemen extends Model
     protected function casts(): array
     {
         return [
+            'kategori' => KategoriUnitBisnis::class,
             'aktif' => 'boolean',
         ];
     }

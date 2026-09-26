@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Departemen;
+use App\Models\UnitBisnis;
 use Illuminate\Database\Seeder;
 
 class DepartemenSeeder extends Seeder
@@ -12,14 +13,25 @@ class DepartemenSeeder extends Seeder
      */
     public function run(): void
     {
+        $headOffice = UnitBisnis::query()->where('kode', 'HO')->firstOrFail();
+        $klinikUtama = UnitBisnis::query()->where('kode', 'KUMA')->firstOrFail();
+
         Departemen::query()->updateOrCreate(
             ['kode' => 'SDM'],
-            ['nama' => 'Sumber Daya Manusia', 'aktif' => true],
+            [
+                'unit_bisnis_id' => $headOffice->getKey(),
+                'nama' => 'Sumber Daya Manusia',
+                'aktif' => true,
+            ],
         );
 
         Departemen::query()->updateOrCreate(
             ['kode' => 'OPS'],
-            ['nama' => 'Operasional', 'aktif' => true],
+            [
+                'unit_bisnis_id' => $klinikUtama->getKey(),
+                'nama' => 'Operasional',
+                'aktif' => true,
+            ],
         );
     }
 }

@@ -8,14 +8,15 @@ Proyek capstone ini dikerjakan oleh tim beranggotakan lima orang. Aplikasi diran
 
 Repository saat ini telah memiliki fondasi database bisnis, autentikasi berbasis NIK, dan pembatasan akses dasar berdasarkan peran. Fitur pengajuan cuti, alur persetujuan, pengelolaan data, dan kemampuan PWA masih dalam tahap perencanaan serta pengembangan.
 
-Rancangan organisasi terbaru mencakup enam unit bisnis, pegawai dengan beberapa jabatan, serta persetujuan dinamis melalui Atasan, Manager Operasional, dan Admin HR. Rancangan tersebut belum diterapkan pada database atau fitur aplikasi.
+Fondasi organisasi terbaru telah mencakup enam unit bisnis, pegawai dengan beberapa jabatan, dan peran jamak. Pembentukan rute persetujuan dinamis melalui Atasan, Manager Operasional, dan Admin HR masih direncanakan.
 
 Yang sudah tersedia:
 
 - Kerangka aplikasi Laravel 13 beserta Blade, JavaScript, Vite, dan Tailwind CSS.
 - Migration, model, factory, dan seeder untuk fondasi data cuti.
+- Migration, model, factory, seeder, dan relasi dasar untuk unit bisnis, jabatan, penugasan jabatan, serta peran jamak.
 - Autentikasi menggunakan NIK dan kata sandi, termasuk pembatasan percobaan masuk dan tindakan keluar.
-- Pemeriksaan akun aktif dan middleware pembatasan akses Karyawan, Atasan, serta Admin HR.
+- Pemeriksaan akun aktif dan middleware pembatasan akses yang mendukung gabungan peran Karyawan, Atasan, serta Admin HR.
 - Halaman masuk dan dashboard dasar yang responsif.
 - Pengujian otomatis untuk fondasi database, autentikasi, dan hak akses dasar.
 
@@ -82,7 +83,7 @@ Ruang lingkup yang direncanakan meliputi:
 | Atasan | Melihat pengajuan yang menjadi tanggung jawabnya, termasuk tahap Atasan langsung atau MO, lalu menyetujui atau menolak. |
 | Admin HR | Mengelola data pendukung, meninjau pengajuan yang telah menyelesaikan tahap organisasi, memberikan keputusan akhir, dan memantau data cuti. |
 
-Satu akun nantinya dapat memiliki beberapa peran. Pembatasan peran tunggal dasar telah tersedia, sedangkan peran jamak dan policy berdasarkan kepemilikan, penugasan jabatan, rute, serta status pengajuan masih direncanakan.
+Satu akun dapat memiliki beberapa peran. Pembatasan akses berdasarkan peran jamak telah tersedia, sedangkan policy berdasarkan kepemilikan, penugasan jabatan, rute, serta status pengajuan masih direncanakan.
 
 ## Alur Utama Pengajuan Cuti
 
@@ -171,7 +172,7 @@ Nama tabel bisnis menggunakan bahasa Indonesia agar mudah dipahami oleh tim. Mig
 | `persetujuan_cuti` | Menyimpan tahap, keputusan, pemberi keputusan, catatan, dan waktu keputusan. |
 | `hari_libur` | Menyimpan tanggal libur yang digunakan dalam validasi hari cuti. |
 
-Rancangan target juga memerlukan tabel `unit_bisnis`, `jabatan`, `penugasan_jabatan`, `peran`, dan `pengguna_peran`. Tabel tersebut masih berupa rancangan karena fondasi sekarang hanya mendukung satu jabatan dan satu peran per akun.
+Tabel `unit_bisnis`, `jabatan`, `penugasan_jabatan`, `peran`, dan `pengguna_peran` sudah tersedia sebagai fondasi organisasi. Kolom lama pada `pegawai` dan `pengguna` masih dipertahankan sementara agar data dan fitur autentikasi lama tetap kompatibel selama masa transisi.
 
 Struktur kolom, relasi, indeks, serta aturan penghapusan dasar sudah diterapkan melalui migration. Tabel teknis Laravel, seperti `migrations`, `cache`, `cache_locks`, `jobs`, `job_batches`, dan tabel teknis lain, tetap boleh menggunakan nama bawaan framework.
 

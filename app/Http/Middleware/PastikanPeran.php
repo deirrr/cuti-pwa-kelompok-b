@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Pengguna;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,8 +16,10 @@ class PastikanPeran
      */
     public function handle(Request $request, Closure $next, string ...$peranDiizinkan): Response
     {
+        $pengguna = $request->user();
+
         abort_unless(
-            in_array($request->user()?->peran?->value, $peranDiizinkan, true),
+            $pengguna instanceof Pengguna && $pengguna->memilikiSalahSatuPeran($peranDiizinkan),
             Response::HTTP_FORBIDDEN,
         );
 

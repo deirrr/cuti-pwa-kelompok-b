@@ -1,6 +1,6 @@
 # Rancangan Organisasi dan Persetujuan Berjenjang
 
-Dokumen ini menjadi acuan utama untuk pengembangan struktur organisasi dan penentuan alur persetujuan cuti PT Medika Antapani. Rancangan ini **belum diimplementasikan**. Struktur database dan pembatasan peran yang saat ini tersedia masih berupa fondasi awal dan perlu disesuaikan pada tahap pengembangan berikutnya.
+Dokumen ini menjadi acuan utama untuk pengembangan struktur organisasi dan penentuan alur persetujuan cuti PT Medika Antapani. Tabel unit bisnis, jabatan, penugasan jabatan, peran jamak, model, seeder, dan middleware peran dasar **sudah tersedia**. Pengelolaan data melalui antarmuka dan pembentukan rute persetujuan masih direncanakan.
 
 ## Tujuan Rancangan
 
@@ -185,7 +185,7 @@ Rancangan target menambahkan atau menyesuaikan data berikut:
 | `pengajuan_cuti` | Menyimpan acuan penugasan utama dan konteks organisasi saat dikirim. |
 | `persetujuan_cuti` | Menyimpan urutan tahap yang dibekukan, target penyetuju, status tahap, keputusan, dan pemberi keputusan. |
 
-Pada rancangan target, `pegawai.atasan_id`, `pegawai.departemen_id`, kolom teks `pegawai.jabatan`, dan satu nilai `pengguna.peran` tidak lagi cukup sebagai sumber struktur organisasi. Perubahan migration belum dilakukan pada tahap dokumentasi ini.
+Pada rancangan target, `pegawai.atasan_id`, `pegawai.departemen_id`, kolom teks `pegawai.jabatan`, dan satu nilai `pengguna.peran` tidak lagi menjadi sumber utama struktur organisasi. Kolom tersebut masih dipertahankan sementara untuk kompatibilitas dan akan dipensiunkan setelah seluruh modul berpindah ke struktur baru.
 
 ## Aturan Data Penting
 

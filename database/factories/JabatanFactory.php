@@ -2,14 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\Departemen;
+use App\Enums\KategoriJabatan;
+use App\Models\Jabatan;
 use App\Models\UnitBisnis;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Departemen>
+ * @extends Factory<Jabatan>
  */
-class DepartemenFactory extends Factory
+class JabatanFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,16 +21,13 @@ class DepartemenFactory extends Factory
     {
         return [
             'unit_bisnis_id' => UnitBisnis::factory(),
-            'kode' => fake()->unique()->bothify('DEP-###'),
-            'nama' => 'Departemen '.fake()->unique()->words(2, true),
+            'departemen_id' => null,
+            'atasan_jabatan_id' => null,
+            'kode' => fake()->unique()->bothify('JBT-####'),
+            'nama' => fake()->jobTitle(),
+            'kategori' => KategoriJabatan::Staf,
+            'langsung_ke_hr' => false,
             'aktif' => true,
         ];
-    }
-
-    public function nonaktif(): static
-    {
-        return $this->state(fn (array $attributes): array => [
-            'aktif' => false,
-        ]);
     }
 }
