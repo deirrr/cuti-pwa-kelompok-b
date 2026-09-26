@@ -52,11 +52,11 @@
                 <h2 class="text-lg font-semibold">Area akses tersedia</h2>
                 <div class="mt-5 flex flex-wrap gap-3">
                     <a href="{{ route('dashboard.karyawan') }}" class="rounded-lg bg-slate-100 px-4 py-2 text-sm font-medium transition hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700">Pengajuan pribadi</a>
-                    @if (auth()->user()->peran === \App\Enums\PeranPengguna::Atasan)
+                    @if (auth()->user()->memilikiPeran(\App\Enums\PeranPengguna::Atasan))
                         <a href="{{ route('dashboard.atasan') }}" class="rounded-lg bg-emerald-100 px-4 py-2 text-sm font-medium text-emerald-800 transition hover:bg-emerald-200 dark:bg-emerald-950 dark:text-emerald-300">Area Atasan</a>
                     @endif
-                    @if (auth()->user()->peran === \App\Enums\PeranPengguna::AdminHr)
-                        <a href="{{ route('dashboard.admin_hr') }}" class="rounded-lg bg-emerald-100 px-4 py-2 text-sm font-medium text-emerald-800 transition hover:bg-emerald-200 dark:bg-emerald-950 dark:text-emerald-300">Area Admin HR</a>
+                    @if (auth()->user()->memilikiPeran(\App\Enums\PeranPengguna::AdminHr))
+                        <a href="{{ route('admin_hr.dashboard') }}" class="rounded-lg bg-emerald-100 px-4 py-2 text-sm font-medium text-emerald-800 transition hover:bg-emerald-200 dark:bg-emerald-950 dark:text-emerald-300">Area Admin HR</a>
                     @endif
                 </div>
             </section>

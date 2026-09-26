@@ -18,6 +18,7 @@ Yang sudah tersedia:
 - Autentikasi menggunakan NIK dan kata sandi, termasuk pembatasan percobaan masuk dan tindakan keluar.
 - Pemeriksaan akun aktif dan middleware pembatasan akses yang mendukung gabungan peran Karyawan, Atasan, serta Admin HR.
 - Halaman masuk dan dashboard dasar yang responsif.
+- Dashboard Admin HR dan pengelolaan Unit Bisnis, termasuk pencarian, penambahan, perubahan, serta penonaktifan.
 - Pengujian otomatis untuk fondasi database, autentikasi, dan hak akses dasar.
 
 Yang masih direncanakan antara lain formulir pengajuan, validasi tanggal dan saldo, proses persetujuan berjenjang, pengelolaan data oleh Admin HR, serta komponen PWA.
@@ -120,6 +121,8 @@ Fitur masuk dengan NIK, keluar, pemeriksaan akun aktif, dan dashboard dasar sesu
 
 ### Admin HR
 
+- Membuka dashboard ringkasan Admin HR. **Sudah tersedia.**
+- Mengelola Unit Bisnis. **Sudah tersedia.**
 - Mengelola data pengguna dan pegawai.
 - Mengelola jenis cuti, saldo cuti, dan hari libur.
 - Memeriksa pengajuan yang telah menyelesaikan seluruh tahap organisasi.

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminHr\DashboardController as AdminHrDashboardController;
+use App\Http\Controllers\AdminHr\UnitBisnisController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SesiController;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +26,16 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
         ->middleware('peran:atasan')
         ->name('dashboard.atasan');
 
-    Route::view('/dashboard/admin-hr', 'dashboard', ['jenisDashboard' => 'Admin HR'])
+    Route::middleware('peran:admin_hr')->prefix('admin-hr')->name('admin_hr.')->group(function () {
+        Route::get('/dashboard', AdminHrDashboardController::class)->name('dashboard');
+        Route::get('/unit-bisnis', [UnitBisnisController::class, 'index'])->name('unit_bisnis.index');
+        Route::get('/unit-bisnis/tambah', [UnitBisnisController::class, 'create'])->name('unit_bisnis.create');
+        Route::post('/unit-bisnis', [UnitBisnisController::class, 'store'])->name('unit_bisnis.store');
+        Route::get('/unit-bisnis/{unitBisnis}/ubah', [UnitBisnisController::class, 'edit'])->name('unit_bisnis.edit');
+        Route::put('/unit-bisnis/{unitBisnis}', [UnitBisnisController::class, 'update'])->name('unit_bisnis.update');
+    });
+
+    Route::get('/dashboard/admin-hr', AdminHrDashboardController::class)
         ->middleware('peran:admin_hr')
         ->name('dashboard.admin_hr');
 });

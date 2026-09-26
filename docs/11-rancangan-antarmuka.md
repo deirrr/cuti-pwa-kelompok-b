@@ -2,6 +2,8 @@
 
 Dokumen ini menjadi rancangan awal antarmuka untuk Karyawan, Atasan, dan Admin HR. Wireframe menunjukkan susunan informasi dan alur, bukan desain visual akhir dan bukan bukti bahwa halaman telah diimplementasikan.
 
+Dashboard Admin HR dan halaman pengelolaan Unit Bisnis sudah diimplementasikan sebagai tahap awal. Halaman lain dalam dokumen ini tetap berstatus rancangan sampai tersedia dan diuji.
+
 ## Tujuan Rancangan
 
 - Menyediakan navigasi sederhana sesuai tugas setiap aktor.
