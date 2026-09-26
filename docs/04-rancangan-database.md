@@ -1,12 +1,14 @@
 # Rancangan Database
 
-Dokumen ini berisi rancangan konseptual database. Belum ada migration bisnis yang dibuat. Nama, tipe, indeks, dan aturan berikut perlu ditinjau kembali sebelum implementasi.
+Dokumen ini mencatat fondasi database yang sudah tersedia dan arah rancangan berikutnya. Migration fondasi bisnis sudah dibuat, tetapi masih memakai satu jabatan, satu Atasan, dan satu peran per akun. Bagian tersebut merupakan kondisi saat ini, bukan rancangan akhir untuk struktur organisasi terbaru.
+
+> Rancangan target pada [Rancangan Organisasi dan Persetujuan Berjenjang](12-rancangan-organisasi-dan-persetujuan.md) menggantikan asumsi organisasi lama di dokumen ini. Migration, model, dan data belum diubah untuk menerapkan rancangan target.
 
 ## Prinsip Rancangan
 
 - Nama tabel dan kolom bisnis menggunakan bahasa Indonesia.
 - Setiap pengguna terhubung dengan tepat satu pegawai.
-- Pegawai dapat memiliki satu Atasan yang juga tercatat sebagai pegawai.
+- Fondasi saat ini menghubungkan pegawai dengan satu Atasan; rancangan target memindahkan hierarki ke jabatan dan penugasan.
 - Saldo dicatat per pegawai, jenis cuti, dan tahun.
 - Satu pengajuan dapat memiliki beberapa tanggal dan beberapa catatan persetujuan.
 - Keputusan dan perubahan saldo akhir dilakukan dalam transaksi database.
@@ -17,7 +19,23 @@ Dokumen ini berisi rancangan konseptual database. Belum ada migration bisnis yan
 
 Tabel `departemen` ditambahkan agar hubungan organisasi tidak disimpan sebagai teks berulang pada setiap pegawai. Tabel ini membantu penyaringan rekap dan pengelompokan pegawai tanpa membuat rancangan terlalu rumit.
 
-## ERD Konseptual
+## Revisi Target Struktur Organisasi
+
+Rancangan berikut akan digunakan sebelum fitur pengajuan dan persetujuan dibangun:
+
+| Tabel target | Perubahan utama |
+| --- | --- |
+| `unit_bisnis` | Menyimpan HO, KUMA, KPMA, Apotek, PMB, dan Medlab beserta kategori unit. |
+| `departemen` | Ditautkan ke `unit_bisnis`; nama tidak lagi diasumsikan unik secara global. |
+| `jabatan` | Menyimpan nama, kategori, unit, departemen, dan jabatan Atasan. |
+| `penugasan_jabatan` | Relasi banyak-ke-banyak pegawai dan jabatan, masa berlaku, serta penanda penugasan utama. |
+| `peran` dan `pengguna_peran` | Menggantikan satu enum peran agar satu akun dapat menjadi Karyawan, Atasan, dan Admin HR sekaligus. |
+| `pengajuan_cuti` | Menyimpan konteks penugasan utama yang dipakai ketika pengajuan dikirim. |
+| `persetujuan_cuti` | Menyimpan urutan tahap Atasan, MO, dan HR yang dibekukan beserta target dan keputusan. |
+
+Kolom `pegawai.departemen_id`, `pegawai.atasan_id`, teks `pegawai.jabatan`, dan `pengguna.peran` tetap menggambarkan fondasi yang ada, tetapi tidak akan menjadi sumber kebenaran struktur organisasi setelah revisi target diterapkan.
+
+## ERD Fondasi Saat Ini
 
 ```mermaid
 erDiagram
@@ -209,7 +227,7 @@ erDiagram
 | `nomor_pengajuan` | varchar(40) | Tidak | Tidak | - | dibuat sistem | Ya | Nomor yang mudah dirujuk pengguna. |
 | `pegawai_id` | bigint unsigned | Tidak | Tidak | `pegawai.id` | - | Tidak | Pegawai yang mengajukan. |
 | `jenis_cuti_id` | bigint unsigned | Tidak | Tidak | `jenis_cuti.id` | - | Tidak | Jenis cuti yang diajukan. |
-| `status` | enum | Tidak | Tidak | - | `draf` | Tidak | `draf`, `menunggu_atasan`, `menunggu_hr`, `disetujui`, `ditolak`, atau `dibatalkan`. |
+| `status` | enum | Tidak | Tidak | - | `draf` | Tidak | Rancangan target menambah `menunggu_mo` pada status yang tersedia. |
 | `alasan` | text | Tidak | Tidak | - | - | Tidak | Alasan pengajuan dari Karyawan. |
 | `jumlah_hari` | integer unsigned | Tidak | Tidak | - | 0 | Tidak | Jumlah tanggal kerja valid dalam pengajuan. |
 | `diajukan_pada` | timestamp | Ya | Tidak | - | null | Tidak | Waktu draf dikirim kepada Atasan. |
@@ -234,7 +252,7 @@ erDiagram
 
 **Aturan unik:** kombinasi (`pengajuan_cuti_id`, `tanggal`) mencegah tanggal berulang dalam pengajuan yang sama.
 
-**Aturan tumpang tindih:** karena pegawai berada pada tabel induk dan status dapat berubah, tumpang tindih antar-pengajuan tidak cukup dicegah oleh unique key sederhana. Saat pengajuan dikirim dan disetujui akhir, sistem harus membuka transaksi, mengunci baris saldo pegawai yang relevan, lalu mencari tanggal yang sama pada pengajuan aktif (`menunggu_atasan`, `menunggu_hr`, atau `disetujui`). Indeks pada `tanggal` dan indeks status serta pegawai pada tabel induk diperlukan agar pemeriksaan efisien.
+**Aturan tumpang tindih:** karena pegawai berada pada tabel induk dan status dapat berubah, tumpang tindih antar-pengajuan tidak cukup dicegah oleh unique key sederhana. Saat pengajuan dikirim dan disetujui akhir, sistem harus mencari tanggal yang sama pada pengajuan aktif (`menunggu_atasan`, `menunggu_mo`, `menunggu_hr`, atau `disetujui`). Indeks pada `tanggal` dan indeks status serta pegawai pada tabel induk diperlukan agar pemeriksaan efisien.
 
 ## Tabel `persetujuan_cuti`
 
@@ -245,13 +263,13 @@ erDiagram
 | `id` | bigint unsigned | Tidak | Ya | - | otomatis | Ya | Identitas catatan keputusan. |
 | `pengajuan_cuti_id` | bigint unsigned | Tidak | Tidak | `pengajuan_cuti.id` | - | Gabungan | Pengajuan yang diproses. |
 | `pemberi_keputusan_id` | bigint unsigned | Tidak | Tidak | `pengguna.id` | - | Tidak | Pengguna yang melakukan tindakan. |
-| `tahap` | enum | Tidak | Tidak | - | - | Gabungan | `atasan`, `admin_hr`, atau `pembatalan`. |
+| `tahap` | enum | Tidak | Tidak | - | - | Gabungan | Target: `atasan`, `manager_operasional`, `admin_hr`, atau `pembatalan`. |
 | `keputusan` | enum | Tidak | Tidak | - | - | Tidak | `disetujui`, `ditolak`, atau `dibatalkan` sesuai tahap. |
 | `catatan` | text | Ya | Tidak | - | null | Tidak | Catatan keputusan; wajib untuk penolakan dan pembatalan. |
 | `diputuskan_pada` | timestamp | Tidak | Tidak | - | waktu saat ini | Tidak | Waktu keputusan diberikan. |
 | `dibuat_pada` | timestamp | Tidak | Tidak | - | waktu saat ini | Tidak | Waktu catatan disimpan. |
 
-**Aturan unik awal:** kombinasi (`pengajuan_cuti_id`, `tahap`) agar satu tahap tidak diproses dua kali. Jika kelak dibutuhkan beberapa peristiwa pembatalan atau proses ulang, rancangan ini harus ditinjau sebelum migration dibuat.
+**Revisi target:** baris tahap dibuat ketika pengajuan dikirim dan menyimpan `urutan`, target jabatan atau penyetuju, status tahap, serta pemberi keputusan yang masih boleh kosong sebelum diputus. Kombinasi (`pengajuan_cuti_id`, `urutan`) harus unik.
 
 **Aturan:** pemberi keputusan tidak boleh diambil dari input browser. Sistem mengisinya dari pengguna yang sedang masuk. Pada seluruh tahap keputusan, pemberi keputusan tidak boleh merupakan pemilik pengajuan.
 
@@ -278,7 +296,7 @@ erDiagram
 1. Validasi kepemilikan, status, jenis cuti, Atasan, hari libur, akhir pekan, dan rincian tanggal.
 2. Mulai transaksi dan kunci saldo terkait untuk menyusun urutan pemeriksaan pengajuan pegawai.
 3. Periksa kembali saldo dan tanggal yang tumpang tindih.
-4. Simpan rincian dan ubah status menjadi `menunggu_atasan`.
+4. Bekukan rute persetujuan lalu ubah status mengikuti tahap pertama.
 5. Batalkan seluruh perubahan jika salah satu langkah gagal.
 
 ### Persetujuan Akhir
@@ -315,8 +333,8 @@ erDiagram
 - Sabtu dan Minggu diperlakukan sebagai akhir pekan.
 - Jenis cuti serta aturan pengurangan saldo dikelola sebagai data oleh Admin HR.
 - Saldo tidak dibawa otomatis ke tahun berikutnya pada versi awal.
-- Atasan dan Admin HR tetap dapat mengajukan cuti sebagai pegawai, tetapi pemberi keputusan tidak boleh pemilik pengajuan.
-- Seorang pegawai memiliki paling banyak satu Atasan langsung.
+- Atasan, MO, dan Admin HR tetap dapat mengajukan cuti sebagai pegawai, tetapi tidak boleh memutus pengajuan sendiri atau dua tahap pada pengajuan yang sama.
+- Pegawai dapat memiliki beberapa penugasan jabatan, dengan tepat satu penugasan utama untuk menentukan rute cuti.
 - Pembatalan pengajuan yang disetujui hanya dapat diproses Admin HR sebelum tanggal cuti pertama.
 - Nomor pengajuan menggunakan format `CUTI-YYYY-NNNNNN` dan nomor urut dimulai kembali setiap tahun.
 - Riwayat yang telah digunakan tidak dihapus; data master dinonaktifkan melalui status `aktif`.

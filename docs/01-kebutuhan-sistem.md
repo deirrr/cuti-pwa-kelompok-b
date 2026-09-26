@@ -4,15 +4,16 @@ Dokumen ini menjabarkan kebutuhan untuk proyek **Rancang Bangun Sistem Informasi
 
 ## Tujuan Sistem
 
-Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah ditelusuri, dan sesuai alur persetujuan PT Medika Antapani. Karyawan dapat mengajukan cuti, Atasan memberikan keputusan tahap pertama, dan Admin HR memberikan keputusan akhir. Saldo cuti diperbarui hanya setelah persetujuan akhir.
+Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah ditelusuri, dan sesuai struktur PT Medika Antapani. Karyawan mengajukan cuti, Atasan langsung dan MO memberikan keputusan sesuai unit, lalu Admin HR memberikan keputusan akhir. Saldo diperbarui hanya setelah persetujuan akhir.
 
 ## Ruang Lingkup
 
 - Autentikasi pengguna dan pembatasan akses berdasarkan peran.
+- Pengelolaan unit bisnis, departemen atau bagian, jabatan, dan penugasan jabatan rangkap.
 - Pengelolaan data pengguna, pegawai, jenis cuti, saldo cuti, dan hari libur.
 - Pengajuan cuti untuk satu atau beberapa tanggal.
 - Validasi tanggal, pengajuan yang tumpang tindih, hari libur, akhir pekan, dan saldo.
-- Persetujuan berjenjang oleh Atasan dan Admin HR.
+- Persetujuan dinamis oleh Atasan langsung, MO bila diperlukan, dan Admin HR.
 - Penolakan dan pembatalan pengajuan dengan pencatatan alasan.
 - Pembaruan saldo setelah persetujuan akhir.
 - Riwayat pengajuan, riwayat keputusan, dan rekap pengajuan.
@@ -28,7 +29,7 @@ Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah di
 | KF-KAR-002 | Karyawan dapat melihat dashboard yang memuat ringkasan saldo dan status pengajuan miliknya. |
 | KF-KAR-003 | Karyawan dapat membuat dan menyimpan pengajuan sebagai `draf`. |
 | KF-KAR-004 | Karyawan dapat memilih jenis cuti, satu atau beberapa tanggal, dan mengisi alasan. |
-| KF-KAR-005 | Karyawan dapat mengirim draf sehingga status berubah menjadi `menunggu_atasan` jika seluruh validasi berhasil. |
+| KF-KAR-005 | Karyawan dapat mengirim draf sehingga sistem membekukan rute dan mengubah status ke tahap pertama jika seluruh validasi berhasil. |
 | KF-KAR-006 | Karyawan dapat melihat detail, status, dan riwayat pengajuan miliknya. |
 | KF-KAR-007 | Karyawan dapat mengubah draf miliknya sebelum dikirim. |
 | KF-KAR-008 | Karyawan dapat membatalkan draf atau pengajuan yang belum diberi keputusan Atasan. |
@@ -38,20 +39,21 @@ Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah di
 
 | Kode | Kebutuhan |
 | --- | --- |
-| KF-ATS-001 | Atasan dapat melihat pengajuan berstatus `menunggu_atasan` dari pegawai yang menjadi bawahannya. |
+| KF-ATS-001 | Atasan atau MO dapat melihat pengajuan pada tahap yang ditujukan kepadanya. |
 | KF-ATS-002 | Atasan dapat melihat detail pengajuan, tanggal cuti, dan informasi saldo yang relevan. |
-| KF-ATS-003 | Atasan dapat menyetujui pengajuan sehingga status berubah menjadi `menunggu_hr`. |
+| KF-ATS-003 | Atasan dapat menyetujui pengajuan sehingga sistem melanjutkan ke tahap MO atau Admin HR sesuai rute. |
 | KF-ATS-004 | Atasan dapat menolak pengajuan dengan alasan sehingga status berubah menjadi `ditolak`. |
 | KF-ATS-005 | Atasan dapat melihat riwayat keputusan yang pernah diberikannya. |
 | KF-ATS-006 | Sistem mencegah Atasan memproses pengajuan miliknya sendiri. |
 | KF-ATS-007 | Atasan hanya dapat memproses pengajuan yang masih menunggu keputusannya. |
+| KF-ATS-008 | MO dapat memproses tahap `menunggu_mo` hanya dalam unit atau cakupan yang ditetapkan. |
 
 ### Admin HR
 
 | Kode | Kebutuhan |
 | --- | --- |
-| KF-HR-001 | Admin HR dapat mengelola akun pengguna dan data pegawai. |
-| KF-HR-002 | Admin HR dapat menetapkan hubungan Atasan dan bawahan. |
+| KF-HR-001 | Admin HR dapat mengelola akun, data pegawai, dan peran jamak pengguna. |
+| KF-HR-002 | Admin HR dapat mengelola unit, departemen atau bagian, jabatan, hierarki, penugasan, dan cakupan MO. |
 | KF-HR-003 | Admin HR dapat mengelola jenis cuti dan status aktifnya. |
 | KF-HR-004 | Admin HR dapat mengelola saldo cuti pegawai per jenis cuti dan tahun. |
 | KF-HR-005 | Admin HR dapat mengelola daftar hari libur. |
@@ -82,13 +84,15 @@ Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah di
 
 ## Ketentuan Awal Sistem
 
-- Setiap pengguna terhubung dengan tepat satu data pegawai.
-- Setiap pegawai memiliki paling banyak satu Atasan langsung.
+- Setiap pengguna terhubung dengan tepat satu data pegawai, tetapi dapat memiliki beberapa peran sistem.
+- Satu pegawai dapat memegang beberapa jabatan aktif dan memiliki tepat satu penugasan utama untuk rute cuti.
+- Setiap penugasan memiliki paling banyak satu jabatan Atasan langsung; hubungan melingkar ditolak.
+- Rute persetujuan dibekukan saat pengajuan dikirim.
 - Admin HR mengelola jenis cuti, jatah bawaan, dan saldo setiap tahun sebagai data, bukan nilai tetap di dalam kode.
 - Saldo tidak otomatis dibawa ke tahun berikutnya pada versi awal.
 - Akhir pekan adalah Sabtu dan Minggu.
 - Satu hari cuti dihitung sebagai satu hari penuh; cuti setengah hari belum direncanakan.
-- Atasan dan Admin HR dapat mengajukan cuti sebagai pegawai, tetapi tidak dapat memberi keputusan atas pengajuannya sendiri.
+- Atasan, MO, dan Admin HR dapat mengajukan cuti sebagai pegawai, tetapi tidak dapat memberi keputusan atas pengajuannya sendiri atau memutus dua tahap dalam pengajuan yang sama.
 - Admin HR memproses pembatalan pengajuan yang sudah disetujui hanya sebelum tanggal cuti pertama dan mengembalikan saldo tepat satu kali.
 - Nomor pengajuan dibuat server dengan format `CUTI-YYYY-NNNNNN`.
 - Ekspor rekap wajib versi awal menggunakan CSV.
@@ -107,9 +111,9 @@ Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah di
 ### Wajib
 
 - Autentikasi dan otorisasi tiga aktor.
-- Data pengguna, pegawai, Atasan, jenis cuti, saldo, dan hari libur.
+- Data unit bisnis, departemen atau bagian, jabatan, penugasan, pengguna, pegawai, jenis cuti, saldo, dan hari libur.
 - Pengajuan dan validasi cuti.
-- Persetujuan Atasan dan keputusan akhir Admin HR.
+- Persetujuan Atasan, MO sesuai unit, dan keputusan akhir Admin HR.
 - Pencegahan persetujuan pengajuan sendiri.
 - Perubahan saldo yang konsisten setelah persetujuan akhir.
 - Riwayat pengajuan dan keputusan.
@@ -140,8 +144,8 @@ Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah di
 
 - Karyawan dapat mengirim pengajuan valid dan melihat statusnya sampai keputusan akhir.
 - Tanggal hari libur, akhir pekan, duplikat, atau tumpang tindih dapat ditolak sesuai aturan.
-- Atasan hanya dapat memproses pengajuan bawahannya dan tidak dapat menyetujui pengajuannya sendiri.
-- Admin HR hanya dapat memproses pengajuan yang telah disetujui Atasan.
+- Atasan dan MO hanya dapat memproses tahap dalam snapshot rutenya dan tidak dapat memutus pengajuan sendiri.
+- Admin HR hanya dapat memproses pengajuan setelah seluruh tahap organisasi selesai dan tidak dapat memutus pengajuan sendiri.
 - Saldo berkurang tepat satu kali setelah persetujuan akhir dan tidak pernah negatif.
 - Penolakan tidak mengurangi saldo; pembatalan yang sah mengembalikan saldo tepat satu kali.
 - Pengguna tidak dapat melihat atau mengubah data yang berada di luar kewenangannya.

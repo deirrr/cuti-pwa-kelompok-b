@@ -1,155 +1,111 @@
 # Alur Bisnis
 
-Dokumen ini menjelaskan rancangan alur bisnis pengajuan cuti. Seluruh alur masih berupa rancangan dan perlu divalidasi sebelum diimplementasikan.
+Dokumen ini menjelaskan rancangan alur bisnis pengajuan cuti. Seluruh alur bisnis masih direncanakan dan belum diimplementasikan. Struktur organisasi mengacu pada [Rancangan Organisasi dan Persetujuan Berjenjang](12-rancangan-organisasi-dan-persetujuan.md).
 
 ## Status Pengajuan
 
 | Status | Arti |
 | --- | --- |
-| `draf` | Pengajuan masih disusun dan hanya dapat dilihat atau diubah oleh pemiliknya. |
-| `menunggu_atasan` | Pengajuan telah dikirim dan menunggu keputusan Atasan. |
-| `menunggu_hr` | Pengajuan telah disetujui Atasan dan menunggu keputusan akhir Admin HR. |
-| `disetujui` | Pengajuan telah disetujui Admin HR dan saldo telah dikurangi. |
-| `ditolak` | Pengajuan ditolak oleh Atasan atau Admin HR. Status ini bersifat akhir. |
-| `dibatalkan` | Pengajuan dibatalkan sesuai kewenangan dan aturan saldo. Status ini bersifat akhir. |
+| `draf` | Pengajuan masih disusun oleh pemilik. |
+| `menunggu_atasan` | Menunggu keputusan Atasan langsung. |
+| `menunggu_mo` | Keputusan Atasan langsung selesai dan pengajuan menunggu MO. |
+| `menunggu_hr` | Seluruh tahap organisasi selesai dan menunggu keputusan akhir Admin HR. |
+| `disetujui` | Disetujui Admin HR dan saldo telah dikurangi. |
+| `ditolak` | Ditolak pada salah satu tahap. |
+| `dibatalkan` | Dibatalkan sesuai kewenangan dan aturan saldo. |
 
 ## Gambaran Alur Utama
 
 ```mermaid
 flowchart TD
-    A[Karyawan membuat pengajuan] --> B[draf]
-    B --> C{Karyawan mengirim?}
-    C -- Belum --> B
-    C -- Ya --> D{Validasi berhasil?}
-    D -- Tidak --> E[Tampilkan kesalahan dan tetap draf]
-    E --> B
-    D -- Ya --> F[menunggu_atasan]
-    F --> G{Keputusan Atasan}
-    G -- Tolak --> H[ditolak]
-    G -- Setujui --> I[menunggu_hr]
-    I --> J{Keputusan Admin HR}
-    J -- Tolak --> H
-    J -- Setujui --> K[Kurangi saldo dalam transaksi]
-    K --> L[disetujui]
-    B --> M[dibatalkan]
-    F --> M
-    L --> N{Pembatalan disetujui Admin HR?}
-    N -- Ya --> O[Kembalikan saldo dalam transaksi]
-    O --> M
+    A[Karyawan membuat draf] --> B{Kirim dan validasi}
+    B -->|Tidak valid| A
+    B -->|Valid| C[Sistem membekukan rute persetujuan]
+    C --> D{Tahap pertama}
+    D -->|Atasan| E[menunggu_atasan]
+    D -->|MO sebagai Atasan langsung| F[menunggu_mo]
+    D -->|Pengecualian resmi| G[menunggu_hr]
+    E -->|Tolak| H[ditolak]
+    E -->|Setujui dan perlu MO| F
+    E -->|Setujui tanpa MO| G
+    F -->|Tolak| H
+    F -->|Setujui| G
+    G -->|Tolak| H
+    G -->|Setujui| I[Kurangi saldo dalam transaksi]
+    I --> J[disetujui]
 ```
 
-## Pengajuan Cuti
+## Pengajuan dan Validasi
 
-1. Karyawan membuat pengajuan baru dan memilih jenis cuti.
-2. Karyawan memilih satu atau beberapa tanggal dan mengisi alasan.
-3. Sistem menyimpan pengajuan sebagai `draf`.
-4. Karyawan dapat memperbaiki draf sebelum mengirimnya.
-5. Saat dikirim, sistem menjalankan seluruh validasi kembali.
-6. Jika valid, status berubah menjadi `menunggu_atasan` dan waktu pengiriman dicatat.
-7. Jika tidak valid, status tetap `draf` dan sistem menampilkan alasan kegagalan.
+1. Karyawan membuat pengajuan, memilih jenis dan tanggal cuti, lalu mengisi alasan.
+2. Sistem menyimpannya sebagai `draf`.
+3. Saat dikirim, sistem memvalidasi akun, pegawai, tanggal, hari libur, tumpang tindih, dan saldo.
+4. Sistem mengambil penugasan utama aktif dan membentuk rute berdasarkan unit bisnis.
+5. Sistem memastikan seluruh penyetuju aktif, bukan pemohon, dan tidak berulang pada tahap lain.
+6. Rute disimpan sebagai snapshot agar mutasi jabatan tidak mengubah pengajuan aktif.
+7. Status berubah mengikuti tahap pertama; jika data tidak lengkap, pengiriman ditolak dan tetap `draf`.
 
-## Validasi Pengajuan
+Pengajuan aktif untuk pemeriksaan tumpang tindih adalah `menunggu_atasan`, `menunggu_mo`, `menunggu_hr`, dan `disetujui`.
 
-Validasi dijalankan di sisi server ketika draf dikirim dan diperiksa kembali sebelum keputusan akhir untuk mencegah data yang sudah berubah.
+## Rute Berdasarkan Unit
 
-- Pengguna aktif dan terhubung dengan data pegawai.
-- Jenis cuti aktif dan dapat digunakan.
-- Sedikitnya satu tanggal dipilih.
-- Setiap tanggal berada dalam rentang yang diizinkan kebijakan.
-- Tanggal bukan hari libur aktif atau akhir pekan.
-- Tidak ada tanggal yang berulang dalam pengajuan yang sama.
-- Tidak ada tanggal yang tumpang tindih dengan pengajuan aktif milik pegawai tersebut.
-- Jumlah hari kerja sesuai jumlah rincian tanggal yang valid.
-- Saldo tahun dan jenis cuti tersedia serta mencukupi.
-- Pegawai memiliki Atasan yang aktif dan bukan dirinya sendiri.
+| Kondisi | Rute persetujuan |
+| --- | --- |
+| Head Office | Atasan langsung -> Admin HR |
+| Unit operasional, Atasan bukan MO | Atasan langsung -> MO -> Admin HR |
+| Unit operasional, Atasan langsung adalah MO | MO -> Admin HR |
+| Jabatan dengan pengecualian resmi | Admin HR |
 
-Pengajuan aktif untuk pemeriksaan tumpang tindih adalah pengajuan berstatus `menunggu_atasan`, `menunggu_hr`, atau `disetujui`. Pengajuan `ditolak` dan `dibatalkan` tidak memblokir tanggal baru.
+Jabatan tanpa Atasan tidak otomatis langsung menuju HR. Pengecualian harus dikonfigurasi secara resmi. Jika terdapat lebih dari satu MO, sistem memakai MO yang cakupannya ditetapkan untuk jabatan atau bagian pemohon, bukan memilih secara acak.
 
-## Persetujuan Atasan
+## Keputusan Atasan dan MO
 
-1. Atasan melihat pengajuan `menunggu_atasan` dari bawahan langsungnya.
-2. Sistem memastikan Atasan bukan pegawai pemilik pengajuan.
-3. Atasan memeriksa jenis cuti, tanggal, alasan, dan saldo yang relevan.
-4. Jika disetujui, sistem mencatat keputusan dan mengubah status menjadi `menunggu_hr`.
-5. Jika ditolak, Atasan wajib memberikan alasan dan status berubah menjadi `ditolak`.
-6. Keputusan hanya boleh dicatat satu kali pada tahap Atasan.
+1. Penyetuju hanya melihat antrean yang ditujukan kepadanya berdasarkan snapshot rute.
+2. Sistem memastikan penyetuju bukan pemohon dan belum memutus tahap lain.
+3. Persetujuan memajukan pengajuan ke tahap berikutnya.
+4. Penolakan mewajibkan alasan dan mengubah status menjadi `ditolak`.
+5. Setiap tahap hanya dapat diputus satu kali.
 
-## Persetujuan Admin HR
+MO menggunakan fungsi Atasan pada aplikasi. MO bukan aktor login keempat, melainkan kategori jabatan dan tahap khusus unit operasional.
 
-1. Admin HR hanya memproses pengajuan berstatus `menunggu_hr`.
-2. Sistem memastikan Admin HR bukan pemilik pengajuan, lalu memeriksa ulang tanggal aktif dan saldo di dalam transaksi database.
-3. Jika disetujui, sistem mengunci data saldo yang berkaitan, memastikan saldo mencukupi, mengurangi saldo tepat satu kali, mencatat keputusan, lalu mengubah status menjadi `disetujui`.
-4. Jika ditolak, Admin HR wajib memberikan alasan, mencatat keputusan, dan mengubah status menjadi `ditolak` tanpa mengubah saldo.
-5. Apabila validasi ulang gagal, keputusan tidak disimpan dan Admin HR menerima penjelasan untuk meninjau data.
+## Keputusan Admin HR
 
-## Penolakan
+1. Admin HR hanya memproses `menunggu_hr` setelah seluruh tahap sebelumnya selesai.
+2. Admin HR yang merupakan pemohon atau telah memutus tahap sebelumnya tidak dapat memberi keputusan akhir.
+3. Persetujuan akhir memeriksa dan mengunci saldo dalam transaksi, mengurangi saldo tepat satu kali, mencatat keputusan, lalu mengubah status menjadi `disetujui`.
+4. Penolakan mewajibkan alasan dan tidak mengubah saldo.
 
-- Penolakan hanya dapat dilakukan oleh aktor yang sedang berwenang pada tahap tersebut.
-- Alasan penolakan wajib diisi agar dapat dipahami Karyawan.
-- Penolakan menghasilkan status akhir `ditolak`.
-- Pengajuan yang ditolak tidak dapat dikirim ulang; Karyawan membuat pengajuan baru jika diperlukan.
-- Penolakan tidak mengurangi atau mengubah saldo cuti.
+## Penolakan, Pembatalan, dan Saldo
 
-## Pembatalan
-
-Rancangan awal pembatalan adalah sebagai berikut:
-
-- Karyawan dapat membatalkan pengajuan `draf` atau `menunggu_atasan` miliknya.
-- Pengajuan `menunggu_hr` tidak dapat dibatalkan langsung oleh Karyawan karena sudah memiliki keputusan Atasan. Pembatalan perlu diproses Admin HR.
-- Pengajuan `disetujui` hanya dapat diubah menjadi `dibatalkan` oleh Admin HR setelah alasan pembatalan diverifikasi dan sebelum tanggal cuti pertama.
-- Pembatalan pengajuan `disetujui` mengembalikan saldo dengan jumlah yang sebelumnya dikurangi, tepat satu kali, dalam transaksi database.
-- Pengajuan `ditolak` atau `dibatalkan` tidak dapat dibatalkan kembali.
-- Aktor, alasan, dan waktu pembatalan harus dicatat dalam jejak keputusan.
-
-Setelah tanggal cuti pertama tercapai, pengajuan yang sudah disetujui tidak dapat dibatalkan melalui alur versi awal.
-
-## Perubahan Saldo
-
-- Pembuatan draf dan persetujuan Atasan tidak mengurangi saldo.
-- Saldo dikurangi setelah Admin HR memberi persetujuan akhir.
-- Saldo diperiksa dan dikunci sebelum pengurangan untuk mencegah penggunaan bersamaan.
-- Nilai saldo tidak boleh menjadi negatif.
-- Proses persetujuan akhir harus idempoten: permintaan berulang tidak boleh mengurangi saldo lebih dari sekali.
-- Penolakan tidak mengubah saldo.
-- Pembatalan pengajuan yang telah disetujui mengembalikan saldo tepat satu kali.
-- Setiap perubahan saldo harus dapat ditelusuri ke pengajuan terkait melalui catatan pengajuan dan persetujuan.
+- Penolakan hanya dilakukan penyetuju tahap aktif dan wajib memiliki alasan.
+- Karyawan dapat membatalkan draf atau pengajuan sebelum keputusan pertama.
+- Setelah keputusan pertama, pembatalan diproses Admin HR.
+- Pengajuan `disetujui` hanya dapat dibatalkan Admin HR sebelum tanggal cuti pertama.
+- Saldo hanya berkurang setelah persetujuan akhir dan tidak boleh negatif.
+- Penolakan tidak mengubah saldo; pembatalan sah mengembalikan saldo tepat satu kali.
+- Seluruh keputusan dan pembatalan menyimpan aktor, alasan atau catatan, dan waktu.
 
 ## Transisi Status dan Wewenang
 
 | Dari | Ke | Aktor | Kondisi |
 | --- | --- | --- | --- |
-| - | `draf` | Karyawan | Pengajuan baru dibuat untuk diri sendiri. |
-| `draf` | `menunggu_atasan` | Karyawan | Seluruh validasi berhasil saat pengajuan dikirim. |
+| - | `draf` | Karyawan | Pengajuan dibuat. |
+| `draf` | status tahap pertama | Karyawan dan sistem | Validasi berhasil dan rute dibekukan. |
 | `draf` | `dibatalkan` | Karyawan | Pemilik membatalkan draf. |
-| `menunggu_atasan` | `menunggu_hr` | Atasan | Atasan adalah Atasan aktif pemilik, bukan pemilik pengajuan, dan menyetujui. |
-| `menunggu_atasan` | `ditolak` | Atasan | Atasan berwenang menolak dan mengisi alasan. |
-| `menunggu_atasan` | `dibatalkan` | Karyawan | Pemilik membatalkan sebelum ada keputusan Atasan. |
-| `menunggu_hr` | `disetujui` | Admin HR | Admin HR bukan pemilik, validasi ulang berhasil, dan saldo dikurangi dalam transaksi. |
-| `menunggu_hr` | `ditolak` | Admin HR | Admin HR bukan pemilik, menolak, dan mengisi alasan; saldo tidak berubah. |
-| `menunggu_hr` | `dibatalkan` | Admin HR | Permintaan pembatalan diverifikasi sebelum keputusan akhir. |
-| `disetujui` | `dibatalkan` | Admin HR | Pembatalan diproses sebelum tanggal cuti pertama dan saldo dikembalikan tepat satu kali. |
+| `menunggu_atasan` | `menunggu_mo` | Atasan | Disetujui dan masih ada tahap MO. |
+| `menunggu_atasan` | `menunggu_hr` | Atasan | Disetujui dan tahap berikutnya HR. |
+| `menunggu_mo` | `menunggu_hr` | MO | MO yang ditetapkan menyetujui. |
+| status menunggu | `ditolak` | Penyetuju tahap aktif | Ditolak dengan alasan. |
+| status sebelum keputusan pertama | `dibatalkan` | Karyawan | Belum ada keputusan pada rute. |
+| `menunggu_hr` | `disetujui` | Admin HR | Validasi dan pengurangan saldo berhasil. |
+| `menunggu_hr` | `dibatalkan` | Admin HR | Pembatalan diverifikasi sebelum keputusan akhir. |
+| `disetujui` | `dibatalkan` | Admin HR | Sebelum tanggal pertama dan saldo dikembalikan. |
 
-Tidak ada transisi keluar dari `ditolak` atau `dibatalkan`. Atasan tidak boleh menyetujui pengajuannya sendiri dalam keadaan apa pun.
+Tidak ada transisi keluar dari `ditolak` atau `dibatalkan`.
 
-## Pengelolaan Hari Libur
+## Data Utama dan Rekap
 
-- Admin HR menambah, mengubah, menonaktifkan, atau melihat hari libur.
-- Satu tanggal hari libur aktif hanya dicatat satu kali.
-- Tanggal hari libur aktif dan akhir pekan tidak dihitung sebagai tanggal cuti.
-- Perubahan hari libur yang bertabrakan dengan pengajuan aktif perlu menampilkan peringatan dan ditinjau Admin HR.
-- Hari libur baru tidak mengubah otomatis pengajuan yang sudah `disetujui`; Admin HR harus meninjau dan melakukan penyesuaian terkontrol.
-
-## Pengelolaan Jenis Cuti
-
-- Admin HR mengelola kode, nama, jatah bawaan, aturan pengurangan saldo, dan status aktif.
-- Jenis cuti yang telah dipakai tidak dihapus secara permanen, tetapi dinonaktifkan agar riwayat tetap utuh.
-- Perubahan jatah bawaan tidak mengubah saldo pegawai yang sudah diterbitkan tanpa tindakan penyesuaian terpisah.
-- Jenis cuti tidak aktif tidak dapat dipilih pada pengajuan baru.
-
-## Rekap Pengajuan
-
-- Admin HR dapat menyaring rekap berdasarkan periode, pegawai, departemen, jenis cuti, dan status.
-- Atasan hanya dapat melihat rekap yang terbatas pada bawahannya sesuai kewenangan.
-- Karyawan hanya dapat melihat riwayat miliknya.
-- Ekspor rekap harus mengikuti filter dan hak akses yang sama dengan data di layar.
-- Rekap menampilkan data yang diperlukan saja dan tidak boleh membuka kata sandi atau data rahasia.
+- Admin HR mengelola unit bisnis, departemen atau bagian, jabatan, penugasan, peran, jenis cuti, saldo, dan hari libur.
+- Data yang telah dipakai dalam riwayat dinonaktifkan, bukan dihapus permanen.
+- Rekap dapat disaring berdasarkan periode, unit, departemen, pegawai, jenis, dan status.
+- Atasan hanya melihat cakupannya; Karyawan hanya melihat miliknya; ekspor mengikuti batas akses yang sama.

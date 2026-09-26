@@ -12,7 +12,7 @@ Dokumen ini menjadi rancangan awal antarmuka untuk Karyawan, Atasan, dan Admin H
 
 ## Prinsip Antarmuka
 
-- Gunakan istilah yang sama dengan dokumentasi: Karyawan, Atasan, Admin HR, saldo tersedia, dan enam status resmi.
+- Gunakan istilah yang sama dengan dokumentasi: Karyawan, Atasan, MO, Admin HR, saldo tersedia, dan tujuh status resmi.
 - Tindakan utama diletakkan paling jelas, tetapi tindakan berbahaya seperti pembatalan atau penolakan memerlukan konfirmasi.
 - Status tidak dibedakan berdasarkan warna saja; selalu sertakan teks atau ikon.
 - Pesan validasi ditempatkan dekat field dan dirangkum di bagian atas jika perlu.
@@ -65,6 +65,7 @@ Atasan dan Admin HR tetap memiliki menu pengajuan pribadi karena keduanya juga m
 | UI-ATS-02 | Daftar Pengajuan Bawahan | Atasan | Menemukan pengajuan `menunggu_atasan`. |
 | UI-ATS-03 | Detail Keputusan Atasan | Atasan | Meninjau pengajuan lalu menyetujui atau menolak. |
 | UI-ATS-04 | Riwayat Keputusan Atasan | Atasan | Melihat keputusan yang pernah diberikan. |
+| UI-ATS-05 | Antrean Manager Operasional | MO | Menemukan pengajuan `menunggu_mo` dalam cakupan yang ditetapkan. |
 | UI-HR-01 | Dashboard Admin HR | Admin HR | Melihat antrean keputusan akhir dan ringkasan operasional. |
 | UI-HR-02 | Daftar Persetujuan Akhir | Admin HR | Menemukan pengajuan `menunggu_hr`. |
 | UI-HR-03 | Detail Keputusan Akhir | Admin HR | Menyetujui atau menolak pada tahap akhir. |
@@ -166,7 +167,7 @@ Tanggal Sabtu, Minggu, hari libur aktif, tanggal duplikat, dan tanggal yang tump
 +----------------------------------------------------------------+
 ```
 
-Karyawan hanya melihat tombol pembatalan pada `draf` atau `menunggu_atasan`. Pengajuan `disetujui` menampilkan informasi bahwa pembatalan harus diproses Admin HR sebelum tanggal cuti pertama.
+Karyawan hanya melihat tombol pembatalan sebelum keputusan pertama diberikan. Pengajuan `disetujui` menampilkan informasi bahwa pembatalan harus diproses Admin HR sebelum tanggal cuti pertama.
 
 ## Wireframe Daftar dan Keputusan Atasan
 
@@ -280,7 +281,8 @@ Halaman offline tidak menampilkan data pribadi dari cache dan tidak menyediakan 
 | --- | --- | --- |
 | `draf` | Draf | Belum dikirim. |
 | `menunggu_atasan` | Menunggu Atasan | Menunggu keputusan tahap pertama. |
-| `menunggu_hr` | Menunggu Admin HR | Telah disetujui Atasan dan menunggu keputusan akhir. |
+| `menunggu_mo` | Menunggu MO | Menunggu keputusan Manager Operasional. |
+| `menunggu_hr` | Menunggu Admin HR | Seluruh tahap organisasi selesai dan menunggu keputusan akhir. |
 | `disetujui` | Disetujui | Keputusan akhir diberikan dan saldo telah diperbarui. |
 | `ditolak` | Ditolak | Ditolak pada salah satu tahap. |
 | `dibatalkan` | Dibatalkan | Dibatalkan sesuai kewenangan dan aturan saldo. |
@@ -315,7 +317,7 @@ Warna akhir ditetapkan pada tahap desain visual. Setiap badge wajib memuat teks 
 - Setiap kebutuhan fungsional memiliki halaman atau tindakan yang dapat ditemukan.
 - Menu yang ditampilkan sesuai peran pengguna.
 - Atasan dan Admin HR dapat mengajukan cuti pribadi tanpa memperoleh tombol untuk memutus pengajuannya sendiri.
-- Status menggunakan enam nilai resmi dan label yang konsisten.
+- Status menggunakan tujuh nilai resmi dan label yang konsisten.
 - Form pengajuan menampilkan jenis, saldo, tanggal, jumlah hari, alasan, serta ringkasan sebelum dikirim.
 - Penolakan dan pembatalan meminta alasan yang diwajibkan.
 - Persetujuan akhir menjelaskan dampak terhadap saldo.

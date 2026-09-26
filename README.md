@@ -8,6 +8,8 @@ Proyek capstone ini dikerjakan oleh tim beranggotakan lima orang. Aplikasi diran
 
 Repository saat ini telah memiliki fondasi database bisnis, autentikasi berbasis NIK, dan pembatasan akses dasar berdasarkan peran. Fitur pengajuan cuti, alur persetujuan, pengelolaan data, dan kemampuan PWA masih dalam tahap perencanaan serta pengembangan.
 
+Rancangan organisasi terbaru mencakup enam unit bisnis, pegawai dengan beberapa jabatan, serta persetujuan dinamis melalui Atasan, Manager Operasional, dan Admin HR. Rancangan tersebut belum diterapkan pada database atau fitur aplikasi.
+
 Yang sudah tersedia:
 
 - Kerangka aplikasi Laravel 13 beserta Blade, JavaScript, Vite, dan Tailwind CSS.
@@ -53,10 +55,10 @@ Karena itu, diperlukan aplikasi yang menyatukan proses pengajuan, pemeriksaan, p
 Ruang lingkup yang direncanakan meliputi:
 
 - Autentikasi pengguna dengan NIK dan pembatasan akses berdasarkan peran.
-- Pengelolaan data pegawai, jenis cuti, saldo cuti, dan hari libur.
+- Pengelolaan data pegawai, unit bisnis, departemen atau bagian, jabatan, jenis cuti, saldo cuti, dan hari libur.
 - Pengajuan cuti untuk satu atau beberapa tanggal.
 - Validasi tanggal pengajuan dan ketersediaan saldo.
-- Persetujuan berjenjang oleh atasan dan Admin HR.
+- Persetujuan berjenjang oleh Atasan langsung, MO bila diperlukan, dan Admin HR.
 - Pencatatan alasan penolakan serta riwayat keputusan.
 - Pembaruan saldo setelah pengajuan memperoleh persetujuan akhir.
 - Penyajian status dan riwayat pengajuan kepada pengguna terkait.
@@ -67,7 +69,7 @@ Ruang lingkup yang direncanakan meliputi:
 - Aplikasi hanya menangani pengajuan dan persetujuan cuti karyawan.
 - Aplikasi tidak mencakup integrasi dengan sistem lain, absensi, penggajian, atau layanan eksternal.
 - Data pegawai dan aturan cuti dikelola di dalam aplikasi ini.
-- Keputusan akhir pengajuan berada pada Admin HR setelah keputusan atasan.
+- Keputusan akhir berada pada Admin HR setelah seluruh tahap organisasi pada rute selesai.
 - Perhitungan saldo mengikuti jenis cuti dan kebijakan yang nantinya ditetapkan oleh tim.
 - Notifikasi melalui email, WhatsApp, atau layanan pihak ketiga berada di luar ruang lingkup proyek.
 - Kemampuan offline terbatas dan tidak berarti seluruh proses bisnis dapat dijalankan tanpa internet.
@@ -77,19 +79,21 @@ Ruang lingkup yang direncanakan meliputi:
 | Aktor | Hak akses yang direncanakan |
 | --- | --- |
 | Karyawan | Melihat profil dan saldo cuti sendiri, membuat pengajuan, melihat status, serta melihat riwayat pengajuan sendiri. |
-| Atasan | Melihat pengajuan dari karyawan yang menjadi tanggung jawabnya, lalu menyetujui atau menolak pada tahap awal. |
-| Admin HR | Mengelola data pendukung, meninjau pengajuan yang telah diproses atasan, memberikan keputusan akhir, dan memantau data cuti. |
+| Atasan | Melihat pengajuan yang menjadi tanggung jawabnya, termasuk tahap Atasan langsung atau MO, lalu menyetujui atau menolak. |
+| Admin HR | Mengelola data pendukung, meninjau pengajuan yang telah menyelesaikan tahap organisasi, memberikan keputusan akhir, dan memantau data cuti. |
 
-Setiap aktor hanya boleh mengakses data dan tindakan sesuai perannya. Pembatasan peran dasar telah tersedia, sedangkan policy berbasis kepemilikan, hubungan Atasan-bawahan, dan status pengajuan akan diterapkan bersama modul bisnis terkait.
+Satu akun nantinya dapat memiliki beberapa peran. Pembatasan peran tunggal dasar telah tersedia, sedangkan peran jamak dan policy berdasarkan kepemilikan, penugasan jabatan, rute, serta status pengajuan masih direncanakan.
 
 ## Alur Utama Pengajuan Cuti
 
 1. Karyawan mengisi dan mengirim pengajuan cuti.
 2. Sistem memvalidasi tanggal yang dipilih, hari libur yang tercatat, dan ketersediaan saldo cuti.
-3. Atasan memeriksa pengajuan lalu menyetujui atau menolaknya.
-4. Jika disetujui atasan, Admin HR memeriksa dan memberikan keputusan akhir.
-5. Setelah persetujuan akhir diberikan, sistem memperbarui saldo cuti sesuai jumlah hari yang disetujui.
-6. Jika pengajuan ditolak pada salah satu tahap, saldo cuti tidak dikurangi dan alasan penolakan dicatat.
+3. Sistem membentuk rute persetujuan berdasarkan unit dan penugasan utama pegawai.
+4. Atasan langsung memeriksa pengajuan jika tahap tersebut diperlukan.
+5. Pada unit operasional, MO memeriksa pengajuan jika belum bertindak sebagai Atasan langsung.
+6. Admin HR yang bukan pemohon memberikan keputusan akhir.
+7. Setelah persetujuan akhir diberikan, sistem memperbarui saldo cuti sesuai jumlah hari yang disetujui.
+8. Jika pengajuan ditolak pada salah satu tahap, saldo cuti tidak dikurangi dan alasan penolakan dicatat.
 
 Alur bisnis pengajuan tersebut masih berupa rancangan dan belum diimplementasikan. Autentikasi serta pembatasan akses dasar telah tersedia sebagai fondasinya.
 
@@ -109,7 +113,7 @@ Fitur masuk dengan NIK, keluar, pemeriksaan akun aktif, dan dashboard dasar sesu
 
 - Melihat daftar pengajuan dari karyawan yang berada di bawah tanggung jawabnya.
 - Melihat detail pengajuan dan saldo yang berkaitan.
-- Menyetujui atau menolak pengajuan pada tahap awal.
+- Menyetujui atau menolak pengajuan pada tahap Atasan atau MO sesuai penugasan.
 - Memberikan catatan atau alasan keputusan.
 - Melihat riwayat keputusan yang pernah diberikan.
 
@@ -117,7 +121,7 @@ Fitur masuk dengan NIK, keluar, pemeriksaan akun aktif, dan dashboard dasar sesu
 
 - Mengelola data pengguna dan pegawai.
 - Mengelola jenis cuti, saldo cuti, dan hari libur.
-- Memeriksa pengajuan yang telah mendapat keputusan atasan.
+- Memeriksa pengajuan yang telah menyelesaikan seluruh tahap organisasi.
 - Memberikan persetujuan atau penolakan akhir.
 - Melihat serta menyaring riwayat pengajuan dan persetujuan.
 - Memantau perubahan saldo cuti.
@@ -157,15 +161,17 @@ Nama tabel bisnis menggunakan bahasa Indonesia agar mudah dipahami oleh tim. Mig
 
 | Tabel | Rencana fungsi |
 | --- | --- |
-| `departemen` | Menyimpan unit kerja pegawai. |
-| `pengguna` | Menyimpan akun, informasi autentikasi, dan peran pengguna. |
-| `pegawai` | Menyimpan identitas pegawai serta hubungan pegawai dengan atasan dan akun pengguna. |
+| `departemen` | Fondasi saat ini menyimpan pengelompokan kerja; pada target akan berada di bawah unit bisnis. |
+| `pengguna` | Menyimpan akun dan informasi autentikasi; relasi peran jamak masih direncanakan. |
+| `pegawai` | Menyimpan identitas pegawai dan hubungan ke akun; struktur jabatan target akan dipisahkan. |
 | `jenis_cuti` | Menyimpan kategori cuti dan ketentuan dasarnya. |
 | `saldo_cuti` | Menyimpan saldo cuti setiap pegawai berdasarkan jenis dan periode. |
 | `pengajuan_cuti` | Menyimpan data utama pengajuan, alasan, status, dan ringkasan durasi. |
 | `tanggal_pengajuan_cuti` | Menyimpan rincian setiap tanggal yang diajukan dalam satu pengajuan. |
 | `persetujuan_cuti` | Menyimpan tahap, keputusan, pemberi keputusan, catatan, dan waktu keputusan. |
 | `hari_libur` | Menyimpan tanggal libur yang digunakan dalam validasi hari cuti. |
+
+Rancangan target juga memerlukan tabel `unit_bisnis`, `jabatan`, `penugasan_jabatan`, `peran`, dan `pengguna_peran`. Tabel tersebut masih berupa rancangan karena fondasi sekarang hanya mendukung satu jabatan dan satu peran per akun.
 
 Struktur kolom, relasi, indeks, serta aturan penghapusan dasar sudah diterapkan melalui migration. Tabel teknis Laravel, seperti `migrations`, `cache`, `cache_locks`, `jobs`, `job_batches`, dan tabel teknis lain, tetap boleh menggunakan nama bawaan framework.
 
@@ -264,6 +270,7 @@ Dokumen berikut menjadi sumber rancangan dan keputusan proyek. Status implementa
 9. [Keputusan Proyek](docs/09-keputusan-proyek.md)
 10. [Matriks Ketertelusuran](docs/10-matriks-ketertelusuran.md)
 11. [Rancangan Antarmuka dan Wireframe](docs/11-rancangan-antarmuka.md)
+12. [Rancangan Organisasi dan Persetujuan Berjenjang](docs/12-rancangan-organisasi-dan-persetujuan.md)
 
 ## Aturan Kontribusi Dasar
 

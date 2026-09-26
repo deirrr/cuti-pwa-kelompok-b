@@ -18,7 +18,10 @@ Dokumen ini berisi rencana pengujian untuk fitur yang akan dikembangkan. Belum a
 Data uji minimal direncanakan mencakup:
 
 - akun Karyawan, Atasan, Admin HR, pengguna tidak aktif, dan pengguna tanpa hak;
-- dua departemen dengan hubungan Atasan-bawahan yang berbeda;
+- data HO dan sedikitnya satu unit operasional dengan hierarki jabatan yang berbeda;
+- pegawai dengan beberapa penugasan jabatan dan tepat satu penugasan utama;
+- unit dengan lebih dari satu MO dan cakupan tanggung jawab yang jelas;
+- Admin HR yang mengajukan cuti serta Admin HR lain sebagai penyetuju akhir;
 - jenis cuti aktif dan tidak aktif;
 - saldo cukup, tepat pada batas, tidak cukup, dan nol;
 - hari kerja, akhir pekan, dan hari libur;
@@ -28,6 +31,22 @@ Data uji minimal direncanakan mencakup:
 Data tersebut dibuat khusus di lingkungan pengujian dan tidak menggunakan data produksi.
 
 ## Matriks Skenario
+
+### Struktur Organisasi dan Rute Dinamis
+
+| ID | Skenario | Kondisi awal | Tindakan | Hasil yang diharapkan | Jenis |
+| --- | --- | --- | --- | --- | --- |
+| ORG-001 | Satu pegawai memegang beberapa jabatan | Pegawai memiliki tiga penugasan aktif | Tetapkan satu penugasan utama | Hanya satu penugasan menjadi acuan rute cuti | Feature - integritas data |
+| ORG-002 | Hierarki jabatan melingkar | Beberapa jabatan tersedia | Hubungkan jabatan kepada dirinya atau membentuk siklus | Perubahan ditolak | Feature - validasi data |
+| RTE-001 | Rute pengajuan HO | Pemohon HO memiliki Atasan aktif | Kirim draf valid | Tahap tersimpan Atasan lalu HR | Feature - alur |
+| RTE-002 | Rute tiga tahap unit operasional | Atasan langsung bukan MO dan MO telah ditetapkan | Kirim draf valid | Tahap tersimpan Atasan, MO, lalu HR | Feature - alur |
+| RTE-003 | Atasan langsung juga MO | Pemohon langsung berada di bawah MO | Kirim draf valid | Hanya satu keputusan MO dibuat sebelum HR | Feature - deduplikasi tahap |
+| RTE-004 | Beberapa MO dalam satu unit | Dua MO memiliki cakupan berbeda | Pemohon dari salah satu cakupan mengirim draf | Hanya MO yang ditetapkan menjadi penyetuju | Feature - otorisasi |
+| RTE-005 | Atasan kosong tanpa pengecualian | Jabatan tidak mempunyai Atasan dan bukan langsung ke HR | Kirim draf | Pengiriman ditolak dengan penjelasan struktur belum lengkap | Feature - validasi |
+| RTE-006 | Pengecualian langsung ke HR | Jabatan ditandai langsung ke HR | Kirim draf valid | Tahap pertama menjadi HR | Feature - alur |
+| RTE-007 | Struktur berubah setelah pengiriman | Rute pengajuan sudah dibekukan | Ubah jabatan atau penugasan pemohon | Rute pengajuan aktif tidak berubah | Feature - audit |
+| RTE-008 | Admin HR mengajukan cuti | Pemohon mempunyai hak Admin HR | Proses hingga tahap akhir | Pemohon ditolak sebagai penyetuju; Admin HR lain dapat memutus | Feature - konflik kepentingan |
+| RTE-009 | Orang yang sama mencoba memutus dua tahap | Penyetuju mempunyai beberapa jabatan atau peran | Putus tahap pertama lalu coba tahap berikutnya | Keputusan kedua ditolak | Feature - konflik kepentingan |
 
 | ID pengujian | Skenario | Prasyarat | Langkah ringkas | Hasil yang diharapkan | Jenis pengujian |
 | --- | --- | --- | --- | --- | --- |

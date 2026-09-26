@@ -40,9 +40,10 @@ Jika kode berbeda dari keputusan dan kebutuhan yang masih berlaku, perbedaan ter
 
 - Aplikasi Laravel monolitik yang berdiri sendiri.
 - Teknologi utama Laravel 13, PHP 8.3, MySQL, Blade, JavaScript, dan PWA.
-- Aktor hanya Karyawan, Atasan, dan Admin HR.
-- Persetujuan berlangsung dua tahap: Atasan, kemudian Admin HR.
-- Status pengajuan hanya `draf`, `menunggu_atasan`, `menunggu_hr`, `disetujui`, `ditolak`, dan `dibatalkan` sampai ada keputusan baru yang terdokumentasi.
+- Aktor sistem tetap Karyawan, Atasan, dan Admin HR; MO merupakan kategori jabatan yang memakai fungsi Atasan.
+- Persetujuan mengikuti rute dinamis: HO melalui Atasan dan HR, sedangkan unit operasional dapat melalui Atasan, MO, dan HR.
+- Status pengajuan adalah `draf`, `menunggu_atasan`, `menunggu_mo`, `menunggu_hr`, `disetujui`, `ditolak`, dan `dibatalkan`.
+- Satu akun dapat memiliki beberapa peran dan satu pegawai dapat mempunyai beberapa penugasan jabatan.
 - Saldo dikurangi setelah persetujuan akhir, bukan ketika draf dibuat atau ketika Atasan menyetujui.
 - Nama tabel dan kolom bisnis menggunakan bahasa Indonesia.
 - Tabel teknis bawaan Laravel boleh mempertahankan nama framework.
@@ -89,7 +90,7 @@ Usulan fitur yang belum memenuhi syarat dicatat sebagai usulan atau pengembangan
 - Perubahan urutan persetujuan, kewenangan aktor, pembatalan, atau waktu pengurangan saldo membutuhkan entri keputusan proyek baru.
 - Alur, matriks hak akses, database, rencana pengujian, dan matriks ketertelusuran diperbarui bersama-sama.
 - Atasan tidak boleh memproses pengajuannya sendiri.
-- Admin HR tidak boleh melewati tahap Atasan.
+- Admin HR tidak boleh melewati tahap Atasan atau MO yang tersimpan pada rute.
 - Penolakan tidak mengurangi saldo.
 - Pembatalan setelah persetujuan akhir harus mengembalikan saldo tepat satu kali sesuai aturan yang disepakati.
 
