@@ -21,9 +21,9 @@ class UnitBisnis extends Model
 
     public const UPDATED_AT = 'diperbarui_pada';
 
-    public function departemen(): HasMany
+    public function bagianOrganisasi(): HasMany
     {
-        return $this->hasMany(Departemen::class);
+        return $this->hasMany(BagianOrganisasi::class);
     }
 
     public function jabatan(): HasMany

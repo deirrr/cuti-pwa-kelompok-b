@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminHr\BagianOrganisasiController;
 use App\Http\Controllers\AdminHr\DashboardController as AdminHrDashboardController;
 use App\Http\Controllers\AdminHr\UnitBisnisController;
 use App\Http\Controllers\DashboardController;
@@ -33,6 +34,11 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
         Route::post('/unit-bisnis', [UnitBisnisController::class, 'store'])->name('unit_bisnis.store');
         Route::get('/unit-bisnis/{unitBisnis}/ubah', [UnitBisnisController::class, 'edit'])->name('unit_bisnis.edit');
         Route::put('/unit-bisnis/{unitBisnis}', [UnitBisnisController::class, 'update'])->name('unit_bisnis.update');
+        Route::get('/bagian-organisasi', [BagianOrganisasiController::class, 'index'])->name('bagian_organisasi.index');
+        Route::get('/bagian-organisasi/tambah', [BagianOrganisasiController::class, 'create'])->name('bagian_organisasi.create');
+        Route::post('/bagian-organisasi', [BagianOrganisasiController::class, 'store'])->name('bagian_organisasi.store');
+        Route::get('/bagian-organisasi/{bagianOrganisasi}/ubah', [BagianOrganisasiController::class, 'edit'])->name('bagian_organisasi.edit');
+        Route::put('/bagian-organisasi/{bagianOrganisasi}', [BagianOrganisasiController::class, 'update'])->name('bagian_organisasi.update');
     });
 
     Route::get('/dashboard/admin-hr', AdminHrDashboardController::class)

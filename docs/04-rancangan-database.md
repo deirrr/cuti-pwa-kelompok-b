@@ -15,9 +15,9 @@ Dokumen ini mencatat fondasi database yang sudah tersedia dan arah rancangan ber
 - Data yang sudah menjadi bagian riwayat dinonaktifkan, bukan dihapus sembarangan.
 - Tabel teknis Laravel seperti `migrations`, `cache`, `cache_locks`, `jobs`, dan `job_batches` boleh tetap menggunakan nama bawaan framework.
 
-## Tambahan Tabel `departemen`
+## Tabel `bagian_organisasi`
 
-Tabel `departemen` ditambahkan agar hubungan organisasi tidak disimpan sebagai teks berulang pada setiap pegawai. Tabel ini membantu penyaringan rekap dan pengelompokan pegawai tanpa membuat rancangan terlalu rumit.
+Tabel lama `departemen` telah ditransisikan menjadi `bagian_organisasi`. Istilah umum ini menyimpan Direktorat dan Departemen pada Head Office serta Bagian pada unit operasional. Kolom `induk_id` memungkinkan struktur bertingkat tanpa membuat tabel berbeda untuk setiap jenis.
 
 ## Revisi Target Struktur Organisasi
 
@@ -26,20 +26,22 @@ Rancangan berikut akan digunakan sebelum fitur pengajuan dan persetujuan dibangu
 | Tabel target | Perubahan utama |
 | --- | --- |
 | `unit_bisnis` | Menyimpan HO, KUMA, KPMA, Apotek, PMB, dan Medlab beserta kategori unit. |
-| `departemen` | Ditautkan ke `unit_bisnis`; nama tidak lagi diasumsikan unik secara global. |
-| `jabatan` | Menyimpan nama, kategori, unit, departemen, dan jabatan Atasan. |
+| `bagian_organisasi` | Ditautkan ke `unit_bisnis`, memiliki jenis dan induk opsional; kode unik di dalam setiap unit. |
+| `jabatan` | Menyimpan nama, kategori, unit, bagian organisasi, dan jabatan Atasan. |
 | `penugasan_jabatan` | Relasi banyak-ke-banyak pegawai dan jabatan, masa berlaku, serta penanda penugasan utama. |
 | `peran` dan `pengguna_peran` | Menggantikan satu enum peran agar satu akun dapat menjadi Karyawan, Atasan, dan Admin HR sekaligus. |
 | `pengajuan_cuti` | Menyimpan konteks penugasan utama yang dipakai ketika pengajuan dikirim. |
 | `persetujuan_cuti` | Menyimpan urutan tahap Atasan, MO, dan HR yang dibekukan beserta target dan keputusan. |
 
-Kolom `pegawai.departemen_id`, `pegawai.atasan_id`, teks `pegawai.jabatan`, dan `pengguna.peran` tetap menggambarkan fondasi yang ada, tetapi tidak akan menjadi sumber kebenaran struktur organisasi setelah revisi target diterapkan.
+Kolom `pegawai.bagian_organisasi_id`, `pegawai.atasan_id`, teks `pegawai.jabatan`, dan `pengguna.peran` tetap menggambarkan fondasi yang ada, tetapi tidak akan menjadi sumber kebenaran struktur organisasi setelah revisi target diterapkan.
 
 ## ERD Fondasi Saat Ini
 
 ```mermaid
 erDiagram
-    departemen ||--o{ pegawai : memiliki
+    unit_bisnis ||--o{ bagian_organisasi : memiliki
+    bagian_organisasi ||--o{ bagian_organisasi : membawahi
+    bagian_organisasi ||--o{ pegawai : memiliki
     pengguna ||--|| pegawai : digunakan_oleh
     pegawai ||--o{ pegawai : membawahi
     pegawai ||--o{ saldo_cuti : mempunyai
@@ -50,10 +52,13 @@ erDiagram
     pengajuan_cuti ||--o{ persetujuan_cuti : memiliki
     pengguna ||--o{ persetujuan_cuti : memutuskan
 
-    departemen {
+    bagian_organisasi {
         bigint id PK
-        varchar kode UK
-        varchar nama UK
+        bigint unit_bisnis_id FK
+        bigint induk_id FK
+        varchar jenis
+        varchar kode
+        varchar nama
         boolean aktif
     }
     pengguna {
@@ -66,7 +71,7 @@ erDiagram
     pegawai {
         bigint id PK
         bigint pengguna_id FK,UK
-        bigint departemen_id FK
+        bigint bagian_organisasi_id FK
         bigint atasan_id FK
         varchar nomor_induk UK
         varchar nama
@@ -128,16 +133,19 @@ erDiagram
 - `timestamp` konseptual disimpan dalam zona waktu aplikasi dan ditampilkan sesuai zona waktu yang disepakati.
 - Kolom `dibuat_pada` dan `diperbarui_pada` adalah padanan konseptual timestamp pencatatan. Nama teknis akhir dapat diselaraskan dengan kebutuhan Laravel sebelum migration dibuat.
 
-## Tabel `departemen`
+## Tabel `bagian_organisasi`
 
-**Tujuan:** menyimpan unit organisasi untuk pengelompokan pegawai dan rekap.
+**Tujuan:** menyimpan struktur pengelompokan kerja di dalam unit bisnis.
 
 | Kolom | Tipe konseptual | Boleh kosong | PK | FK | Nilai bawaan | Unik | Penjelasan |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `id` | bigint unsigned | Tidak | Ya | - | otomatis | Ya | Identitas departemen. |
-| `kode` | varchar(20) | Tidak | Tidak | - | - | Ya | Kode singkat departemen. |
-| `nama` | varchar(100) | Tidak | Tidak | - | - | Ya | Nama departemen. |
-| `aktif` | boolean | Tidak | Tidak | - | true | Tidak | Menentukan apakah departemen dapat dipilih. |
+| `id` | bigint unsigned | Tidak | Ya | - | otomatis | Ya | Identitas bagian organisasi. |
+| `unit_bisnis_id` | bigint unsigned | Tidak | Tidak | `unit_bisnis.id` | - | Gabungan | Unit tempat struktur berada. |
+| `induk_id` | bigint unsigned | Ya | Tidak | `bagian_organisasi.id` | null | Tidak | Struktur induk dalam unit yang sama. |
+| `jenis` | varchar(20) | Tidak | Tidak | - | `bagian` | Tidak | `direktorat`, `departemen`, atau `bagian`. |
+| `kode` | varchar(20) | Tidak | Tidak | - | - | Gabungan | Kode singkat yang unik dalam satu unit. |
+| `nama` | varchar(100) | Tidak | Tidak | - | - | Tidak | Nama struktur organisasi. |
+| `aktif` | boolean | Tidak | Tidak | - | true | Tidak | Menentukan apakah data dapat digunakan. |
 | `dibuat_pada` | timestamp | Tidak | Tidak | - | waktu saat ini | Tidak | Waktu pembuatan data. |
 | `diperbarui_pada` | timestamp | Tidak | Tidak | - | waktu saat ini | Tidak | Waktu perubahan terakhir. |
 
@@ -167,7 +175,7 @@ erDiagram
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `id` | bigint unsigned | Tidak | Ya | - | otomatis | Ya | Identitas pegawai. |
 | `pengguna_id` | bigint unsigned | Tidak | Tidak | `pengguna.id` | - | Ya | Akun yang dimiliki pegawai. |
-| `departemen_id` | bigint unsigned | Tidak | Tidak | `departemen.id` | - | Tidak | Departemen pegawai. |
+| `bagian_organisasi_id` | bigint unsigned | Tidak | Tidak | `bagian_organisasi.id` | - | Tidak | Bagian organisasi pegawai pada struktur kompatibilitas. |
 | `atasan_id` | bigint unsigned | Ya | Tidak | `pegawai.id` | null | Tidak | Atasan langsung; null untuk pimpinan tertinggi atau kondisi awal. |
 | `nomor_induk` | varchar(30) | Tidak | Tidak | - | - | Ya | Nomor identitas internal pegawai. |
 | `nama` | varchar(150) | Tidak | Tidak | - | - | Tidak | Nama lengkap pegawai. |
@@ -320,7 +328,7 @@ erDiagram
 
 - `pengguna.email` unik.
 - `pegawai.pengguna_id` unik dan `pegawai.nomor_induk` unik.
-- Indeks pada `pegawai.atasan_id` dan `pegawai.departemen_id`.
+- Indeks pada `pegawai.atasan_id` dan `pegawai.bagian_organisasi_id`.
 - Kombinasi unik saldo (`pegawai_id`, `jenis_cuti_id`, `tahun`).
 - `pengajuan_cuti.nomor_pengajuan` unik.
 - Indeks gabungan `pengajuan_cuti` pada (`pegawai_id`, `status`) dan (`status`, `dibuat_pada`).

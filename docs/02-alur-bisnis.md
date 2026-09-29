@@ -105,7 +105,7 @@ Tidak ada transisi keluar dari `ditolak` atau `dibatalkan`.
 
 ## Data Utama dan Rekap
 
-- Admin HR mengelola unit bisnis, departemen atau bagian, jabatan, penugasan, peran, jenis cuti, saldo, dan hari libur.
+- Admin HR mengelola unit bisnis, bagian organisasi, jabatan, penugasan, peran, jenis cuti, saldo, dan hari libur.
 - Data yang telah dipakai dalam riwayat dinonaktifkan, bukan dihapus permanen.
-- Rekap dapat disaring berdasarkan periode, unit, departemen, pegawai, jenis, dan status.
+- Rekap dapat disaring berdasarkan periode, unit, bagian organisasi, pegawai, jenis, dan status.
 - Atasan hanya melihat cakupannya; Karyawan hanya melihat miliknya; ekspor mengikuti batas akses yang sama.

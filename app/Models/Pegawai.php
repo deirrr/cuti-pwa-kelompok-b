@@ -17,7 +17,7 @@ use InvalidArgumentException;
 #[Table('pegawai')]
 #[Fillable([
     'pengguna_id',
-    'departemen_id',
+    'bagian_organisasi_id',
     'atasan_id',
     'nomor_induk',
     'nama',
@@ -39,9 +39,9 @@ class Pegawai extends Model
         return $this->belongsTo(Pengguna::class);
     }
 
-    public function departemen(): BelongsTo
+    public function bagianOrganisasi(): BelongsTo
     {
-        return $this->belongsTo(Departemen::class);
+        return $this->belongsTo(BagianOrganisasi::class);
     }
 
     public function atasan(): BelongsTo

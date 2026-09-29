@@ -2,10 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Enums\JenisBagianOrganisasi;
 use App\Enums\KategoriJabatan;
 use App\Enums\KategoriUnitBisnis;
 use App\Enums\PeranPengguna;
-use App\Models\Departemen;
+use App\Models\BagianOrganisasi;
 use App\Models\Jabatan;
 use App\Models\Pegawai;
 use App\Models\Pengguna;
@@ -27,23 +28,30 @@ class StrukturOrganisasiTest extends TestCase
         $this->withoutVite();
     }
 
-    public function test_unit_departemen_dan_hierarki_jabatan_dapat_direlasikan(): void
+    public function test_unit_bagian_organisasi_dan_hierarki_jabatan_dapat_direlasikan(): void
     {
         $unit = UnitBisnis::factory()->create([
             'kategori' => KategoriUnitBisnis::HeadOffice,
         ]);
-        $departemen = Departemen::factory()->for($unit, 'unitBisnis')->create();
+        $direktorat = BagianOrganisasi::factory()->for($unit, 'unitBisnis')->create([
+            'jenis' => JenisBagianOrganisasi::Direktorat,
+        ]);
+        $departemen = BagianOrganisasi::factory()
+            ->for($unit, 'unitBisnis')
+            ->for($direktorat, 'induk')
+            ->create(['jenis' => JenisBagianOrganisasi::Departemen]);
         $direktur = Jabatan::factory()->for($unit, 'unitBisnis')->create([
-            'departemen_id' => null,
+            'bagian_organisasi_id' => null,
             'kategori' => KategoriJabatan::Direktur,
         ]);
         $supervisor = Jabatan::factory()
             ->for($unit, 'unitBisnis')
-            ->for($departemen, 'departemen')
+            ->for($departemen, 'bagianOrganisasi')
             ->for($direktur, 'atasanJabatan')
             ->create(['kategori' => KategoriJabatan::Supervisor]);
 
         $this->assertTrue($departemen->unitBisnis->is($unit));
+        $this->assertTrue($departemen->induk->is($direktorat));
         $this->assertTrue($supervisor->atasanJabatan->is($direktur));
         $this->assertTrue($direktur->bawahanJabatan->contains($supervisor));
     }

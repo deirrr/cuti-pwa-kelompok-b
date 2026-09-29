@@ -2,14 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\Departemen;
+use App\Enums\JenisBagianOrganisasi;
+use App\Models\BagianOrganisasi;
 use App\Models\UnitBisnis;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Departemen>
+ * @extends Factory<BagianOrganisasi>
  */
-class DepartemenFactory extends Factory
+class BagianOrganisasiFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,8 +21,10 @@ class DepartemenFactory extends Factory
     {
         return [
             'unit_bisnis_id' => UnitBisnis::factory(),
-            'kode' => fake()->unique()->bothify('DEP-###'),
-            'nama' => 'Departemen '.fake()->unique()->words(2, true),
+            'induk_id' => null,
+            'jenis' => JenisBagianOrganisasi::Bagian,
+            'kode' => fake()->unique()->bothify('BGN-###'),
+            'nama' => 'Bagian '.fake()->unique()->words(2, true),
             'aktif' => true,
         ];
     }

@@ -21,7 +21,7 @@ class JabatanFactory extends Factory
     {
         return [
             'unit_bisnis_id' => UnitBisnis::factory(),
-            'departemen_id' => null,
+            'bagian_organisasi_id' => null,
             'atasan_jabatan_id' => null,
             'kode' => fake()->unique()->bothify('JBT-####'),
             'nama' => fake()->jobTitle(),

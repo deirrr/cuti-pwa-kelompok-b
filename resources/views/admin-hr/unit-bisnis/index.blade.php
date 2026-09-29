@@ -51,7 +51,7 @@
                     <tr>
                         <th scope="col" class="px-5 py-4 font-semibold">Unit</th>
                         <th scope="col" class="px-5 py-4 font-semibold">Kategori</th>
-                        <th scope="col" class="px-5 py-4 text-center font-semibold">Departemen</th>
+                        <th scope="col" class="px-5 py-4 text-center font-semibold">Bagian Organisasi</th>
                         <th scope="col" class="px-5 py-4 text-center font-semibold">Jabatan</th>
                         <th scope="col" class="px-5 py-4 font-semibold">Status</th>
                         <th scope="col" class="px-5 py-4 text-right font-semibold">Aksi</th>
@@ -70,7 +70,7 @@
                                 </div>
                             </td>
                             <td class="whitespace-nowrap px-5 py-4 text-slate-600 dark:text-slate-300">{{ $unit->kategori->label() }}</td>
-                            <td class="px-5 py-4 text-center font-medium">{{ $unit->departemen_count }}</td>
+                            <td class="px-5 py-4 text-center font-medium">{{ $unit->bagian_organisasi_count }}</td>
                             <td class="px-5 py-4 text-center font-medium">{{ $unit->jabatan_count }}</td>
                             <td class="px-5 py-4">
                                 <span @class([

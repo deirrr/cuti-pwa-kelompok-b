@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Departemen;
+use App\Models\BagianOrganisasi;
 use App\Models\Pegawai;
 use App\Models\Pengguna;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,7 +21,7 @@ class PegawaiFactory extends Factory
     {
         return [
             'pengguna_id' => Pengguna::factory(),
-            'departemen_id' => Departemen::factory(),
+            'bagian_organisasi_id' => BagianOrganisasi::factory(),
             'atasan_id' => null,
             'nomor_induk' => fake()->unique()->numerify('PGW-######'),
             'nama' => fake()->name(),
@@ -35,7 +35,7 @@ class PegawaiFactory extends Factory
     {
         return $this->state(fn (array $attributes): array => [
             'atasan_id' => $atasan->getKey(),
-            'departemen_id' => $atasan->departemen_id,
+            'bagian_organisasi_id' => $atasan->bagian_organisasi_id,
         ]);
     }
 

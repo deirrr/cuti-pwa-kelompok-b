@@ -42,7 +42,7 @@ Seluruh kebutuhan saat dokumen ini dibuat berstatus **Direncanakan** karena apli
 | ID kebutuhan | Nama kebutuhan | Aktor | Alur bisnis terkait | Tabel terkait | Halaman atau modul yang direncanakan | Skenario pengujian | Status implementasi |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | KF-HR-001 | Mengelola pengguna, pegawai, dan peran jamak | Admin HR | Pengelolaan data utama | `pengguna`, `pegawai`, `peran`, `pengguna_peran` | Manajemen pengguna dan pegawai | DAT-001, AKS-004 | Direncanakan |
-| KF-HR-002 | Mengelola organisasi dan penugasan | Admin HR | Penyiapan kewenangan persetujuan | `unit_bisnis`, `departemen`, `jabatan`, `penugasan_jabatan` | Form struktur organisasi | ORG-001, ORG-002, DAT-002 | Direncanakan |
+| KF-HR-002 | Mengelola organisasi dan penugasan | Admin HR | Penyiapan kewenangan persetujuan | `unit_bisnis`, `bagian_organisasi`, `jabatan`, `penugasan_jabatan` | Form struktur organisasi | ORG-001, ORG-002, DAT-002 | Sebagian tersedia |
 | KF-HR-003 | Mengelola jenis cuti | Admin HR | [Data utama dan rekap](02-alur-bisnis.md#data-utama-dan-rekap) | `jenis_cuti` | Manajemen jenis cuti | JCT-001 | Direncanakan |
 | KF-HR-004 | Mengelola saldo per jenis dan tahun | Admin HR | [Penolakan, pembatalan, dan saldo](02-alur-bisnis.md#penolakan-pembatalan-dan-saldo) | `pegawai`, `jenis_cuti`, `saldo_cuti` | Manajemen saldo | SLD-005, SLD-006, AKS-004 | Direncanakan |
 | KF-HR-005 | Mengelola hari libur | Admin HR | [Data utama dan rekap](02-alur-bisnis.md#data-utama-dan-rekap) | `hari_libur` | Manajemen hari libur | LIB-001 sampai LIB-003 | Direncanakan |
@@ -51,7 +51,7 @@ Seluruh kebutuhan saat dokumen ini dibuat berstatus **Direncanakan** karena apli
 | KF-HR-008 | Menolak pengajuan dengan alasan | Admin HR | `menunggu_hr` ke `ditolak` | `pengajuan_cuti`, `persetujuan_cuti` | Form keputusan Admin HR | ALR-006 | Direncanakan |
 | KF-HR-009 | Mengurangi saldo setelah persetujuan akhir | Admin HR dan sistem | [Penolakan, pembatalan, dan saldo](02-alur-bisnis.md#penolakan-pembatalan-dan-saldo) | `saldo_cuti`, `pengajuan_cuti`, `persetujuan_cuti` | Layanan transaksi persetujuan akhir | ALR-005, SLD-001 sampai SLD-004 | Direncanakan |
 | KF-HR-010 | Memproses pembatalan setelah persetujuan | Admin HR | [Penolakan, pembatalan, dan saldo](02-alur-bisnis.md#penolakan-pembatalan-dan-saldo) | `saldo_cuti`, `pengajuan_cuti`, `persetujuan_cuti` | Form pembatalan Admin HR | BTL-004 sampai BTL-006 | Direncanakan |
-| KF-HR-011 | Melihat, menyaring, dan mengekspor rekap | Admin HR | [Data utama dan rekap](02-alur-bisnis.md#data-utama-dan-rekap) | `departemen`, `pegawai`, `jenis_cuti`, `pengajuan_cuti`, `tanggal_pengajuan_cuti` | Rekap dan ekspor pengajuan | RKP-001, SEC-003 | Direncanakan |
+| KF-HR-011 | Melihat, menyaring, dan mengekspor rekap | Admin HR | [Data utama dan rekap](02-alur-bisnis.md#data-utama-dan-rekap) | `bagian_organisasi`, `pegawai`, `jenis_cuti`, `pengajuan_cuti`, `tanggal_pengajuan_cuti` | Rekap dan ekspor pengajuan | RKP-001, SEC-003 | Direncanakan |
 | KF-HR-012 | Melihat jejak keputusan dan waktunya | Admin HR | Audit persetujuan | `pengajuan_cuti`, `persetujuan_cuti`, `pengguna` | Riwayat persetujuan | RWT-003 | Direncanakan |
 
 ## Kebutuhan Nonfungsional

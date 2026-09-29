@@ -41,8 +41,15 @@
                         <svg class="size-5 shrink-0" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 10h1m4 0h1m-6 4h1m4 0h1m-6 4h6"/></svg>
                         Unit Bisnis
                     </a>
+                    <a href="{{ route('admin_hr.bagian_organisasi.index') }}" @class([
+                        'group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition',
+                        'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' => request()->routeIs('admin_hr.bagian_organisasi.*'),
+                        'text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' => ! request()->routeIs('admin_hr.bagian_organisasi.*'),
+                    ])>
+                        <svg class="size-5 shrink-0" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V10l8-5 8 5v11M9 21v-6h6v6"/></svg>
+                        Bagian Organisasi
+                    </a>
                     @foreach ([
-                        ['label' => 'Departemen', 'icon' => 'M4 21V10l8-5 8 5v11M9 21v-6h6v6'],
                         ['label' => 'Jabatan', 'icon' => 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm13 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'],
                         ['label' => 'Pegawai', 'icon' => 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z'],
                     ] as $menu)

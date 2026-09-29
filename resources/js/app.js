@@ -61,3 +61,49 @@ document.querySelectorAll('[data-password-toggle]').forEach((button) => {
         button.querySelector('[data-password-hide-icon]')?.classList.toggle('hidden', ! shouldShowPassword);
     });
 });
+
+document.querySelectorAll('[data-bagian-organisasi-form]').forEach((form) => {
+    const unitSelect = form.querySelector('[data-unit-bisnis]');
+    const jenisSelect = form.querySelector('[data-jenis-bagian]');
+    const indukSelect = form.querySelector('[data-induk-bagian]');
+
+    if (! unitSelect || ! jenisSelect || ! indukSelect) {
+        return;
+    }
+
+    const sesuaikanPilihan = () => {
+        const selectedUnit = unitSelect.selectedOptions[0];
+        const selectedUnitId = unitSelect.value;
+        const kategoriUnit = selectedUnit?.dataset.kategori;
+
+        Array.from(indukSelect.options).forEach((option) => {
+            const sesuaiUnit = option.value === '' || option.dataset.unitBisnisId === selectedUnitId;
+            option.hidden = ! sesuaiUnit;
+            option.disabled = ! sesuaiUnit;
+        });
+
+        if (indukSelect.selectedOptions[0]?.disabled) {
+            indukSelect.value = '';
+        }
+
+        Array.from(jenisSelect.options).forEach((option) => {
+            if (option.value === '') {
+                return;
+            }
+
+            const sesuaiKategori = kategoriUnit === 'operasional'
+                ? option.value === 'bagian'
+                : option.value !== 'bagian';
+
+            option.hidden = ! sesuaiKategori;
+            option.disabled = ! sesuaiKategori;
+        });
+
+        if (jenisSelect.selectedOptions[0]?.disabled) {
+            jenisSelect.value = '';
+        }
+    };
+
+    unitSelect.addEventListener('change', sesuaikanPilihan);
+    sesuaikanPilihan();
+});

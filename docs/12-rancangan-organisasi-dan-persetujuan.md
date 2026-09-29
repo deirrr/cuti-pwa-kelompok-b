@@ -1,10 +1,10 @@
 # Rancangan Organisasi dan Persetujuan Berjenjang
 
-Dokumen ini menjadi acuan utama untuk pengembangan struktur organisasi dan penentuan alur persetujuan cuti PT Medika Antapani. Tabel unit bisnis, jabatan, penugasan jabatan, peran jamak, model, seeder, dan middleware peran dasar **sudah tersedia**. Pengelolaan data melalui antarmuka dan pembentukan rute persetujuan masih direncanakan.
+Dokumen ini menjadi acuan utama untuk pengembangan struktur organisasi dan penentuan alur persetujuan cuti PT Medika Antapani. Tabel dan pengelolaan Unit Bisnis serta Bagian Organisasi **sudah tersedia**. Fondasi jabatan, penugasan jabatan, peran jamak, dan middleware peran dasar juga tersedia; antarmuka jabatan serta pembentukan rute persetujuan masih direncanakan.
 
 ## Tujuan Rancangan
 
-- Mewakili unit bisnis, departemen atau bagian, dan hierarki jabatan secara jelas.
+- Mewakili unit bisnis, bagian organisasi, dan hierarki jabatan secara jelas.
 - Mendukung satu pegawai yang memegang lebih dari satu jabatan pada waktu yang sama.
 - Menentukan alur persetujuan yang berbeda antara Head Office dan unit operasional.
 - Mendukung lebih dari satu Manager Operasional tanpa membuat tujuan persetujuan menjadi ambigu.
@@ -16,7 +16,7 @@ Dokumen ini menjadi acuan utama untuk pengembangan struktur organisasi dan penen
 | Istilah | Arti |
 | --- | --- |
 | Unit bisnis | Lingkup organisasi utama tempat jabatan berada, misalnya HO, KUMA, atau Medlab. |
-| Departemen atau bagian | Kelompok kerja di dalam sebuah unit bisnis. Nama akhirnya mengikuti data resmi perusahaan. |
+| Bagian organisasi | Istilah umum untuk Direktorat dan Departemen di Head Office serta Bagian di unit operasional. |
 | Jabatan | Posisi dalam struktur organisasi, misalnya Direktur, Kepala Departemen, MO, SPV, atau Staf. |
 | Penugasan jabatan | Hubungan antara seorang pegawai dan jabatan yang dipegangnya pada periode tertentu. |
 | Penugasan utama | Satu penugasan aktif yang dipakai untuk menentukan alur cuti pegawai. |
@@ -35,7 +35,20 @@ Dokumen ini menjadi acuan utama untuk pengembangan struktur organisasi dan penen
 | `PMB` | Praktek Mandiri Bidan | Unit operasional |
 | `MEDLAB` | Medika Laboratorium | Unit operasional |
 
-Daftar departemen atau bagian pada masing-masing unit belum dianggap lengkap sebelum dikonfirmasi menggunakan struktur resmi perusahaan.
+Daftar bagian organisasi berikut berasal dari data struktur yang diterima pada 29 September 2026. Nama orang dan label jabatan seperti Head, Staf, MO, serta Apoteker Penanggung Jawab tidak dimasukkan sebagai bagian organisasi.
+
+### Master Bagian Organisasi
+
+| Unit bisnis | Bagian organisasi aktif |
+| --- | --- |
+| Head Office | Direktorat Pelayanan, Direktorat Umum, Direktorat Keuangan, Pelayanan, Pengadaan, IT, SDM, Umum, Cleaning Service, Keuangan, Marketing, dan Sekretariat. |
+| KUMA | Manajemen, Pendaftaran, Satpam, Umum, Cleaning Service, Perawat Gigi, Admin JKN, Perawat Umum, Instalasi Farmasi, Ambulatur, Kasir, Admin, Radiografer, Pelayanan, Dokter, Asisten Obgyn, Kesehatan Masyarakat, Tenaga Vokasi Farmasi, dan Apoteker. |
+| KPMA | Manajemen, Pendaftaran, Perawat Gigi, Perawat Umum, Satpam, Ambulatur, Customer Service, Tenaga Teknis Kefarmasian, Kasir, Umum, Sterilisasi, Admin, Kesehatan Masyarakat, Refraksi Optisi, Pelayanan, Dokter, Fisioterapi, Tenaga Vokasi Farmasi, dan Apoteker. |
+| Apotek Medika Antapani | Apoteker dan Tenaga Vokasi Farmasi. |
+| Medika Laboratorium | Manajemen Laboratorium, Laboratorium, dan Pelayanan. |
+| PMB | Administrasi dan Pelayanan Kebidanan. Bidan Penanggung Jawab serta Bidan Pelaksana dicatat sebagai jabatan pada Pelayanan Kebidanan. |
+
+Bagian pada unit operasional disimpan langsung di bawah unit karena data sumber belum menjelaskan hierarki antarbagian. Pada Head Office, Departemen Pelayanan dan Pengadaan berada di bawah Direktorat Pelayanan; IT, SDM, Umum, dan Cleaning Service berada di bawah Direktorat Umum; Keuangan dan Marketing berada di bawah Direktorat Keuangan; sedangkan Sekretariat dicatat langsung di bawah Head Office sampai garis pelaporannya dikonfirmasi.
 
 ## Struktur Head Office
 
@@ -56,7 +69,7 @@ flowchart TD
     DK --> MKT[Marketing]
 ```
 
-Setiap departemen atau bagian dapat memiliki Kepala Departemen, SPV, dan Staf sesuai kondisi sebenarnya. Diagram ini menunjukkan garis organisasi, bukan berarti setiap kotak pasti diisi oleh orang yang berbeda.
+Setiap bagian organisasi dapat memiliki Kepala Departemen, SPV, dan Staf sesuai kondisi sebenarnya. Diagram ini menunjukkan garis organisasi, bukan berarti setiap kotak pasti diisi oleh orang yang berbeda.
 
 ## Struktur Umum Unit Operasional
 
@@ -177,7 +190,7 @@ Rancangan target menambahkan atau menyesuaikan data berikut:
 | Tabel | Fungsi yang direncanakan |
 | --- | --- |
 | `unit_bisnis` | Menyimpan enam unit bisnis dan kategorinya. |
-| `departemen` | Menyimpan departemen atau bagian di dalam unit bisnis. |
+| `bagian_organisasi` | Menyimpan Direktorat, Departemen, atau Bagian di dalam unit bisnis serta hubungan induknya. |
 | `jabatan` | Menyimpan posisi, kategorinya, dan hubungan ke jabatan Atasan. |
 | `penugasan_jabatan` | Menghubungkan pegawai dengan satu atau beberapa jabatan serta menandai penugasan utama. |
 | `peran` | Menyimpan daftar peran sistem. |
@@ -185,11 +198,13 @@ Rancangan target menambahkan atau menyesuaikan data berikut:
 | `pengajuan_cuti` | Menyimpan acuan penugasan utama dan konteks organisasi saat dikirim. |
 | `persetujuan_cuti` | Menyimpan urutan tahap yang dibekukan, target penyetuju, status tahap, keputusan, dan pemberi keputusan. |
 
-Pada rancangan target, `pegawai.atasan_id`, `pegawai.departemen_id`, kolom teks `pegawai.jabatan`, dan satu nilai `pengguna.peran` tidak lagi menjadi sumber utama struktur organisasi. Kolom tersebut masih dipertahankan sementara untuk kompatibilitas dan akan dipensiunkan setelah seluruh modul berpindah ke struktur baru.
+Pada rancangan target, `pegawai.atasan_id`, `pegawai.bagian_organisasi_id`, kolom teks `pegawai.jabatan`, dan satu nilai `pengguna.peran` tidak lagi menjadi sumber utama struktur organisasi. Kolom tersebut masih dipertahankan sementara untuk kompatibilitas dan akan dipensiunkan setelah seluruh modul berpindah ke struktur jabatan dan penugasan.
 
 ## Aturan Data Penting
 
-- Satu jabatan berada pada satu unit bisnis dan dapat dikaitkan dengan satu departemen atau bagian.
+- Satu jabatan berada pada satu unit bisnis dan dapat dikaitkan dengan satu bagian organisasi.
+- Head Office menggunakan jenis Direktorat atau Departemen; unit operasional menggunakan jenis Bagian.
+- Satu bagian organisasi boleh mempunyai satu induk pada unit yang sama dan tidak boleh membentuk hubungan melingkar.
 - Satu jabatan dapat mempunyai satu jabatan induk; hubungan melingkar dan hubungan ke dirinya sendiri ditolak.
 - Satu pegawai boleh mempunyai banyak penugasan aktif, tetapi hanya satu yang menjadi penugasan utama untuk cuti.
 - Satu posisi dapat diisi lebih dari satu pegawai jika memang ditetapkan demikian, misalnya MO.
@@ -200,7 +215,7 @@ Pada rancangan target, `pegawai.atasan_id`, `pegawai.departemen_id`, kolom teks 
 
 Sebelum migration baru dibuat, tim perlu memperoleh keputusan perusahaan tentang:
 
-1. Daftar resmi departemen atau bagian pada setiap unit bisnis.
+1. Daftar resmi bagian organisasi pada setiap unit bisnis selain data awal KUMA yang sudah dikonfirmasi.
 2. Daftar jabatan dan hubungan Atasan untuk setiap bagian.
 3. Pembagian cakupan ketika satu unit memiliki lebih dari satu MO.
 4. Penugasan utama untuk pegawai yang merangkap beberapa jabatan.
@@ -212,7 +227,7 @@ Sebelum migration baru dibuat, tim perlu memperoleh keputusan perusahaan tentang
 
 1. Validasi struktur organisasi dan pertanyaan terbuka bersama pihak perusahaan.
 2. Perbarui rancangan database final dan siapkan strategi migrasi dari fondasi saat ini.
-3. Bangun master unit bisnis, departemen, jabatan, penugasan, dan peran jamak.
+3. Bangun master unit bisnis, bagian organisasi, jabatan, penugasan, dan peran jamak. **Unit bisnis dan bagian organisasi sudah tersedia.**
 4. Bangun pembentuk rute persetujuan beserta snapshot tahap.
 5. Terapkan otorisasi Atasan, MO, dan Admin HR serta pencegahan konflik kepentingan.
 6. Tambahkan antarmuka pengelolaan organisasi dan antrean persetujuan.

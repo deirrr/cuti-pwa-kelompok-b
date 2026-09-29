@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Table('jabatan')]
 #[Fillable([
     'unit_bisnis_id',
-    'departemen_id',
+    'bagian_organisasi_id',
     'atasan_jabatan_id',
     'kode',
     'nama',
@@ -37,9 +37,9 @@ class Jabatan extends Model
         return $this->belongsTo(UnitBisnis::class);
     }
 
-    public function departemen(): BelongsTo
+    public function bagianOrganisasi(): BelongsTo
     {
-        return $this->belongsTo(Departemen::class);
+        return $this->belongsTo(BagianOrganisasi::class);
     }
 
     public function atasanJabatan(): BelongsTo

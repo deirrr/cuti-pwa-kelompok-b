@@ -2,7 +2,7 @@
 
 Dokumen ini menjadi rancangan awal antarmuka untuk Karyawan, Atasan, dan Admin HR. Wireframe menunjukkan susunan informasi dan alur, bukan desain visual akhir dan bukan bukti bahwa halaman telah diimplementasikan.
 
-Dashboard Admin HR dan halaman pengelolaan Unit Bisnis sudah diimplementasikan sebagai tahap awal. Halaman lain dalam dokumen ini tetap berstatus rancangan sampai tersedia dan diuji.
+Dashboard Admin HR serta halaman pengelolaan Unit Bisnis dan Bagian Organisasi sudah diimplementasikan sebagai tahap awal. Halaman lain dalam dokumen ini tetap berstatus rancangan sampai tersedia dan diuji.
 
 ## Tujuan Rancangan
 
@@ -71,7 +71,7 @@ Atasan dan Admin HR tetap memiliki menu pengajuan pribadi karena keduanya juga m
 | UI-HR-01 | Dashboard Admin HR | Admin HR | Melihat antrean keputusan akhir dan ringkasan operasional. |
 | UI-HR-02 | Daftar Persetujuan Akhir | Admin HR | Menemukan pengajuan `menunggu_hr`. |
 | UI-HR-03 | Detail Keputusan Akhir | Admin HR | Menyetujui atau menolak pada tahap akhir. |
-| UI-HR-04 | Pengguna dan Pegawai | Admin HR | Mengelola akun, data pegawai, departemen, dan Atasan. |
+| UI-HR-04 | Pengguna dan Pegawai | Admin HR | Mengelola akun, data pegawai, bagian organisasi, dan Atasan. |
 | UI-HR-05 | Jenis Cuti | Admin HR | Mengelola jenis, jatah bawaan, dan status aktif. |
 | UI-HR-06 | Saldo Cuti | Admin HR | Menerbitkan serta menyesuaikan saldo per tahun. |
 | UI-HR-07 | Hari Libur | Admin HR | Mengelola tanggal libur aktif. |
@@ -251,11 +251,11 @@ Pola ini dipakai secara konsisten untuk pengguna dan pegawai, jenis cuti, saldo,
 +----------------------------------------------------------------+
 | Rekap Pengajuan                                                 |
 |----------------------------------------------------------------|
-| Periode [____ - ____] Departemen [Semua v]                      |
+| Periode [____ - ____] Bagian organisasi [Semua v]              |
 | Jenis [Semua v] Status [Semua v] Pegawai [____________]         |
 | [Terapkan Filter] [Reset]                      [Ekspor CSV]      |
 |                                                                |
-| Nomor | Pegawai | Departemen | Jenis | Hari | Status | Tanggal  |
+| Nomor | Pegawai | Bagian organisasi | Jenis | Hari | Status | Tanggal |
 | ...                                                            |
 +----------------------------------------------------------------+
 ```

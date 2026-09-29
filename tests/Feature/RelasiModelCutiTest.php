@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Enums\KeputusanPersetujuan;
 use App\Enums\StatusPengajuanCuti;
 use App\Enums\TahapPersetujuan;
-use App\Models\Departemen;
+use App\Models\BagianOrganisasi;
 use App\Models\JenisCuti;
 use App\Models\Pegawai;
 use App\Models\PengajuanCuti;
@@ -22,15 +22,15 @@ class RelasiModelCutiTest extends TestCase
 
     public function test_relasi_organisasi_dan_saldo_cuti_dapat_diakses(): void
     {
-        $departemen = Departemen::factory()->create();
+        $bagianOrganisasi = BagianOrganisasi::factory()->create();
         $penggunaAtasan = Pengguna::factory()->atasan()->create();
         $atasan = Pegawai::factory()
-            ->for($departemen, 'departemen')
+            ->for($bagianOrganisasi, 'bagianOrganisasi')
             ->for($penggunaAtasan, 'pengguna')
             ->create();
         $penggunaKaryawan = Pengguna::factory()->create();
         $pegawai = Pegawai::factory()
-            ->for($departemen, 'departemen')
+            ->for($bagianOrganisasi, 'bagianOrganisasi')
             ->for($penggunaKaryawan, 'pengguna')
             ->denganAtasan($atasan)
             ->create();
@@ -41,7 +41,7 @@ class RelasiModelCutiTest extends TestCase
             ->create();
 
         $this->assertTrue($pegawai->pengguna->is($penggunaKaryawan));
-        $this->assertTrue($pegawai->departemen->is($departemen));
+        $this->assertTrue($pegawai->bagianOrganisasi->is($bagianOrganisasi));
         $this->assertTrue($pegawai->atasan->is($atasan));
         $this->assertTrue($atasan->bawahan->contains($pegawai));
         $this->assertTrue($pegawai->saldoCuti->contains($saldoCuti));

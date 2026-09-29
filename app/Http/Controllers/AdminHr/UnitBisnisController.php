@@ -20,7 +20,7 @@ class UnitBisnisController extends Controller
         $pencarian = $request->string('cari')->trim()->toString();
 
         $unitBisnis = UnitBisnis::query()
-            ->withCount(['departemen', 'jabatan'])
+            ->withCount(['bagianOrganisasi', 'jabatan'])
             ->when($pencarian !== '', function ($query) use ($pencarian): void {
                 $query->where(function ($query) use ($pencarian): void {
                     $query

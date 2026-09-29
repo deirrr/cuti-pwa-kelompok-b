@@ -49,7 +49,7 @@
             <input name="aktif" type="checkbox" value="1" @checked((bool) old('aktif', $unit?->aktif ?? true)) class="mt-0.5 size-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 dark:border-slate-700 dark:bg-slate-900">
             <span>
                 <span class="block text-sm font-semibold text-slate-800 dark:text-slate-100">Unit aktif</span>
-                <span class="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">Unit aktif dapat dipilih saat menyusun departemen, jabatan, dan penugasan pegawai.</span>
+                <span class="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">Unit aktif dapat dipilih saat menyusun bagian organisasi, jabatan, dan penugasan pegawai.</span>
             </span>
         </label>
         @error('aktif')<p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>@enderror

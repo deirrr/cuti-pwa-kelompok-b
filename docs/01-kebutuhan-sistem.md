@@ -9,7 +9,7 @@ Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah di
 ## Ruang Lingkup
 
 - Autentikasi pengguna dan pembatasan akses berdasarkan peran.
-- Pengelolaan unit bisnis, departemen atau bagian, jabatan, dan penugasan jabatan rangkap.
+- Pengelolaan unit bisnis, bagian organisasi, jabatan, dan penugasan jabatan rangkap.
 - Pengelolaan data pengguna, pegawai, jenis cuti, saldo cuti, dan hari libur.
 - Pengajuan cuti untuk satu atau beberapa tanggal.
 - Validasi tanggal, pengajuan yang tumpang tindih, hari libur, akhir pekan, dan saldo.
@@ -53,7 +53,7 @@ Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah di
 | Kode | Kebutuhan |
 | --- | --- |
 | KF-HR-001 | Admin HR dapat mengelola akun, data pegawai, dan peran jamak pengguna. |
-| KF-HR-002 | Admin HR dapat mengelola unit, departemen atau bagian, jabatan, hierarki, penugasan, dan cakupan MO. |
+| KF-HR-002 | Admin HR dapat mengelola unit, bagian organisasi, jabatan, hierarki, penugasan, dan cakupan MO. |
 | KF-HR-003 | Admin HR dapat mengelola jenis cuti dan status aktifnya. |
 | KF-HR-004 | Admin HR dapat mengelola saldo cuti pegawai per jenis cuti dan tahun. |
 | KF-HR-005 | Admin HR dapat mengelola daftar hari libur. |
@@ -111,7 +111,7 @@ Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah di
 ### Wajib
 
 - Autentikasi dan otorisasi tiga aktor.
-- Data unit bisnis, departemen atau bagian, jabatan, penugasan, pengguna, pegawai, jenis cuti, saldo, dan hari libur.
+- Data unit bisnis, bagian organisasi, jabatan, penugasan, pengguna, pegawai, jenis cuti, saldo, dan hari libur.
 - Pengajuan dan validasi cuti.
 - Persetujuan Atasan, MO sesuai unit, dan keputusan akhir Admin HR.
 - Pencegahan persetujuan pengajuan sendiri.
