@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Table('jabatan')]
 #[Fillable([
-    'unit_bisnis_id',
     'bagian_organisasi_id',
     'atasan_jabatan_id',
     'kode',
@@ -31,11 +30,6 @@ class Jabatan extends Model
     public const CREATED_AT = 'dibuat_pada';
 
     public const UPDATED_AT = 'diperbarui_pada';
-
-    public function unitBisnis(): BelongsTo
-    {
-        return $this->belongsTo(UnitBisnis::class);
-    }
 
     public function bagianOrganisasi(): BelongsTo
     {

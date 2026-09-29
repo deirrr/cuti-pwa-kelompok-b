@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AdminHr\BagianOrganisasiController;
 use App\Http\Controllers\AdminHr\DashboardController as AdminHrDashboardController;
-use App\Http\Controllers\AdminHr\UnitBisnisController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SesiController;
 use Illuminate\Http\RedirectResponse;
@@ -29,11 +28,6 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
 
     Route::middleware('peran:admin_hr')->prefix('admin-hr')->name('admin_hr.')->group(function () {
         Route::get('/dashboard', AdminHrDashboardController::class)->name('dashboard');
-        Route::get('/unit-bisnis', [UnitBisnisController::class, 'index'])->name('unit_bisnis.index');
-        Route::get('/unit-bisnis/tambah', [UnitBisnisController::class, 'create'])->name('unit_bisnis.create');
-        Route::post('/unit-bisnis', [UnitBisnisController::class, 'store'])->name('unit_bisnis.store');
-        Route::get('/unit-bisnis/{unitBisnis}/ubah', [UnitBisnisController::class, 'edit'])->name('unit_bisnis.edit');
-        Route::put('/unit-bisnis/{unitBisnis}', [UnitBisnisController::class, 'update'])->name('unit_bisnis.update');
         Route::get('/bagian-organisasi', [BagianOrganisasiController::class, 'index'])->name('bagian_organisasi.index');
         Route::get('/bagian-organisasi/tambah', [BagianOrganisasiController::class, 'create'])->name('bagian_organisasi.create');
         Route::post('/bagian-organisasi', [BagianOrganisasiController::class, 'store'])->name('bagian_organisasi.store');

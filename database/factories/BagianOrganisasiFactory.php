@@ -2,9 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\JenisBagianOrganisasi;
 use App\Models\BagianOrganisasi;
-use App\Models\UnitBisnis;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,9 +18,6 @@ class BagianOrganisasiFactory extends Factory
     public function definition(): array
     {
         return [
-            'unit_bisnis_id' => UnitBisnis::factory(),
-            'induk_id' => null,
-            'jenis' => JenisBagianOrganisasi::Bagian,
             'kode' => fake()->unique()->bothify('BGN-###'),
             'nama' => 'Bagian '.fake()->unique()->words(2, true),
             'aktif' => true,

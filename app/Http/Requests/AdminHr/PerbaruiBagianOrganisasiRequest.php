@@ -2,16 +2,12 @@
 
 namespace App\Http\Requests\AdminHr;
 
-use App\Enums\JenisBagianOrganisasi;
-use App\Enums\KategoriUnitBisnis;
 use App\Enums\PeranPengguna;
 use App\Models\BagianOrganisasi;
 use App\Models\Pengguna;
-use App\Models\UnitBisnis;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Validator;
 
 class PerbaruiBagianOrganisasiRequest extends FormRequest
 {
@@ -29,77 +25,21 @@ class PerbaruiBagianOrganisasiRequest extends FormRequest
         $bagianOrganisasi = $this->route('bagianOrganisasi');
 
         return [
-            'unit_bisnis_id' => ['required', 'integer', Rule::exists('unit_bisnis', 'id')],
-            'induk_id' => [
-                'nullable', 'integer', Rule::exists('bagian_organisasi', 'id'), Rule::notIn([$bagianOrganisasi->getKey()]),
-            ],
-            'jenis' => ['required', Rule::enum(JenisBagianOrganisasi::class)],
-            'kode' => [
-                'required', 'string', 'max:20', 'regex:/^[A-Z0-9-]+$/',
-                Rule::unique('bagian_organisasi', 'kode')
-                    ->where('unit_bisnis_id', $this->integer('unit_bisnis_id'))
-                    ->ignore($bagianOrganisasi),
-            ],
-            'nama' => ['required', 'string', 'max:100'],
+            'kode' => ['required', 'string', 'max:20', 'regex:/^[A-Z0-9-]+$/', Rule::unique('bagian_organisasi', 'kode')->ignore($bagianOrganisasi)],
+            'nama' => ['required', 'string', 'max:100', Rule::unique('bagian_organisasi', 'nama')->ignore($bagianOrganisasi)],
             'aktif' => ['required', 'boolean'],
         ];
-    }
-
-    /** @return array<int, callable(Validator): void> */
-    public function after(): array
-    {
-        return [function (Validator $validator): void {
-            if ($validator->errors()->hasAny(['unit_bisnis_id', 'induk_id', 'jenis'])) {
-                return;
-            }
-
-            /** @var BagianOrganisasi $bagianOrganisasi */
-            $bagianOrganisasi = $this->route('bagianOrganisasi');
-            $unitBisnis = UnitBisnis::query()->find($this->integer('unit_bisnis_id'));
-            $induk = $this->filled('induk_id')
-                ? BagianOrganisasi::query()->find($this->integer('induk_id'))
-                : null;
-
-            if ($induk !== null && ! $induk->unitBisnis()->is($unitBisnis)) {
-                $validator->errors()->add('induk_id', 'Induk harus berada pada unit bisnis yang sama.');
-            }
-
-            $unitBerubah = $bagianOrganisasi->unit_bisnis_id !== $this->integer('unit_bisnis_id');
-            $sudahDigunakan = $unitBerubah && (
-                $bagianOrganisasi->anak()->exists()
-                || $bagianOrganisasi->jabatan()->exists()
-                || $bagianOrganisasi->pegawai()->exists()
-            );
-
-            if ($unitBerubah && $sudahDigunakan) {
-                $validator->errors()->add('unit_bisnis_id', 'Unit bisnis tidak dapat diubah karena bagian organisasi sudah digunakan.');
-            }
-
-            for ($calonInduk = $induk; $calonInduk !== null; $calonInduk = $calonInduk->induk) {
-                if ($calonInduk->is($bagianOrganisasi)) {
-                    $validator->errors()->add('induk_id', 'Induk tidak boleh membentuk hubungan melingkar.');
-                    break;
-                }
-            }
-
-            $this->validasiJenisUntukUnit($validator, $unitBisnis);
-        }];
     }
 
     /** @return array<string, string> */
     public function messages(): array
     {
         return [
-            'unit_bisnis_id.required' => 'Unit bisnis wajib dipilih.',
-            'unit_bisnis_id.exists' => 'Unit bisnis tidak valid.',
-            'induk_id.exists' => 'Induk bagian organisasi tidak valid.',
-            'induk_id.not_in' => 'Bagian organisasi tidak dapat menjadi induk dirinya sendiri.',
-            'jenis.required' => 'Jenis bagian organisasi wajib dipilih.',
-            'jenis.enum' => 'Jenis bagian organisasi tidak valid.',
             'kode.required' => 'Kode bagian organisasi wajib diisi.',
             'kode.regex' => 'Kode hanya boleh berisi huruf kapital, angka, dan tanda hubung.',
-            'kode.unique' => 'Kode sudah digunakan pada unit bisnis tersebut.',
+            'kode.unique' => 'Kode bagian organisasi sudah digunakan.',
             'nama.required' => 'Nama bagian organisasi wajib diisi.',
+            'nama.unique' => 'Nama bagian organisasi sudah digunakan.',
             'aktif.boolean' => 'Status bagian organisasi tidak valid.',
         ];
     }
@@ -107,22 +47,8 @@ class PerbaruiBagianOrganisasiRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'induk_id' => $this->input('induk_id') ?: null,
             'kode' => $this->string('kode')->trim()->upper()->toString(),
             'nama' => $this->string('nama')->trim()->toString(),
         ]);
-    }
-
-    private function validasiJenisUntukUnit(Validator $validator, ?UnitBisnis $unitBisnis): void
-    {
-        $jenis = JenisBagianOrganisasi::tryFrom($this->string('jenis')->toString());
-
-        if ($unitBisnis?->kategori === KategoriUnitBisnis::Operasional && $jenis !== JenisBagianOrganisasi::Bagian) {
-            $validator->errors()->add('jenis', 'Unit operasional hanya dapat menggunakan jenis Bagian.');
-        }
-
-        if ($unitBisnis?->kategori === KategoriUnitBisnis::HeadOffice && $jenis === JenisBagianOrganisasi::Bagian) {
-            $validator->errors()->add('jenis', 'Head Office menggunakan jenis Direktorat atau Departemen.');
-        }
     }
 }

@@ -33,14 +33,6 @@
 
                 <p class="mt-7 px-3 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Organisasi</p>
                 <div class="mt-2 flex flex-col gap-1">
-                    <a href="{{ route('admin_hr.unit_bisnis.index') }}" @class([
-                        'group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition',
-                        'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' => request()->routeIs('admin_hr.unit_bisnis.*'),
-                        'text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' => ! request()->routeIs('admin_hr.unit_bisnis.*'),
-                    ])>
-                        <svg class="size-5 shrink-0" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 10h1m4 0h1m-6 4h1m4 0h1m-6 4h6"/></svg>
-                        Unit Bisnis
-                    </a>
                     <a href="{{ route('admin_hr.bagian_organisasi.index') }}" @class([
                         'group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition',
                         'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' => request()->routeIs('admin_hr.bagian_organisasi.*'),
