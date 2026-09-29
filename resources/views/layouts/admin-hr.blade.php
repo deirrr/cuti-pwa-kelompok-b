@@ -55,7 +55,12 @@
 
                 <p class="mt-7 px-3 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Cuti Karyawan</p>
                 <div class="mt-2 flex flex-col gap-1">
-                    @foreach (['Persetujuan Akhir', 'Jenis & Saldo Cuti', 'Hari Libur', 'Rekap'] as $menu)
+                    <a href="{{ route('admin_hr.saldo_cuti.index') }}" @class([
+                        'flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition',
+                        'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' => request()->routeIs('admin_hr.saldo_cuti.*'),
+                        'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800' => ! request()->routeIs('admin_hr.saldo_cuti.*'),
+                    ])><span class="size-2 rounded-full bg-emerald-500"></span>Saldo Cuti Tahunan</a>
+                    @foreach (['Persetujuan Akhir', 'Hari Libur', 'Rekap'] as $menu)
                         <span class="flex cursor-not-allowed items-center gap-3 rounded-xl px-3 py-3 text-sm text-slate-400 dark:text-slate-600">
                             <span class="size-2 rounded-full bg-slate-300 dark:bg-slate-700"></span>
                             {{ $menu }}

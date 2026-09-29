@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\JenisCuti;
+use App\Enums\PeranPengguna;
 use App\Models\Pegawai;
 use App\Models\SaldoCuti;
 use Illuminate\Database\Seeder;
@@ -14,21 +14,23 @@ class SaldoCutiSeeder extends Seeder
      */
     public function run(): void
     {
-        $jenisCuti = JenisCuti::query()->where('kode', 'TAHUNAN')->firstOrFail();
-
-        Pegawai::query()->each(function (Pegawai $pegawai) use ($jenisCuti): void {
-            SaldoCuti::query()->updateOrCreate(
-                [
-                    'pegawai_id' => $pegawai->getKey(),
-                    'jenis_cuti_id' => $jenisCuti->getKey(),
-                    'tahun' => now()->year,
-                ],
-                [
-                    'jatah_awal' => $jenisCuti->jatah_bawaan,
-                    'saldo_tersedia' => $jenisCuti->jatah_bawaan,
-                    'catatan' => 'Saldo awal data pengembangan.',
-                ],
-            );
-        });
+        Pegawai::query()
+            ->whereHas('pengguna', fn ($query) => $query->whereIn('peran', [
+                PeranPengguna::Karyawan->value,
+                PeranPengguna::Atasan->value,
+            ]))
+            ->each(function (Pegawai $pegawai): void {
+                SaldoCuti::query()->updateOrCreate(
+                    [
+                        'pegawai_id' => $pegawai->getKey(),
+                        'tahun' => now()->year,
+                    ],
+                    [
+                        'jatah_awal' => 12,
+                        'saldo_tersedia' => 12,
+                        'catatan' => 'Saldo awal data pengembangan.',
+                    ],
+                );
+            });
     }
 }

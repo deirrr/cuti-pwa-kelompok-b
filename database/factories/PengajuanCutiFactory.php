@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Enums\StatusPengajuanCuti;
-use App\Models\JenisCuti;
 use App\Models\Pegawai;
 use App\Models\PengajuanCuti;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -27,7 +26,6 @@ class PengajuanCutiFactory extends Factory
                 fake()->unique()->numerify('######'),
             ),
             'pegawai_id' => Pegawai::factory(),
-            'jenis_cuti_id' => JenisCuti::factory(),
             'status' => StatusPengajuanCuti::Draf,
             'alasan' => fake()->sentence(),
             'jumlah_hari' => 0,

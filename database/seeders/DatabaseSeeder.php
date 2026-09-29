@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
             BagianOrganisasiSeeder::class,
             PenggunaSeeder::class,
             PegawaiSeeder::class,
-            JenisCutiSeeder::class,
             SaldoCutiSeeder::class,
         ]);
     }

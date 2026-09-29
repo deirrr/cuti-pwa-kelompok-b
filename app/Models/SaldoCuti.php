@@ -13,7 +13,6 @@ use InvalidArgumentException;
 #[Table('saldo_cuti')]
 #[Fillable([
     'pegawai_id',
-    'jenis_cuti_id',
     'tahun',
     'jatah_awal',
     'saldo_tersedia',
@@ -31,11 +30,6 @@ class SaldoCuti extends Model
     public function pegawai(): BelongsTo
     {
         return $this->belongsTo(Pegawai::class);
-    }
-
-    public function jenisCuti(): BelongsTo
-    {
-        return $this->belongsTo(JenisCuti::class);
     }
 
     protected static function booted(): void

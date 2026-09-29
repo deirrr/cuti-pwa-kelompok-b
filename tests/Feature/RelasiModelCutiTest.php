@@ -6,7 +6,6 @@ use App\Enums\KeputusanPersetujuan;
 use App\Enums\StatusPengajuanCuti;
 use App\Enums\TahapPersetujuan;
 use App\Models\BagianOrganisasi;
-use App\Models\JenisCuti;
 use App\Models\Pegawai;
 use App\Models\PengajuanCuti;
 use App\Models\Pengguna;
@@ -34,10 +33,8 @@ class RelasiModelCutiTest extends TestCase
             ->for($penggunaKaryawan, 'pengguna')
             ->denganAtasan($atasan)
             ->create();
-        $jenisCuti = JenisCuti::factory()->create();
         $saldoCuti = SaldoCuti::factory()
             ->for($pegawai, 'pegawai')
-            ->for($jenisCuti, 'jenisCuti')
             ->create();
 
         $this->assertTrue($pegawai->pengguna->is($penggunaKaryawan));
@@ -45,7 +42,6 @@ class RelasiModelCutiTest extends TestCase
         $this->assertTrue($pegawai->atasan->is($atasan));
         $this->assertTrue($atasan->bawahan->contains($pegawai));
         $this->assertTrue($pegawai->saldoCuti->contains($saldoCuti));
-        $this->assertTrue($saldoCuti->jenisCuti->is($jenisCuti));
     }
 
     public function test_pengajuan_memuat_tanggal_dan_riwayat_persetujuan(): void

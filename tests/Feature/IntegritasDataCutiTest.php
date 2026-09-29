@@ -16,7 +16,7 @@ class IntegritasDataCutiTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
-    public function test_saldo_cuti_hanya_satu_per_pegawai_jenis_dan_tahun(): void
+    public function test_saldo_cuti_hanya_satu_per_pegawai_dan_tahun(): void
     {
         $saldo = SaldoCuti::factory()->create();
 
@@ -24,7 +24,6 @@ class IntegritasDataCutiTest extends TestCase
 
         SaldoCuti::factory()->create([
             'pegawai_id' => $saldo->pegawai_id,
-            'jenis_cuti_id' => $saldo->jenis_cuti_id,
             'tahun' => $saldo->tahun,
         ]);
     }

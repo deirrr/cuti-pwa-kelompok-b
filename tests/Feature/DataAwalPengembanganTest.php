@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\BagianOrganisasi;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class DataAwalPengembanganTest extends TestCase
@@ -17,6 +18,6 @@ class DataAwalPengembanganTest extends TestCase
         $this->assertDatabaseHas('bagian_organisasi', ['kode' => 'PENDAFTARAN']);
         $this->assertDatabaseHas('bagian_organisasi', ['kode' => 'INSTALASI-FARMASI']);
         $this->assertSame(20, BagianOrganisasi::query()->count());
-        $this->assertDatabaseMissing('jenis_cuti', ['kode' => 'SAKIT']);
+        $this->assertFalse(Schema::hasTable('jenis_cuti'));
     }
 }

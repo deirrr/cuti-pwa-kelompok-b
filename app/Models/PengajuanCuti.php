@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable([
     'nomor_pengajuan',
     'pegawai_id',
-    'jenis_cuti_id',
     'status',
     'alasan',
     'jumlah_hari',
@@ -34,11 +33,6 @@ class PengajuanCuti extends Model
     public function pegawai(): BelongsTo
     {
         return $this->belongsTo(Pegawai::class);
-    }
-
-    public function jenisCuti(): BelongsTo
-    {
-        return $this->belongsTo(JenisCuti::class);
     }
 
     public function tanggalCuti(): HasMany
