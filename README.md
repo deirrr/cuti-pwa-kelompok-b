@@ -17,7 +17,7 @@ Sistem informasi ini dibangun untuk memindahkan proses pengajuan dan persetujuan
 - Memudahkan Atasan dan HR memeriksa serta memproses pengajuan cuti.
 - Membantu pengguna memantau status pengajuan cuti.
 - Menyimpan riwayat pengajuan dan persetujuan secara terpusat.
-- Membantu HR mengelola saldo cuti dan menyusun laporan cuti karyawan.
+- Membantu HR mengatur jatah cuti tahunan setiap pegawai dan menyusun laporan cuti karyawan.
 - Menyediakan aplikasi yang responsif dan dapat dipasang sebagai PWA.
 
 ## Ruang Lingkup
@@ -25,7 +25,9 @@ Sistem informasi ini dibangun untuk memindahkan proses pengajuan dan persetujuan
 Sistem ini digunakan di lingkungan Klinik Utama Medika Antapani dengan ruang lingkup:
 
 - Autentikasi dan pembatasan akses berdasarkan peran pengguna.
-- Pengelolaan data Staff, Atasan, bagian organisasi, jenis cuti, saldo cuti, dan hari libur.
+- Pengelolaan data Staff, Atasan, bagian organisasi, saldo cuti tahunan, dan hari libur.
+- Sistem hanya menangani cuti tahunan dengan jatah awal 12 hari per pegawai.
+- HR dapat menyesuaikan jatah cuti tahunan setiap pegawai sesuai kebijakan yang berlaku.
 - Pengajuan cuti oleh Staff dan Atasan.
 - Persetujuan pengajuan Staff oleh Atasan dan HR.
 - Persetujuan pengajuan Atasan oleh HR.
@@ -35,21 +37,13 @@ Sistem ini digunakan di lingkungan Klinik Utama Medika Antapani dengan ruang lin
 - Penyediaan laporan pengajuan dan penggunaan cuti.
 - Dukungan dasar PWA untuk pemasangan aplikasi dan tampilan yang responsif.
 
-Sistem tidak mencakup:
-
-- Pengajuan cuti untuk HR dan Kepala Klinik.
-- Struktur organisasi berbasis Unit Bisnis.
-- Pengelolaan absensi dan penggajian.
-- Integrasi dengan sistem atau layanan eksternal.
-- Notifikasi melalui WhatsApp, email, atau layanan pihak ketiga.
-
 ## Aktor Sistem
 
 | Aktor | Tanggung jawab dan hak akses |
 | --- | --- |
 | Staff | Mengajukan cuti, melihat saldo, memantau status, membatalkan pengajuan yang masih dapat dibatalkan, dan melihat riwayat pengajuan sendiri. |
 | Atasan | Memiliki hak pengajuan pribadi serta memeriksa, menyetujui, atau menolak pengajuan Staff yang menjadi bawahannya. Pengajuan pribadi Atasan diteruskan langsung kepada HR. |
-| HR | Mengelola data pendukung cuti, memberikan persetujuan akhir, memperbarui saldo melalui proses sistem, dan melihat laporan cuti karyawan. |
+| HR | Mengatur jatah cuti tahunan setiap pegawai, mengelola data pendukung, memberikan persetujuan akhir, dan melihat laporan cuti karyawan. |
 
 ## Alur Singkat
 
