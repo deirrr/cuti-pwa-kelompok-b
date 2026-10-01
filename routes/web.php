@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AdminHr\BagianOrganisasiController;
 use App\Http\Controllers\AdminHr\DashboardController as AdminHrDashboardController;
-use App\Http\Controllers\AdminHr\SaldoCutiController;
+use App\Http\Controllers\AdminHr\PegawaiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SesiController;
 use Illuminate\Http\RedirectResponse;
@@ -34,9 +34,11 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
         Route::post('/bagian-organisasi', [BagianOrganisasiController::class, 'store'])->name('bagian_organisasi.store');
         Route::get('/bagian-organisasi/{bagianOrganisasi}/ubah', [BagianOrganisasiController::class, 'edit'])->name('bagian_organisasi.edit');
         Route::put('/bagian-organisasi/{bagianOrganisasi}', [BagianOrganisasiController::class, 'update'])->name('bagian_organisasi.update');
-        Route::get('/saldo-cuti', [SaldoCutiController::class, 'index'])->name('saldo_cuti.index');
-        Route::get('/saldo-cuti/{pegawai}/ubah', [SaldoCutiController::class, 'edit'])->name('saldo_cuti.edit');
-        Route::put('/saldo-cuti/{pegawai}', [SaldoCutiController::class, 'update'])->name('saldo_cuti.update');
+        Route::get('/karyawan', [PegawaiController::class, 'index'])->name('pegawai.index');
+        Route::get('/karyawan/tambah', [PegawaiController::class, 'create'])->name('pegawai.create');
+        Route::post('/karyawan', [PegawaiController::class, 'store'])->name('pegawai.store');
+        Route::get('/karyawan/{pegawai}/ubah', [PegawaiController::class, 'edit'])->name('pegawai.edit');
+        Route::put('/karyawan/{pegawai}', [PegawaiController::class, 'update'])->name('pegawai.update');
     });
 
     Route::get('/dashboard/admin-hr', AdminHrDashboardController::class)

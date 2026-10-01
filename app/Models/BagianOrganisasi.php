@@ -25,11 +25,6 @@ class BagianOrganisasi extends Model
         return $this->hasMany(Pegawai::class);
     }
 
-    public function jabatan(): HasMany
-    {
-        return $this->hasMany(Jabatan::class);
-    }
-
     /**
      * @return array<string, string>
      */

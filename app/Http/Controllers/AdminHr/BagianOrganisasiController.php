@@ -16,7 +16,7 @@ class BagianOrganisasiController extends Controller
     {
         $pencarian = $request->string('cari')->trim()->toString();
         $bagianOrganisasi = BagianOrganisasi::query()
-            ->withCount('jabatan')
+            ->withCount('pegawai')
             ->when($pencarian !== '', function ($query) use ($pencarian): void {
                 $query->where(function ($query) use ($pencarian): void {
                     $query

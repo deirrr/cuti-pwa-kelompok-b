@@ -25,8 +25,8 @@ class PegawaiFactory extends Factory
             'atasan_id' => null,
             'nomor_induk' => fake()->unique()->numerify('PGW-######'),
             'nama' => fake()->name(),
-            'jabatan' => fake()->jobTitle(),
             'tanggal_masuk' => fake()->dateTimeBetween('-10 years', '-1 month')->format('Y-m-d'),
+            'jatah_cuti' => 12,
             'aktif' => true,
         ];
     }

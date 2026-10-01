@@ -25,9 +25,9 @@
         <div class="relative max-w-2xl">
             <p class="text-sm font-semibold text-emerald-100">Selamat datang, {{ auth()->user()->pegawai->nama }}</p>
             <h2 class="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">Siapkan struktur organisasi sebelum alur cuti digunakan.</h2>
-            <p class="mt-4 text-sm leading-6 text-emerald-50/90">Kelola bagian organisasi sebagai fondasi data Staff, Atasan, dan alur persetujuan cuti.</p>
-            <a href="{{ route('admin_hr.bagian_organisasi.index') }}" class="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-emerald-800 shadow-sm transition hover:bg-emerald-50 focus:outline-none focus:ring-4 focus:ring-white/30">
-                Kelola Bagian Organisasi
+            <p class="mt-4 text-sm leading-6 text-emerald-50/90">Kelola Staff, Atasan, bagian organisasi, dan jatah cuti tahunan dalam satu tempat.</p>
+            <a href="{{ route('admin_hr.pegawai.index') }}" class="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-emerald-800 shadow-sm transition hover:bg-emerald-50 focus:outline-none focus:ring-4 focus:ring-white/30">
+                Kelola Master Karyawan
                 <svg class="size-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
             </a>
         </div>
@@ -36,8 +36,8 @@
     @php
         $ringkasan = [
             ['label' => 'Bagian organisasi aktif', 'nilai' => $jumlahBagianOrganisasiAktif, 'warna' => 'blue', 'ikon' => 'M4 21V10l8-5 8 5v11M9 21v-6h6v6'],
-            ['label' => 'Jabatan aktif', 'nilai' => $jumlahJabatanAktif, 'warna' => 'violet', 'ikon' => 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z'],
-            ['label' => 'Pegawai aktif', 'nilai' => $jumlahPegawaiAktif, 'warna' => 'amber', 'ikon' => 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z'],
+            ['label' => 'Staff aktif', 'nilai' => $jumlahStaffAktif, 'warna' => 'violet', 'ikon' => 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z'],
+            ['label' => 'Atasan aktif', 'nilai' => $jumlahAtasanAktif, 'warna' => 'amber', 'ikon' => 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z'],
         ];
     @endphp
 

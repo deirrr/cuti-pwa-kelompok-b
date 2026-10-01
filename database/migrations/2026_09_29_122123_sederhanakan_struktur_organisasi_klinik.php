@@ -2,24 +2,33 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     public function up(): void
     {
+        $databaseDriver = DB::connection()->getDriverName();
+
         Schema::table('jabatan', function (Blueprint $table) {
+            $table->dropForeign(['unit_bisnis_id']);
             $table->dropUnique(['unit_bisnis_id', 'kode']);
             $table->dropIndex(['unit_bisnis_id', 'kategori', 'aktif']);
-            $table->dropForeign(['unit_bisnis_id']);
             $table->dropColumn('unit_bisnis_id');
         });
 
-        Schema::table('bagian_organisasi', function (Blueprint $table) {
+        Schema::table('bagian_organisasi', function (Blueprint $table) use ($databaseDriver) {
             $table->dropForeign(['induk_id']);
+
+            if ($databaseDriver === 'sqlite') {
+                $table->dropForeign(['unit_bisnis_id']);
+            } else {
+                $table->dropForeign('departemen_unit_bisnis_id_foreign');
+            }
+
             $table->dropUnique(['unit_bisnis_id', 'kode']);
             $table->dropIndex(['unit_bisnis_id', 'jenis', 'aktif']);
-            $table->dropForeign(['unit_bisnis_id']);
             $table->dropColumn(['unit_bisnis_id', 'induk_id', 'jenis']);
         });
 

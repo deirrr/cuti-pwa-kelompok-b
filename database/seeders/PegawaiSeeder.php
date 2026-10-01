@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PeranPengguna;
 use App\Models\BagianOrganisasi;
 use App\Models\Pegawai;
 use App\Models\Pengguna;
@@ -25,7 +26,6 @@ class PegawaiSeeder extends Seeder
                 'atasan_id' => null,
                 'nomor_induk' => 'PGW-000001',
                 'nama' => 'Atasan Contoh',
-                'jabatan' => 'Kepala Operasional',
                 'tanggal_masuk' => now()->subYears(5)->toDateString(),
                 'aktif' => true,
             ],
@@ -37,21 +37,18 @@ class PegawaiSeeder extends Seeder
                 'bagian_organisasi_id' => $departemenSdm->getKey(),
                 'nomor_induk' => 'PGW-000002',
                 'nama' => 'Admin HR Contoh',
-                'jabatan' => 'Staf HR',
             ],
             [
                 'email' => 'admin.hr.2@example.test',
                 'bagian_organisasi_id' => $departemenSdm->getKey(),
                 'nomor_induk' => 'PGW-000003',
                 'nama' => 'Admin HR Kedua',
-                'jabatan' => 'Staf HR',
             ],
             [
                 'email' => 'karyawan@example.test',
                 'bagian_organisasi_id' => $bagianPendaftaran->getKey(),
                 'nomor_induk' => 'PGW-000004',
                 'nama' => 'Karyawan Contoh',
-                'jabatan' => 'Staf Operasional',
             ],
         ];
 
@@ -62,10 +59,9 @@ class PegawaiSeeder extends Seeder
                 ['pengguna_id' => $pengguna->getKey()],
                 [
                     'bagian_organisasi_id' => $data['bagian_organisasi_id'],
-                    'atasan_id' => $atasan->getKey(),
+                    'atasan_id' => $pengguna->peran === PeranPengguna::Karyawan ? $atasan->getKey() : null,
                     'nomor_induk' => $data['nomor_induk'],
                     'nama' => $data['nama'],
-                    'jabatan' => $data['jabatan'],
                     'tanggal_masuk' => now()->subYears(2)->toDateString(),
                     'aktif' => true,
                 ],

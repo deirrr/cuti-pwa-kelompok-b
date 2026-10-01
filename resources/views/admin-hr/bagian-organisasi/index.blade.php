@@ -27,13 +27,13 @@
         <div class="overflow-x-auto">
             <table class="min-w-full text-left text-sm">
                 <thead class="border-b border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950/50">
-                    <tr><th class="px-5 py-4">Nama</th><th class="px-5 py-4">Jabatan</th><th class="px-5 py-4">Status</th><th class="px-5 py-4 text-right">Aksi</th></tr>
+                    <tr><th class="px-5 py-4">Nama</th><th class="px-5 py-4">Karyawan</th><th class="px-5 py-4">Status</th><th class="px-5 py-4 text-right">Aksi</th></tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                     @forelse ($bagianOrganisasi as $bagian)
                         <tr>
                             <td class="px-5 py-4"><p class="font-semibold">{{ $bagian->nama }}</p><p class="text-xs text-slate-500">{{ $bagian->kode }}</p></td>
-                            <td class="px-5 py-4">{{ $bagian->jabatan_count }}</td>
+                            <td class="px-5 py-4">{{ $bagian->pegawai_count }}</td>
                             <td class="px-5 py-4">{{ $bagian->aktif ? 'Aktif' : 'Nonaktif' }}</td>
                             <td class="px-5 py-4 text-right"><a href="{{ route('admin_hr.bagian_organisasi.edit', $bagian) }}" class="font-semibold text-emerald-700 dark:text-emerald-400">Ubah</a></td>
                         </tr>

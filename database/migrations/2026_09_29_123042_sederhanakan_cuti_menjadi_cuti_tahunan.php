@@ -20,8 +20,9 @@ return new class extends Migration
         }
 
         Schema::table('saldo_cuti', function (Blueprint $table) {
-            $table->dropUnique('saldo_cuti_pegawai_jenis_tahun_unik');
+            $table->index('pegawai_id', 'saldo_cuti_pegawai_id_index');
             $table->dropForeign(['jenis_cuti_id']);
+            $table->dropUnique('saldo_cuti_pegawai_jenis_tahun_unik');
             $table->dropColumn('jenis_cuti_id');
             $table->unique(['pegawai_id', 'tahun'], 'saldo_cuti_pegawai_tahun_unik');
         });

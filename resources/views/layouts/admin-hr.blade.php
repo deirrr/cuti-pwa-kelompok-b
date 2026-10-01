@@ -41,25 +41,18 @@
                         <svg class="size-5 shrink-0" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21V10l8-5 8 5v11M9 21v-6h6v6"/></svg>
                         Bagian Organisasi
                     </a>
-                    @foreach ([
-                        ['label' => 'Jabatan', 'icon' => 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm13 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75'],
-                        ['label' => 'Pegawai', 'icon' => 'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z'],
-                    ] as $menu)
-                        <span class="flex cursor-not-allowed items-center gap-3 rounded-xl px-3 py-3 text-sm text-slate-400 dark:text-slate-600">
-                            <svg class="size-5 shrink-0" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="{{ $menu['icon'] }}"/></svg>
-                            {{ $menu['label'] }}
-                            <span class="ml-auto rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase dark:bg-slate-800">Segera</span>
-                        </span>
-                    @endforeach
+                    <a href="{{ route('admin_hr.pegawai.index') }}" @class([
+                        'group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition',
+                        'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' => request()->routeIs('admin_hr.pegawai.*'),
+                        'text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' => ! request()->routeIs('admin_hr.pegawai.*'),
+                    ])>
+                        <svg class="size-5 shrink-0" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/></svg>
+                        Master Karyawan
+                    </a>
                 </div>
 
                 <p class="mt-7 px-3 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">Cuti Karyawan</p>
                 <div class="mt-2 flex flex-col gap-1">
-                    <a href="{{ route('admin_hr.saldo_cuti.index') }}" @class([
-                        'flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition',
-                        'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' => request()->routeIs('admin_hr.saldo_cuti.*'),
-                        'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800' => ! request()->routeIs('admin_hr.saldo_cuti.*'),
-                    ])><span class="size-2 rounded-full bg-emerald-500"></span>Saldo Cuti Tahunan</a>
                     @foreach (['Persetujuan Akhir', 'Hari Libur', 'Rekap'] as $menu)
                         <span class="flex cursor-not-allowed items-center gap-3 rounded-xl px-3 py-3 text-sm text-slate-400 dark:text-slate-600">
                             <span class="size-2 rounded-full bg-slate-300 dark:bg-slate-700"></span>
@@ -97,11 +90,6 @@
                         <button data-sidebar-open type="button" aria-label="Buka navigasi" class="rounded-full p-2.5 text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-600/10 dark:text-slate-300 dark:hover:bg-slate-800 xl:hidden">
                             <svg class="size-5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
                         </button>
-                        <div class="hidden items-center gap-3 rounded-xl bg-slate-100 px-4 py-2.5 text-sm text-slate-500 dark:bg-slate-800 dark:text-slate-400 sm:flex">
-                            <svg class="size-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                            Cari menu atau data
-                            <kbd class="ml-6 rounded border border-slate-300 bg-white px-1.5 py-0.5 text-[10px] dark:border-slate-700 dark:bg-slate-900">Ctrl K</kbd>
-                        </div>
                     </div>
 
                     <div class="flex items-center gap-2">

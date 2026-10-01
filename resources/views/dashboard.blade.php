@@ -39,8 +39,8 @@
                     <p class="mt-2 text-lg font-semibold">{{ auth()->user()->pegawai->nomor_induk }}</p>
                 </article>
                 <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                    <p class="text-sm text-slate-500 dark:text-slate-400">Jabatan</p>
-                    <p class="mt-2 text-lg font-semibold">{{ auth()->user()->pegawai->jabatan }}</p>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Bagian organisasi</p>
+                    <p class="mt-2 text-lg font-semibold">{{ auth()->user()->pegawai->bagianOrganisasi->nama }}</p>
                 </article>
                 <article class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:col-span-2 lg:col-span-1 dark:border-slate-800 dark:bg-slate-900">
                     <p class="text-sm text-slate-500 dark:text-slate-400">Peran sistem</p>

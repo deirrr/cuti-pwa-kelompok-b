@@ -62,6 +62,50 @@ document.querySelectorAll('[data-password-toggle]').forEach((button) => {
     });
 });
 
+document.querySelectorAll('[data-dialog-pegawai-open]').forEach((button) => {
+    const dialog = document.getElementById(button.dataset.dialogPegawaiOpen);
+
+    if (! (dialog instanceof HTMLDialogElement)) {
+        return;
+    }
+
+    button.addEventListener('click', () => dialog.showModal());
+
+    dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) {
+            dialog.close();
+        }
+    });
+});
+
+document.querySelectorAll('[data-pegawai-form]').forEach((form) => {
+    const peranSelect = form.querySelector('[data-peran]');
+    const atasanGroup = form.querySelector('[data-atasan-group]');
+    const atasanSelect = form.querySelector('[data-atasan]');
+    const jatahGroup = form.querySelector('[data-jatah-group]');
+    const jatahInput = form.querySelector('[data-jatah]');
+
+    if (! peranSelect || ! atasanGroup || ! atasanSelect || ! jatahGroup || ! jatahInput) {
+        return;
+    }
+
+    const sesuaikanForm = () => {
+        const staffDipilih = peranSelect.value === 'karyawan';
+        const adminHrDipilih = peranSelect.value === 'admin_hr';
+
+        atasanGroup.classList.toggle('hidden', ! staffDipilih);
+        atasanSelect.disabled = ! staffDipilih;
+        atasanSelect.required = staffDipilih;
+
+        jatahGroup.classList.toggle('hidden', adminHrDipilih);
+        jatahInput.disabled = adminHrDipilih;
+        jatahInput.required = ! adminHrDipilih;
+    };
+
+    peranSelect.addEventListener('change', sesuaikanForm);
+    sesuaikanForm();
+});
+
 document.querySelectorAll('[data-bagian-organisasi-form]').forEach((form) => {
     const unitSelect = form.querySelector('[data-unit-bisnis]');
     const jenisSelect = form.querySelector('[data-jenis-bagian]');
