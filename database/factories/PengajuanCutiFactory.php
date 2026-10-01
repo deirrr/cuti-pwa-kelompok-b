@@ -26,9 +26,10 @@ class PengajuanCutiFactory extends Factory
                 fake()->unique()->numerify('######'),
             ),
             'pegawai_id' => Pegawai::factory(),
+            'atasan_penyetuju_id' => null,
             'status' => StatusPengajuanCuti::Draf,
             'alasan' => fake()->sentence(),
-            'jumlah_hari' => 0,
+            'tanggal_cuti' => fake()->dateTimeBetween('+1 day', '+1 year')->format('Y-m-d'),
             'diajukan_pada' => null,
             'dibatalkan_pada' => null,
         ];

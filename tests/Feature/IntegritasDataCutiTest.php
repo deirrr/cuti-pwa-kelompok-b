@@ -6,7 +6,6 @@ use App\Models\Pegawai;
 use App\Models\PengajuanCuti;
 use App\Models\PersetujuanCuti;
 use App\Models\SaldoCuti;
-use App\Models\TanggalPengajuanCuti;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use InvalidArgumentException;
@@ -25,20 +24,6 @@ class IntegritasDataCutiTest extends TestCase
         SaldoCuti::factory()->create([
             'pegawai_id' => $saldo->pegawai_id,
             'tahun' => $saldo->tahun,
-        ]);
-    }
-
-    public function test_tanggal_yang_sama_tidak_dapat_diulang_dalam_satu_pengajuan(): void
-    {
-        $tanggal = TanggalPengajuanCuti::factory()->create([
-            'tanggal' => '2026-10-05',
-        ]);
-
-        $this->expectException(QueryException::class);
-
-        TanggalPengajuanCuti::factory()->create([
-            'pengajuan_cuti_id' => $tanggal->pengajuan_cuti_id,
-            'tanggal' => $tanggal->tanggal,
         ]);
     }
 

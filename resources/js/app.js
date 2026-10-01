@@ -78,6 +78,126 @@ document.querySelectorAll('[data-dialog-pegawai-open]').forEach((button) => {
     });
 });
 
+document.querySelectorAll('[data-cuti-calendar]').forEach((calendar) => {
+    const title = calendar.querySelector('[data-calendar-title]');
+    const daysContainer = calendar.querySelector('[data-calendar-days]');
+    const previousButton = calendar.querySelector('[data-calendar-previous]');
+    const nextButton = calendar.querySelector('[data-calendar-next]');
+    const inputContainer = calendar.parentElement?.querySelector('[data-calendar-inputs]');
+    const countLabel = calendar.parentElement?.querySelector('[data-calendar-count]');
+
+    if (! title || ! daysContainer || ! previousButton || ! nextButton || ! inputContainer || ! countLabel) {
+        return;
+    }
+
+    const selectedDates = new Set(JSON.parse(calendar.dataset.selected || '[]'));
+    const disabledDates = new Set(JSON.parse(calendar.dataset.disabled || '[]'));
+    const maximumSelections = Number.parseInt(calendar.dataset.maxSelections || '31', 10);
+    const minimumDate = calendar.dataset.minDate;
+    const initialDate = selectedDates.size > 0 ? [...selectedDates][0] : minimumDate;
+    const parseDate = (date) => {
+        const [year, month, day] = date.split('-').map(Number);
+
+        return new Date(year, month - 1, day);
+    };
+    const formatDate = (date) => [
+        date.getFullYear(),
+        String(date.getMonth() + 1).padStart(2, '0'),
+        String(date.getDate()).padStart(2, '0'),
+    ].join('-');
+    let visibleMonth = new Date(parseDate(initialDate).getFullYear(), parseDate(initialDate).getMonth(), 1);
+
+    const syncInputs = () => {
+        inputContainer.replaceChildren();
+
+        [...selectedDates].sort().forEach((date) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'tanggal_cuti[]';
+            input.value = date;
+            inputContainer.append(input);
+        });
+
+        countLabel.textContent = `${selectedDates.size} tanggal`;
+    };
+
+    const renderCalendar = () => {
+        const year = visibleMonth.getFullYear();
+        const month = visibleMonth.getMonth();
+        const firstDay = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+        const minimumMonth = new Date(parseDate(minimumDate).getFullYear(), parseDate(minimumDate).getMonth(), 1);
+
+        title.textContent = new Intl.DateTimeFormat('id-ID', {
+            month: 'long',
+            year: 'numeric',
+        }).format(visibleMonth);
+        previousButton.disabled = visibleMonth <= minimumMonth;
+        daysContainer.replaceChildren();
+
+        for (let blank = 0; blank < firstDay; blank += 1) {
+            daysContainer.append(document.createElement('span'));
+        }
+
+        for (let day = 1; day <= totalDays; day += 1) {
+            const currentDate = new Date(year, month, day);
+            const date = formatDate(currentDate);
+            const isSunday = currentDate.getDay() === 0;
+            const isHoliday = disabledDates.has(date);
+            const isPast = date < minimumDate;
+            const isDisabled = isSunday || isHoliday || isPast;
+            const isSelected = selectedDates.has(date);
+            const button = document.createElement('button');
+
+            button.type = 'button';
+            button.textContent = String(day);
+            button.disabled = isDisabled;
+            button.setAttribute('aria-label', new Intl.DateTimeFormat('id-ID', { dateStyle: 'full' }).format(currentDate));
+            button.className = 'aspect-square rounded-xl text-sm font-semibold transition focus:outline-none focus:ring-4 focus:ring-emerald-500/15';
+
+            if (isSelected) {
+                button.classList.add('bg-emerald-600', 'text-white', 'shadow-sm');
+            } else if (isDisabled) {
+                button.classList.add('cursor-not-allowed', 'bg-red-50', 'text-red-300', 'line-through', 'dark:bg-red-950/40', 'dark:text-red-700');
+                button.title = isSunday ? 'Klinik tutup setiap hari Minggu' : (isHoliday ? 'Hari libur nasional' : 'Tanggal sudah lewat');
+            } else {
+                button.classList.add('text-slate-700', 'hover:bg-emerald-50', 'hover:text-emerald-700', 'dark:text-slate-200', 'dark:hover:bg-emerald-950');
+            }
+
+            button.addEventListener('click', () => {
+                if (selectedDates.has(date)) {
+                    selectedDates.delete(date);
+                } else {
+                    if (maximumSelections === 1) {
+                        selectedDates.clear();
+                    }
+
+                    if (selectedDates.size < maximumSelections) {
+                        selectedDates.add(date);
+                    }
+                }
+
+                syncInputs();
+                renderCalendar();
+            });
+
+            daysContainer.append(button);
+        }
+    };
+
+    previousButton.addEventListener('click', () => {
+        visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1, 1);
+        renderCalendar();
+    });
+    nextButton.addEventListener('click', () => {
+        visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 1);
+        renderCalendar();
+    });
+
+    syncInputs();
+    renderCalendar();
+});
+
 document.querySelectorAll('[data-pegawai-form]').forEach((form) => {
     const peranSelect = form.querySelector('[data-peran]');
     const atasanGroup = form.querySelector('[data-atasan-group]');

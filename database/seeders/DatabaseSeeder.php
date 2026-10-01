@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             PenggunaSeeder::class,
             PegawaiSeeder::class,
             SaldoCutiSeeder::class,
+            HariLiburSeeder::class,
         ]);
     }
 }

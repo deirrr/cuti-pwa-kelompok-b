@@ -15,9 +15,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable([
     'nomor_pengajuan',
     'pegawai_id',
+    'atasan_penyetuju_id',
     'status',
     'alasan',
-    'jumlah_hari',
+    'tanggal_cuti',
     'diajukan_pada',
     'dibatalkan_pada',
 ])]
@@ -35,9 +36,9 @@ class PengajuanCuti extends Model
         return $this->belongsTo(Pegawai::class);
     }
 
-    public function tanggalCuti(): HasMany
+    public function atasanPenyetuju(): BelongsTo
     {
-        return $this->hasMany(TanggalPengajuanCuti::class);
+        return $this->belongsTo(Pengguna::class, 'atasan_penyetuju_id');
     }
 
     public function persetujuan(): HasMany
@@ -52,7 +53,7 @@ class PengajuanCuti extends Model
     {
         return [
             'status' => StatusPengajuanCuti::class,
-            'jumlah_hari' => 'integer',
+            'tanggal_cuti' => 'date',
             'diajukan_pada' => 'datetime',
             'dibatalkan_pada' => 'datetime',
         ];

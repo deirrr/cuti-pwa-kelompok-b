@@ -11,7 +11,6 @@ use App\Models\PengajuanCuti;
 use App\Models\Pengguna;
 use App\Models\PersetujuanCuti;
 use App\Models\SaldoCuti;
-use App\Models\TanggalPengajuanCuti;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
@@ -47,14 +46,8 @@ class RelasiModelCutiTest extends TestCase
     public function test_pengajuan_memuat_tanggal_dan_riwayat_persetujuan(): void
     {
         $pengajuan = PengajuanCuti::factory()->menungguHr()->create([
-            'jumlah_hari' => 2,
+            'tanggal_cuti' => '2026-10-05',
         ]);
-        TanggalPengajuanCuti::factory()
-            ->for($pengajuan, 'pengajuanCuti')
-            ->create(['tanggal' => '2026-10-05']);
-        TanggalPengajuanCuti::factory()
-            ->for($pengajuan, 'pengajuanCuti')
-            ->create(['tanggal' => '2026-10-06']);
         $pemberiKeputusan = Pengguna::factory()->atasan()->create();
         $persetujuan = PersetujuanCuti::factory()
             ->for($pengajuan, 'pengajuanCuti')
@@ -64,7 +57,7 @@ class RelasiModelCutiTest extends TestCase
         $pengajuan->refresh();
 
         $this->assertSame(StatusPengajuanCuti::MenungguHr, $pengajuan->status);
-        $this->assertCount(2, $pengajuan->tanggalCuti);
+        $this->assertSame('2026-10-05', $pengajuan->tanggal_cuti->toDateString());
         $this->assertTrue($pengajuan->persetujuan->contains($persetujuan));
         $this->assertSame(TahapPersetujuan::Atasan, $persetujuan->tahap);
         $this->assertSame(KeputusanPersetujuan::Disetujui, $persetujuan->keputusan);

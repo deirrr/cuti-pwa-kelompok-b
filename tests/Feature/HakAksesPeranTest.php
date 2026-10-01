@@ -44,9 +44,9 @@ class HakAksesPeranTest extends TestCase
             ->assertRedirect(route($namaRute));
     }
 
-    public function test_semua_peran_dapat_membuka_dashboard_pengajuan_pribadi(): void
+    public function test_staff_dan_atasan_dapat_membuka_dashboard_pengajuan_pribadi(): void
     {
-        foreach (PeranPengguna::cases() as $peran) {
+        foreach ([PeranPengguna::Karyawan, PeranPengguna::Atasan] as $peran) {
             $pegawai = $this->buatPegawai($peran);
 
             $this->actingAs($pegawai->pengguna)
@@ -54,6 +54,12 @@ class HakAksesPeranTest extends TestCase
                 ->assertOk()
                 ->assertSee('Dashboard Karyawan');
         }
+
+        $adminHr = $this->buatPegawai(PeranPengguna::AdminHr);
+
+        $this->actingAs($adminHr->pengguna)
+            ->get(route('dashboard.karyawan'))
+            ->assertForbidden();
     }
 
     public function test_hanya_atasan_dapat_membuka_area_atasan(): void

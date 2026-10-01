@@ -2,8 +2,12 @@
 
 use App\Http\Controllers\AdminHr\BagianOrganisasiController;
 use App\Http\Controllers\AdminHr\DashboardController as AdminHrDashboardController;
+use App\Http\Controllers\AdminHr\HariLiburController;
 use App\Http\Controllers\AdminHr\PegawaiController;
+use App\Http\Controllers\AdminHr\PersetujuanCutiController as AdminHrPersetujuanCutiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PengajuanCutiController;
+use App\Http\Controllers\PersetujuanAtasanController;
 use App\Http\Controllers\SesiController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
@@ -20,12 +24,26 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
     Route::post('/logout', [SesiController::class, 'destroy'])->name('logout');
 
     Route::view('/dashboard/karyawan', 'dashboard', ['jenisDashboard' => 'Karyawan'])
-        ->middleware('peran:karyawan,atasan,admin_hr')
+        ->middleware('peran:karyawan,atasan')
         ->name('dashboard.karyawan');
 
     Route::view('/dashboard/atasan', 'dashboard', ['jenisDashboard' => 'Atasan'])
         ->middleware('peran:atasan')
         ->name('dashboard.atasan');
+
+    Route::middleware('peran:karyawan,atasan')->group(function () {
+        Route::get('/cuti', [PengajuanCutiController::class, 'index'])->name('cuti.index');
+        Route::get('/cuti/ajukan', [PengajuanCutiController::class, 'create'])->name('cuti.create');
+        Route::post('/cuti', [PengajuanCutiController::class, 'store'])->name('cuti.store');
+        Route::get('/cuti/{pengajuanCuti}/ubah', [PengajuanCutiController::class, 'edit'])->name('cuti.edit');
+        Route::put('/cuti/{pengajuanCuti}', [PengajuanCutiController::class, 'update'])->name('cuti.update');
+        Route::post('/cuti/{pengajuanCuti}/batalkan', [PengajuanCutiController::class, 'cancel'])->name('cuti.cancel');
+    });
+
+    Route::middleware('peran:atasan')->group(function () {
+        Route::get('/persetujuan-atasan', [PersetujuanAtasanController::class, 'index'])->name('persetujuan_atasan.index');
+        Route::post('/persetujuan-atasan/{pengajuanCuti}', [PersetujuanAtasanController::class, 'store'])->name('persetujuan_atasan.store');
+    });
 
     Route::middleware('peran:admin_hr')->prefix('admin-hr')->name('admin_hr.')->group(function () {
         Route::get('/dashboard', AdminHrDashboardController::class)->name('dashboard');
@@ -39,6 +57,12 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
         Route::post('/karyawan', [PegawaiController::class, 'store'])->name('pegawai.store');
         Route::get('/karyawan/{pegawai}/ubah', [PegawaiController::class, 'edit'])->name('pegawai.edit');
         Route::put('/karyawan/{pegawai}', [PegawaiController::class, 'update'])->name('pegawai.update');
+        Route::get('/persetujuan-cuti', [AdminHrPersetujuanCutiController::class, 'index'])->name('persetujuan.index');
+        Route::post('/persetujuan-cuti/{pengajuanCuti}', [AdminHrPersetujuanCutiController::class, 'store'])->name('persetujuan.store');
+        Route::resource('/hari-libur', HariLiburController::class)
+            ->except('show')
+            ->parameters(['hari-libur' => 'hariLibur'])
+            ->names('hari_libur');
     });
 
     Route::get('/dashboard/admin-hr', AdminHrDashboardController::class)
