@@ -21,18 +21,61 @@ use Illuminate\Validation\ValidationException;
 
 class PengajuanCutiController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         $pegawai = auth()->user()->pegawai;
-        $saldoCuti = $pegawai->saldoCuti()->where('tahun', now()->year)->first();
+        $ringkasanPengajuan = $pegawai->pengajuanCuti()
+            ->get(['tanggal_cuti', 'status']);
+        $tahunTersedia = $ringkasanPengajuan
+            ->map(fn (PengajuanCuti $pengajuan): int => $pengajuan->tanggal_cuti->year)
+            ->push(now()->year)
+            ->unique()
+            ->sortDesc()
+            ->values();
+        $tahun = $request->integer('tahun', now()->year);
+
+        if (! $tahunTersedia->contains($tahun)) {
+            $tahun = now()->year;
+        }
+
+        $statusYangDapatDipilih = [
+            StatusPengajuanCuti::MenungguAtasan,
+            StatusPengajuanCuti::MenungguHr,
+            StatusPengajuanCuti::Dibatalkan,
+            StatusPengajuanCuti::Ditolak,
+            StatusPengajuanCuti::Disetujui,
+        ];
+        $statusDiminta = $request->query('status');
+        $statusTerpilih = is_string($statusDiminta)
+            && in_array($statusDiminta, array_map(fn (StatusPengajuanCuti $status): string => $status->value, $statusYangDapatDipilih), true)
+                ? $statusDiminta
+                : null;
+        $jumlahPerStatus = $ringkasanPengajuan
+            ->filter(fn (PengajuanCuti $pengajuan): bool => $pengajuan->tanggal_cuti->year === $tahun)
+            ->countBy(fn (PengajuanCuti $pengajuan): string => $pengajuan->status->value);
+        $saldoCuti = $pegawai->saldoCuti()->where('tahun', $tahun)->first();
 
         return view('cuti.index', [
             'pengajuan' => $pegawai->pengajuanCuti()
                 ->with(['persetujuan.pemberiKeputusan.pegawai'])
+                ->whereYear('tanggal_cuti', $tahun)
+                ->when($statusTerpilih !== null, fn ($query) => $query->where('status', $statusTerpilih))
                 ->latest('diajukan_pada')
                 ->latest('id')
                 ->get(),
             'saldoTersedia' => $saldoCuti?->saldo_tersedia ?? $pegawai->jatah_cuti,
+            'statusTerpilih' => $statusTerpilih,
+            'tahun' => $tahun,
+            'tahunTersedia' => $tahunTersedia,
+            'pilihanStatus' => collect($statusYangDapatDipilih)->map(fn (StatusPengajuanCuti $status): array => [
+                'nilai' => $status->value,
+                'label' => match ($status) {
+                    StatusPengajuanCuti::Dibatalkan => 'Batal',
+                    StatusPengajuanCuti::Disetujui => 'ACC',
+                    default => $status->label(),
+                },
+                'jumlah' => $jumlahPerStatus->get($status->value, 0),
+            ]),
         ]);
     }
 

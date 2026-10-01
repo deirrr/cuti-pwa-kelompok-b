@@ -208,6 +208,61 @@ class AlurPengajuanCutiTest extends TestCase
         $this->assertNull($pengajuan->atasan_penyetuju_id);
     }
 
+    public function test_daftar_pengajuan_default_ke_tahun_berjalan_dan_dapat_difilter_berdasarkan_status(): void
+    {
+        $bagian = BagianOrganisasi::factory()->create();
+        $staff = $this->buatPegawai(PeranPengguna::Karyawan, $bagian);
+        $staffLain = $this->buatPegawai(PeranPengguna::Karyawan, $bagian);
+        PengajuanCuti::factory()->menungguAtasan()->create([
+            'nomor_pengajuan' => 'CUTI-2026-MENUNGGU',
+            'pegawai_id' => $staff->getKey(),
+            'tanggal_cuti' => '2026-10-05',
+        ]);
+        PengajuanCuti::factory()->disetujui()->create([
+            'nomor_pengajuan' => 'CUTI-2026-DISETUJUI',
+            'pegawai_id' => $staff->getKey(),
+            'tanggal_cuti' => '2026-10-06',
+        ]);
+        PengajuanCuti::factory()->dibatalkan()->create([
+            'nomor_pengajuan' => 'CUTI-2025-DIBATALKAN',
+            'pegawai_id' => $staff->getKey(),
+            'tanggal_cuti' => '2025-12-20',
+        ]);
+        PengajuanCuti::factory()->create([
+            'nomor_pengajuan' => 'CUTI-2024-PEGAWAI-LAIN',
+            'pegawai_id' => $staffLain->getKey(),
+            'tanggal_cuti' => '2024-12-20',
+        ]);
+
+        $halamanAwal = $this->actingAs($staff->pengguna)->get(route('cuti.index'));
+
+        $halamanAwal
+            ->assertOk()
+            ->assertViewHas('tahun', 2026)
+            ->assertViewHas('tahunTersedia', fn ($tahun): bool => $tahun->all() === [2026, 2025])
+            ->assertSee('CUTI-2026-MENUNGGU')
+            ->assertSee('CUTI-2026-DISETUJUI')
+            ->assertDontSee('CUTI-2025-DIBATALKAN')
+            ->assertDontSee('2024');
+
+        $this->actingAs($staff->pengguna)
+            ->get(route('cuti.index', [
+                'tahun' => 2026,
+                'status' => StatusPengajuanCuti::Disetujui->value,
+            ]))
+            ->assertOk()
+            ->assertViewHas('statusTerpilih', StatusPengajuanCuti::Disetujui->value)
+            ->assertSee('CUTI-2026-DISETUJUI')
+            ->assertDontSee('CUTI-2026-MENUNGGU');
+
+        $this->actingAs($staff->pengguna)
+            ->get(route('cuti.index', ['tahun' => 2025]))
+            ->assertOk()
+            ->assertViewHas('tahun', 2025)
+            ->assertSee('CUTI-2025-DIBATALKAN')
+            ->assertDontSee('CUTI-2026-DISETUJUI');
+    }
+
     private function buatPegawai(
         PeranPengguna $peran,
         BagianOrganisasi $bagian,
