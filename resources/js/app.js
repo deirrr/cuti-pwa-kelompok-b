@@ -62,6 +62,39 @@ document.querySelectorAll('[data-password-toggle]').forEach((button) => {
     });
 });
 
+document.querySelectorAll('[data-status-scroller]').forEach((scroller) => {
+    const track = scroller.querySelector('[data-status-scroll-track]');
+    const previousButton = scroller.querySelector('[data-status-scroll-previous]');
+    const nextButton = scroller.querySelector('[data-status-scroll-next]');
+
+    if (! track || ! previousButton || ! nextButton) {
+        return;
+    }
+
+    const updateButtons = () => {
+        const hasOverflow = track.scrollWidth > track.clientWidth + 1;
+        const reachedStart = track.scrollLeft <= 1;
+        const reachedEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 1;
+
+        previousButton.classList.toggle('hidden', ! hasOverflow);
+        previousButton.classList.toggle('flex', hasOverflow);
+        nextButton.classList.toggle('hidden', ! hasOverflow);
+        nextButton.classList.toggle('flex', hasOverflow);
+        previousButton.disabled = reachedStart;
+        nextButton.disabled = reachedEnd;
+    };
+
+    previousButton.addEventListener('click', () => {
+        track.scrollBy({ left: -Math.max(160, track.clientWidth * 0.7), behavior: 'smooth' });
+    });
+    nextButton.addEventListener('click', () => {
+        track.scrollBy({ left: Math.max(160, track.clientWidth * 0.7), behavior: 'smooth' });
+    });
+    track.addEventListener('scroll', updateButtons, { passive: true });
+    window.addEventListener('resize', updateButtons);
+    requestAnimationFrame(updateButtons);
+});
+
 document.querySelectorAll('[data-dialog-pegawai-open]').forEach((button) => {
     const dialog = document.getElementById(button.dataset.dialogPegawaiOpen);
 
