@@ -22,6 +22,7 @@ class PwaAssetsTest extends TestCase
             ->assertSee('data-pwa-install', false)
             ->assertSee('Pasang Medika Cuti')
             ->assertSee('data-pwa-install-dialog', false)
+            ->assertSee('data-pwa-install-manual', false)
             ->assertSee('Tambahkan ke Layar Utama')
             ->assertSee('Pasang sekarang');
     }

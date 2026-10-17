@@ -41,9 +41,15 @@
                 <h2 class="mt-5 text-xl font-bold tracking-tight">Pasang Medika Cuti</h2>
                 <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">Akses aplikasi lebih cepat langsung dari layar utama HP.</p>
 
-                <ol data-pwa-install-android class="mt-5 space-y-3 text-sm text-slate-700 dark:text-slate-200">
+                <ol data-pwa-install-native class="mt-5 hidden space-y-3 text-sm text-slate-700 dark:text-slate-200">
                     <li class="flex gap-3"><span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">1</span><span>Tekan <strong>Pasang sekarang</strong> di bawah.</span></li>
                     <li class="flex gap-3"><span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">2</span><span>Pilih <strong>Instal</strong> pada konfirmasi browser.</span></li>
+                    <li class="flex gap-3"><span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">3</span><span>Buka Medika Cuti dari ikon di layar utama.</span></li>
+                </ol>
+
+                <ol data-pwa-install-manual class="mt-5 space-y-3 text-sm text-slate-700 dark:text-slate-200">
+                    <li class="flex gap-3"><span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">1</span><span>Buka <strong>menu browser</strong> pada halaman ini.</span></li>
+                    <li class="flex gap-3"><span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">2</span><span>Pilih <strong>Instal aplikasi</strong> atau <strong>Tambahkan ke layar utama</strong>.</span></li>
                     <li class="flex gap-3"><span class="flex size-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">3</span><span>Buka Medika Cuti dari ikon di layar utama.</span></li>
                 </ol>
 
@@ -56,7 +62,7 @@
                 <p data-pwa-install-status class="mt-4 text-xs leading-5 text-slate-500 dark:text-slate-400" aria-live="polite"></p>
 
                 <div class="mt-6 flex flex-col gap-2">
-                    <button data-pwa-install data-pwa-install-action type="button" class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-600/20">
+                    <button data-pwa-install data-pwa-install-action type="button" hidden class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-600/20">
                         Pasang sekarang
                     </button>
                     <button data-pwa-install-close type="button" class="inline-flex w-full items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-slate-500/10 dark:text-slate-300 dark:hover:bg-slate-800">

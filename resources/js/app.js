@@ -166,7 +166,8 @@ const pwaInstallOpenButtons = document.querySelectorAll('[data-pwa-install-open]
 const pwaInstallCloseButtons = document.querySelectorAll('[data-pwa-install-close]');
 const pwaInstallDialogs = document.querySelectorAll('[data-pwa-install-dialog]');
 const pwaInstallActions = document.querySelectorAll('[data-pwa-install-action]');
-const pwaAndroidInstructions = document.querySelectorAll('[data-pwa-install-android]');
+const pwaNativeInstructions = document.querySelectorAll('[data-pwa-install-native]');
+const pwaManualInstructions = document.querySelectorAll('[data-pwa-install-manual]');
 const pwaIosInstructions = document.querySelectorAll('[data-pwa-install-ios]');
 const pwaStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 const pwaIosDevice = /iphone|ipad|ipod/i.test(window.navigator.userAgent)
@@ -178,6 +179,20 @@ const bukaPanduanInstalasi = () => {
             dialog.showModal();
         }
     });
+};
+
+const tampilkanInstruksiManual = () => {
+    pwaInstallActions.forEach((button) => button.setAttribute('hidden', ''));
+    pwaNativeInstructions.forEach((instructions) => instructions.classList.add('hidden'));
+    pwaManualInstructions.forEach((instructions) => instructions.classList.toggle('hidden', pwaIosDevice));
+    pwaIosInstructions.forEach((instructions) => instructions.classList.toggle('hidden', ! pwaIosDevice));
+};
+
+const tampilkanInstruksiInstalasiLangsung = () => {
+    pwaInstallActions.forEach((button) => button.removeAttribute('hidden'));
+    pwaNativeInstructions.forEach((instructions) => instructions.classList.remove('hidden'));
+    pwaManualInstructions.forEach((instructions) => instructions.classList.add('hidden'));
+    pwaIosInstructions.forEach((instructions) => instructions.classList.add('hidden'));
 };
 
 const tutupPanduanInstalasi = () => {
@@ -204,9 +219,7 @@ const tampilkanStatusTerpasang = () => {
 if (pwaStandaloneMode) {
     tampilkanStatusTerpasang();
 } else {
-    pwaAndroidInstructions.forEach((instructions) => instructions.classList.toggle('hidden', pwaIosDevice));
-    pwaIosInstructions.forEach((instructions) => instructions.classList.toggle('hidden', ! pwaIosDevice));
-    pwaInstallActions.forEach((button) => button.classList.toggle('hidden', pwaIosDevice));
+    tampilkanInstruksiManual();
 
     if (pwaInstallDialogs.length > 0 && sessionStorage.getItem('panduan-pwa-ditutup') === null) {
         window.addEventListener('load', bukaPanduanInstalasi);
@@ -223,6 +236,7 @@ window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
     pwaInstallPrompt = event;
     pwaInstallButtons.forEach((button) => button.removeAttribute('hidden'));
+    tampilkanInstruksiInstalasiLangsung();
     pwaInstallStatuses.forEach((status) => {
         status.textContent = 'Aplikasi siap dipasang pada perangkat ini.';
     });
@@ -247,8 +261,9 @@ pwaInstallButtons.forEach((button) => {
             tampilkanStatusTerpasang();
         } else {
             pwaInstallPrompt = null;
+            tampilkanInstruksiManual();
             pwaInstallStatuses.forEach((status) => {
-                status.textContent = 'Pemasangan dibatalkan. Tekan Pasang sekarang untuk mencoba kembali.';
+                status.textContent = 'Pemasangan dibatalkan. Gunakan menu browser jika ingin memasangnya nanti.';
             });
         }
     });
