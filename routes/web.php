@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminHr\HariLiburController;
 use App\Http\Controllers\AdminHr\PegawaiController;
 use App\Http\Controllers\AdminHr\PersetujuanCutiController as AdminHrPersetujuanCutiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PengajuanCutiController;
 use App\Http\Controllers\PersetujuanAtasanController;
 use App\Http\Controllers\SesiController;
@@ -22,6 +23,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth', 'akun.aktif'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::post('/logout', [SesiController::class, 'destroy'])->name('logout');
+    Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
+    Route::post('/notifikasi/baca-semua', [NotifikasiController::class, 'bacaSemua'])->name('notifikasi.baca_semua');
+    Route::post('/notifikasi/{notifikasi}/baca', [NotifikasiController::class, 'baca'])->name('notifikasi.baca');
 
     Route::view('/dashboard/karyawan', 'dashboard', ['jenisDashboard' => 'Karyawan'])
         ->middleware('peran:karyawan,atasan')

@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\View as ViewContract;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer(
+            ['layouts.pegawai', 'layouts.admin-hr'],
+            function (ViewContract $view): void {
+                $view->with(
+                    'jumlahNotifikasiBelumDibaca',
+                    Auth::check() ? Auth::user()->unreadNotifications()->count() : 0,
+                );
+            },
+        );
     }
 }

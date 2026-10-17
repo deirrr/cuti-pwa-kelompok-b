@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SimpanKeputusanCutiRequest;
 use App\Models\PengajuanCuti;
 use App\Models\SaldoCuti;
+use App\Notifications\StatusPengajuanCutiDiperbarui;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -29,9 +30,10 @@ class PersetujuanCutiController extends Controller
 
     public function store(SimpanKeputusanCutiRequest $request, PengajuanCuti $pengajuanCuti): RedirectResponse
     {
-        DB::transaction(function () use ($request, $pengajuanCuti): void {
+        /** @var array{PengajuanCuti, KeputusanPersetujuan} $hasilKeputusan */
+        $hasilKeputusan = DB::transaction(function () use ($request, $pengajuanCuti): array {
             $pengajuan = PengajuanCuti::query()
-                ->with('pegawai')
+                ->with('pegawai.pengguna')
                 ->lockForUpdate()
                 ->findOrFail($pengajuanCuti->getKey());
 
@@ -76,7 +78,22 @@ class PersetujuanCutiController extends Controller
                     ? StatusPengajuanCuti::Disetujui
                     : StatusPengajuanCuti::Ditolak,
             ]);
+
+            return [$pengajuan, $keputusan];
         });
+
+        [$pengajuan, $keputusan] = $hasilKeputusan;
+        $disetujui = $keputusan === KeputusanPersetujuan::Disetujui;
+        $pengajuan->pegawai->pengguna->notify(new StatusPengajuanCutiDiperbarui(
+            $pengajuan,
+            $disetujui ? 'Pengajuan cuti disetujui' : 'Pengajuan cuti ditolak',
+            sprintf(
+                'Pengajuan cuti tanggal %s %s oleh Admin HR.',
+                $pengajuan->tanggal_cuti->format('d-m-Y'),
+                $disetujui ? 'disetujui' : 'ditolak',
+            ),
+            'cuti.index',
+        ));
 
         return back()->with('sukses', 'Keputusan Admin HR berhasil disimpan.');
     }

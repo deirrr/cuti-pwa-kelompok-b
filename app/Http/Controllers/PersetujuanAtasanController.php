@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Enums\KeputusanPersetujuan;
+use App\Enums\PeranPengguna;
 use App\Enums\StatusPengajuanCuti;
 use App\Enums\TahapPersetujuan;
 use App\Http\Requests\SimpanKeputusanCutiRequest;
 use App\Models\PengajuanCuti;
+use App\Models\Pengguna;
+use App\Notifications\PengajuanCutiDiajukan;
+use App\Notifications\StatusPengajuanCutiDiperbarui;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class PersetujuanAtasanController extends Controller
 {
@@ -27,7 +32,8 @@ class PersetujuanAtasanController extends Controller
 
     public function store(SimpanKeputusanCutiRequest $request, PengajuanCuti $pengajuanCuti): RedirectResponse
     {
-        DB::transaction(function () use ($request, $pengajuanCuti): void {
+        /** @var array{PengajuanCuti, KeputusanPersetujuan} $hasilKeputusan */
+        $hasilKeputusan = DB::transaction(function () use ($request, $pengajuanCuti): array {
             $pengajuan = PengajuanCuti::query()->lockForUpdate()->findOrFail($pengajuanCuti->getKey());
 
             abort_unless(
@@ -51,7 +57,29 @@ class PersetujuanAtasanController extends Controller
                     ? StatusPengajuanCuti::MenungguHr
                     : StatusPengajuanCuti::Ditolak,
             ]);
+
+            return [$pengajuan, $keputusan];
         });
+
+        [$pengajuan, $keputusan] = $hasilKeputusan;
+        $pengajuan->loadMissing('pegawai.pengguna');
+        $disetujui = $keputusan === KeputusanPersetujuan::Disetujui;
+        $pengajuan->pegawai->pengguna->notify(new StatusPengajuanCutiDiperbarui(
+            $pengajuan,
+            $disetujui ? 'Pengajuan disetujui Atasan' : 'Pengajuan ditolak Atasan',
+            $disetujui
+                ? sprintf('Pengajuan cuti tanggal %s disetujui Atasan dan menunggu keputusan Admin HR.', $pengajuan->tanggal_cuti->format('d-m-Y'))
+                : sprintf('Pengajuan cuti tanggal %s ditolak Atasan.', $pengajuan->tanggal_cuti->format('d-m-Y')),
+            'cuti.index',
+        ));
+
+        if ($disetujui) {
+            $adminHrAktif = Pengguna::query()
+                ->where('peran', PeranPengguna::AdminHr)
+                ->where('aktif', true)
+                ->get();
+            Notification::send($adminHrAktif, new PengajuanCutiDiajukan($pengajuan, 'admin_hr.persetujuan.index'));
+        }
 
         return back()->with('sukses', 'Keputusan Atasan berhasil disimpan.');
     }

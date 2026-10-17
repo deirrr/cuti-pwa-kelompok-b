@@ -9,13 +9,17 @@ use App\Http\Requests\SimpanPengajuanCutiRequest;
 use App\Models\HariLibur;
 use App\Models\Pegawai;
 use App\Models\PengajuanCuti;
+use App\Models\Pengguna;
 use App\Models\SaldoCuti;
+use App\Notifications\PengajuanCutiDiajukan;
+use App\Notifications\StatusPengajuanCutiDiperbarui;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -95,7 +99,8 @@ class PengajuanCutiController extends Controller
     {
         $tanggalCuti = $request->tanggalCuti();
 
-        DB::transaction(function () use ($request, $tanggalCuti): void {
+        /** @var Collection<int, PengajuanCuti> $pengajuanDibuat */
+        $pengajuanDibuat = DB::transaction(function () use ($request, $tanggalCuti): Collection {
             /** @var Pegawai $pegawai */
             $pegawai = Pegawai::query()
                 ->with(['pengguna', 'atasan.pengguna'])
@@ -117,11 +122,11 @@ class PengajuanCutiController extends Controller
                 ]);
             }
 
-            foreach ($tanggalCuti as $tanggal) {
+            return $tanggalCuti->map(function (string $tanggal) use ($request, $pegawai, $atasanPenyetujuId, $status): PengajuanCuti {
                 $tahun = CarbonImmutable::parse($tanggal)->year;
                 $this->saldoCuti($pegawai, $tahun);
 
-                PengajuanCuti::query()->create([
+                return PengajuanCuti::query()->create([
                     'nomor_pengajuan' => 'CUTI-'.$tahun.'-'.Str::upper(Str::random(10)),
                     'pegawai_id' => $pegawai->getKey(),
                     'atasan_penyetuju_id' => $atasanPenyetujuId,
@@ -130,8 +135,22 @@ class PengajuanCutiController extends Controller
                     'tanggal_cuti' => $tanggal,
                     'diajukan_pada' => now(),
                 ]);
-            }
+            });
         }, attempts: 3);
+
+        if ($pengajuanDibuat->first()?->status === StatusPengajuanCuti::MenungguAtasan) {
+            $atasanPenyetuju = $pengajuanDibuat->firstOrFail()->atasanPenyetuju()->firstOrFail();
+
+            foreach ($pengajuanDibuat as $pengajuan) {
+                $atasanPenyetuju->notify(new PengajuanCutiDiajukan($pengajuan, 'persetujuan_atasan.index'));
+            }
+        } else {
+            $adminHrAktif = $this->adminHrAktif();
+
+            foreach ($pengajuanDibuat as $pengajuan) {
+                Notification::send($adminHrAktif, new PengajuanCutiDiajukan($pengajuan, 'admin_hr.persetujuan.index'));
+            }
+        }
 
         return redirect()
             ->route('cuti.index')
@@ -176,14 +195,39 @@ class PengajuanCutiController extends Controller
 
     public function cancel(Request $request, PengajuanCuti $pengajuanCuti): RedirectResponse
     {
-        DB::transaction(function () use ($request, $pengajuanCuti): void {
+        /** @var array{PengajuanCuti, StatusPengajuanCuti} $hasilPembatalan */
+        $hasilPembatalan = DB::transaction(function () use ($request, $pengajuanCuti): array {
             $pengajuan = PengajuanCuti::query()->lockForUpdate()->findOrFail($pengajuanCuti->getKey());
             $this->pastikanDapatDiubah($pengajuan, $request->user()->pegawai->getKey());
+            $statusSebelumnya = $pengajuan->status;
             $pengajuan->update([
                 'status' => StatusPengajuanCuti::Dibatalkan,
                 'dibatalkan_pada' => now(),
             ]);
+
+            return [$pengajuan, $statusSebelumnya];
         });
+
+        [$pengajuan, $statusSebelumnya] = $hasilPembatalan;
+        $pengajuan->loadMissing('pegawai');
+        $notifikasi = new StatusPengajuanCutiDiperbarui(
+            $pengajuan,
+            'Pengajuan cuti dibatalkan',
+            sprintf(
+                '%s membatalkan pengajuan cuti tanggal %s.',
+                $pengajuan->pegawai->nama,
+                $pengajuan->tanggal_cuti->format('d-m-Y'),
+            ),
+            $statusSebelumnya === StatusPengajuanCuti::MenungguAtasan
+                ? 'persetujuan_atasan.index'
+                : 'admin_hr.persetujuan.index',
+        );
+
+        if ($statusSebelumnya === StatusPengajuanCuti::MenungguAtasan) {
+            $pengajuan->atasanPenyetuju?->notify($notifikasi);
+        } else {
+            Notification::send($this->adminHrAktif(), $notifikasi);
+        }
 
         return back()->with('sukses', 'Pengajuan cuti berhasil dibatalkan.');
     }
@@ -276,5 +320,14 @@ class PengajuanCutiController extends Controller
             && ! $pengajuan->persetujuan()->exists(),
             403,
         );
+    }
+
+    /** @return Collection<int, Pengguna> */
+    private function adminHrAktif(): Collection
+    {
+        return Pengguna::query()
+            ->where('peran', PeranPengguna::AdminHr)
+            ->where('aktif', true)
+            ->get();
     }
 }
