@@ -1,6 +1,6 @@
 # Rancangan Organisasi dan Persetujuan Berjenjang
 
-Dokumen ini menjadi acuan utama untuk pengembangan struktur organisasi dan penentuan alur persetujuan cuti PT Medika Antapani. Tabel dan pengelolaan Unit Bisnis serta Bagian Organisasi **sudah tersedia**. Fondasi jabatan, penugasan jabatan, peran jamak, dan middleware peran dasar juga tersedia; antarmuka jabatan serta pembentukan rute persetujuan masih direncanakan.
+Dokumen ini menjadi acuan utama untuk pengembangan struktur organisasi dan penentuan alur persetujuan cuti Klinik Utama Medika Antapani. Tabel dan pengelolaan Unit Bisnis serta Bagian Organisasi **sudah tersedia**. Fondasi jabatan, penugasan jabatan, peran jamak, dan middleware peran dasar juga tersedia; antarmuka jabatan serta pembentukan rute persetujuan masih direncanakan.
 
 ## Tujuan Rancangan
 

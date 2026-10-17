@@ -31,7 +31,7 @@ Manifest harus dapat diakses, menggunakan format yang valid, dan dirujuk dari la
 
 - Menyediakan ikon minimal untuk ukuran 192x192 dan 512x512 piksel.
 - Menyediakan ikon maskable jika hasil pengujian perangkat membutuhkannya.
-- Ikon menggunakan identitas visual yang telah disetujui tim dan PT Medika Antapani.
+- Ikon menggunakan identitas visual yang telah disetujui tim dan Klinik Utama Medika Antapani.
 - Berkas ikon dioptimalkan agar tidak memperlambat pemuatan.
 
 ### Instalasi ke Perangkat

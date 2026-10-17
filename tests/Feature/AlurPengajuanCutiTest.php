@@ -12,6 +12,7 @@ use App\Models\Pegawai;
 use App\Models\PengajuanCuti;
 use App\Models\Pengguna;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class AlurPengajuanCutiTest extends TestCase
@@ -24,6 +25,29 @@ class AlurPengajuanCutiTest extends TestCase
 
         $this->withoutVite();
         $this->travelTo('2026-10-01 08:00:00');
+    }
+
+    /** @return array<string, array{PeranPengguna}> */
+    public static function peranPengaju(): array
+    {
+        return [
+            'staff' => [PeranPengguna::Karyawan],
+            'atasan' => [PeranPengguna::Atasan],
+        ];
+    }
+
+    #[DataProvider('peranPengaju')]
+    public function test_cuti_saya_dapat_dibuka_saat_belum_memiliki_pengajuan(PeranPengguna $peran): void
+    {
+        $bagian = BagianOrganisasi::factory()->create();
+        $pegawai = $this->buatPegawai($peran, $bagian);
+
+        $this->actingAs($pegawai->pengguna)
+            ->get(route('cuti.index'))
+            ->assertOk()
+            ->assertViewHas('tahun', 2026)
+            ->assertViewHas('tahunTersedia', fn ($tahun): bool => $tahun->all() === [2026])
+            ->assertSee('Tidak ada pengajuan pada pilihan ini');
     }
 
     public function test_satu_kali_input_beberapa_tanggal_membuat_pengajuan_terpisah(): void

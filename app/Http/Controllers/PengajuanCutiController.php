@@ -27,6 +27,7 @@ class PengajuanCutiController extends Controller
         $ringkasanPengajuan = $pegawai->pengajuanCuti()
             ->get(['tanggal_cuti', 'status']);
         $tahunTersedia = $ringkasanPengajuan
+            ->toBase()
             ->map(fn (PengajuanCuti $pengajuan): int => $pengajuan->tanggal_cuti->year)
             ->push(now()->year)
             ->unique()

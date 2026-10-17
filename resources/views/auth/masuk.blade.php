@@ -16,7 +16,7 @@
                     <span class="flex size-12 items-center justify-center rounded-2xl bg-emerald-600 text-sm font-bold text-white shadow-lg shadow-emerald-600/25">MA</span>
                     <span>
                         <span class="block font-bold tracking-tight text-slate-900 dark:text-white">Medika Cuti</span>
-                        <span class="block text-xs text-slate-500 dark:text-slate-400">PT Medika Antapani</span>
+                        <span class="block text-xs text-slate-500 dark:text-slate-400">Klinik Utama Medika Antapani</span>
                     </span>
                 </a>
             </div>

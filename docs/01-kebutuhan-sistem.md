@@ -1,10 +1,10 @@
 # Kebutuhan Sistem
 
-Dokumen ini menjabarkan kebutuhan untuk proyek **Rancang Bangun Sistem Informasi Pengajuan dan Persetujuan Cuti Karyawan Berbasis Progressive Web App di PT Medika Antapani**. Dokumen kebutuhan tidak dengan sendirinya menjadi bukti implementasi; status aktual dibuktikan melalui kode, pengujian, dan matriks ketertelusuran.
+Dokumen ini menjabarkan kebutuhan untuk proyek **Rancang Bangun Sistem Informasi Pengajuan dan Persetujuan Cuti Karyawan Berbasis Progressive Web App di Klinik Utama Medika Antapani**. Dokumen kebutuhan tidak dengan sendirinya menjadi bukti implementasi; status aktual dibuktikan melalui kode, pengujian, dan matriks ketertelusuran.
 
 ## Tujuan Sistem
 
-Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah ditelusuri, dan sesuai struktur PT Medika Antapani. Karyawan mengajukan cuti, Atasan langsung dan MO memberikan keputusan sesuai unit, lalu Admin HR memberikan keputusan akhir. Saldo diperbarui hanya setelah persetujuan akhir.
+Sistem dirancang untuk menyediakan proses pengajuan cuti yang terpusat, mudah ditelusuri, dan sesuai struktur Klinik Utama Medika Antapani. Karyawan mengajukan cuti, Atasan langsung dan MO memberikan keputusan sesuai unit, lalu Admin HR memberikan keputusan akhir. Saldo diperbarui hanya setelah persetujuan akhir.
 
 ## Ruang Lingkup
 
