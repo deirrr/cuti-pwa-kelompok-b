@@ -135,73 +135,35 @@ Pada desktop, sidebar tetap terlihat di sisi kiri. Pada layar yang lebih kecil, 
 
 ## Wireframe Dashboard Karyawan
 
-```text
-+----------------------------------------------------------------+
-| Menu | Nama Pengguna | Status koneksi | Keluar                   |
-|----------------------------------------------------------------|
-| Dashboard Saya                                                  |
-|                                                                |
-| +-------------------+ +-------------------+                     |
-| | Saldo Cuti Tahunan| | Menunggu Keputusan|                     |
-| | 10 hari           | | 1 pengajuan       |                     |
-| +-------------------+ +-------------------+                     |
-|                                                                |
-| [ + Ajukan Cuti ]                                              |
-|                                                                |
-| Pengajuan Terbaru                                               |
-| Nomor            Jenis      Tanggal       Status        Aksi    |
-| CUTI-2026-000001 Tahunan    02-03 Okt    menunggu_hr   Detail   |
-+----------------------------------------------------------------+
-```
+![Wireframe dashboard Karyawan](images/wireframes/karyawan-dashboard.svg)
 
-Jika pegawai memiliki beberapa jenis saldo, kartu saldo ditampilkan per jenis cuti aktif.
+*Gambar 4. Wireframe dashboard Karyawan dan variasi menu bagi Atasan.*
+
+Dashboard menampilkan identitas kerja berupa NIK, bagian organisasi, dan jatah cuti. Pintasan `Cuti Saya` tersedia bagi seluruh pegawai, sedangkan pintasan `Persetujuan Staff` hanya ditampilkan kepada Atasan. Pada ponsel, kartu informasi dan pintasan disusun vertikal.
+
+## Wireframe Cuti Saya
+
+![Wireframe halaman Cuti Saya](images/wireframes/karyawan-cuti-saya.svg)
+
+*Gambar 5. Wireframe daftar dan penyaringan pengajuan pribadi.*
+
+Halaman ini menampilkan saldo cuti tersedia berdasarkan tahun, filter status beserta jumlah data, dan riwayat pengajuan. Tabel desktop berubah menjadi kartu berlabel pada ponsel. Tindakan `Ubah` dan `Batalkan` hanya muncul selama pengajuan belum memperoleh keputusan.
 
 ## Wireframe Form Pengajuan
 
-```text
-+----------------------------------------------------------------+
-| Pengajuan Cuti Baru                                             |
-|----------------------------------------------------------------|
-| Jenis cuti *                                                    |
-| [ Pilih jenis cuti                                      v ]     |
-| Saldo tersedia: 10 hari                                        |
-|                                                                |
-| Tanggal cuti *                                                  |
-| [ Tambah tanggal ]                                              |
-| 02-10-2026 [Hapus]                                              |
-| 05-10-2026 [Hapus]                                              |
-| Hari valid: 2                                                   |
-|                                                                |
-| Alasan *                                                        |
-| [__________________________________________________________]    |
-| [__________________________________________________________]    |
-|                                                                |
-| [Simpan Draf]                         [Tinjau dan Kirim]         |
-+----------------------------------------------------------------+
-```
+![Wireframe formulir pengajuan cuti](images/wireframes/karyawan-form-cuti.svg)
 
-Tanggal Sabtu, Minggu, hari libur aktif, tanggal duplikat, dan tanggal yang tumpang tindih harus menghasilkan pesan yang jelas. Ringkasan akhir ditampilkan sebelum pengiriman.
+*Gambar 6. Wireframe formulir pengajuan dan perubahan cuti.*
+
+Pengguna memilih satu atau beberapa tanggal melalui kalender, kemudian mengisi alasan cuti. Setiap tanggal yang dipilih disimpan sebagai satu pengajuan terpisah. Hari Minggu dan hari libur nasional tidak dapat dipilih. Pada mode perubahan, kalender hanya menerima satu tanggal pengganti. Pesan validasi ditempatkan di bawah kalender atau kolom alasan yang bermasalah.
 
 ## Wireframe Detail Pengajuan
 
-```text
-+----------------------------------------------------------------+
-| CUTI-2026-000001                    [menunggu_hr]                |
-|----------------------------------------------------------------|
-| Jenis       : Cuti Tahunan                                     |
-| Tanggal     : 02-10-2026, 05-10-2026                           |
-| Jumlah hari : 2                                                 |
-| Alasan      : Keperluan keluarga                               |
-|                                                                |
-| Riwayat                                                       |
-| 01-09 08:30  Dikirim oleh Karyawan                             |
-| 01-09 10:15  Disetujui Atasan - Catatan ...                    |
-|                                                                |
-| Tindakan yang tersedia mengikuti status dan kewenangan.         |
-+----------------------------------------------------------------+
-```
+![Wireframe detail pengajuan](images/wireframes/karyawan-detail-pengajuan.svg)
 
-Karyawan hanya melihat tombol pembatalan sebelum keputusan pertama diberikan. Pengajuan `disetujui` menampilkan informasi bahwa pembatalan harus diproses Admin HR sebelum tanggal cuti pertama.
+*Gambar 7. Wireframe rancangan lanjutan detail pengajuan pribadi.*
+
+Halaman detail memperlihatkan data pengajuan dan urutan keputusan sebagai garis waktu. Karyawan hanya melihat tindakan yang masih sah sesuai status. Halaman tersendiri ini belum tersedia pada implementasi saat ini; data ringkas dan tindakan masih disajikan melalui halaman `Cuti Saya`.
 
 ## Wireframe Daftar dan Keputusan Atasan
 
