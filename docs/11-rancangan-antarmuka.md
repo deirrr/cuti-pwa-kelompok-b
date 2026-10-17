@@ -80,26 +80,58 @@ Atasan dan Admin HR tetap memiliki menu pengajuan pribadi karena keduanya juga m
 | UI-SHR-01 | Profil | Semua pengguna | Melihat identitas akun dan pegawai. |
 | UI-PWA-01 | Halaman Offline | Semua pengguna | Menjelaskan bahwa koneksi diperlukan. |
 
-## Wireframe Halaman Masuk
+## Wireframe Antarmuka Umum
 
-```text
-+--------------------------------------------------+
-| Logo / Nama Aplikasi                             |
-|--------------------------------------------------|
-| Masuk                                            |
-|                                                  |
-| NIK                                              |
-| [______________________________________________] |
-| Kata sandi                                       |
-| [______________________________________________] |
-| [ ] Ingat saya                                   |
-|                                                  |
-| [                Masuk                         ] |
-| Pesan kesalahan ditampilkan di area ini          |
-+--------------------------------------------------+
-```
+Antarmuka umum memuat elemen yang digunakan sebelum pengguna masuk atau dipakai secara konsisten pada berbagai halaman. Wireframe pada bagian ini menggambarkan struktur dan hierarki informasi, bukan warna, tipografi, atau ukuran final.
 
-Tidak ada pilihan peran pada formulir masuk. Pengguna masuk menggunakan NIK dan kata sandi, sedangkan peran diperoleh dari akun yang berhasil diautentikasi. NIK merujuk pada `pegawai.nomor_induk` dan tidak disalin ke tabel `pengguna`.
+### Halaman Masuk
+
+![Wireframe halaman masuk](images/wireframes/umum-login.svg)
+
+*Gambar 1. Wireframe halaman masuk Medika Cuti.*
+
+Halaman masuk menjadi satu-satunya gerbang autentikasi bagi Karyawan, Atasan, dan Admin HR. Tidak ada pilihan peran pada formulir. Pengguna masuk menggunakan NIK dan kata sandi, sedangkan peran diperoleh dari akun yang berhasil diautentikasi. NIK merujuk pada `pegawai.nomor_induk` dan tidak disalin ke tabel `pengguna`.
+
+Komponen utamanya meliputi:
+
+- identitas aplikasi dan Klinik Utama Medika Antapani;
+- kolom NIK dan kata sandi;
+- tombol untuk menampilkan atau menyembunyikan kata sandi;
+- pilihan untuk mengingat sesi pada perangkat;
+- tombol masuk sebagai tindakan utama;
+- pesan validasi yang ditempatkan dekat kolom terkait;
+- informasi kebutuhan koneksi dan tombol pengubah tema.
+
+Pada ponsel maupun desktop, formulir tetap menggunakan satu kolom agar alur pengisian konsisten. Lebar kartu dibatasi pada desktop dan mengikuti lebar layar dengan jarak tepi yang cukup pada ponsel.
+
+### Navigasi Karyawan dan Atasan
+
+![Wireframe navigasi Karyawan dan Atasan](images/wireframes/umum-navigasi-pegawai.svg)
+
+*Gambar 2. Wireframe navigasi Karyawan dan Atasan pada desktop dan ponsel.*
+
+Navigasi Karyawan dan Atasan menggunakan header horizontal. Identitas aplikasi dan peran tampil di sisi kiri, sedangkan menu, pengubah tema, dan tombol keluar berada di sisi kanan. Menu `Cuti Saya` tersedia bagi kedua peran. Menu `Persetujuan Staff` hanya tersedia bagi Atasan.
+
+Pada ponsel, menu utama dipindahkan ke baris kedua yang dapat digulir secara horizontal. Pola ini menjaga tindakan utama tetap terlihat tanpa menggunakan sidebar dan tanpa mengurangi ruang konten secara permanen.
+
+### Navigasi Admin HR
+
+![Wireframe navigasi Admin HR](images/wireframes/umum-navigasi-admin-hr.svg)
+
+*Gambar 3. Wireframe navigasi Admin HR pada desktop dan ponsel.*
+
+Navigasi Admin HR menggunakan sidebar karena jumlah menu dan kelompok tugas lebih banyak. Menu dikelompokkan menjadi Beranda, Organisasi, dan Cuti Karyawan. Bagian bawah sidebar memuat identitas pengguna dan tindakan keluar. Header area kerja memuat pengubah tema serta ringkasan identitas pengguna.
+
+Pada desktop, sidebar tetap terlihat di sisi kiri. Pada layar yang lebih kecil, sidebar disembunyikan dan dibuka melalui tombol menu sebagai panel geser di atas lapisan gelap. Panel menyediakan tombol tutup dan tidak mengubah urutan menu.
+
+### Ketentuan Umum Navigasi
+
+- Menu aktif harus dapat dikenali melalui teks, bentuk, dan penanda visual, bukan warna saja.
+- Menu hanya ditampilkan jika sesuai dengan peran dan kewenangan pengguna.
+- Perubahan tema tersedia pada halaman masuk dan seluruh halaman setelah autentikasi.
+- Tombol keluar harus mudah ditemukan dan mengakhiri sesi melalui permintaan yang terlindungi.
+- Identitas aplikasi menggunakan nama Medika Cuti dan identitas Klinik Utama Medika Antapani.
+- Urutan navigasi tidak berubah antara desktop dan ponsel agar pengguna tidak perlu mempelajari ulang susunan menu.
 
 ## Wireframe Dashboard Karyawan
 

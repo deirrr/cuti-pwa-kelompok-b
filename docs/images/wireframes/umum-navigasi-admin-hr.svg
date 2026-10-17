@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title description">
+  <title id="title">Wireframe navigasi Admin HR</title>
+  <desc id="description">Perbandingan layout Admin HR pada desktop dan perangkat seluler, dengan sidebar, header, kelompok menu, profil, tema, dan area konten.</desc>
+  <defs>
+    <style>
+      .canvas { fill: #f8fafc; }
+      .frame { fill: #ffffff; stroke: #64748b; stroke-width: 2; }
+      .surface { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5; }
+      .sidebar { fill: #f1f5f9; stroke: #94a3b8; stroke-width: 1.5; }
+      .muted { fill: #e2e8f0; stroke: #94a3b8; stroke-width: 1.5; }
+      .accent { fill: #d1fae5; stroke: #059669; stroke-width: 2; }
+      .primary { fill: #059669; }
+      .overlay { fill: #0f172a; opacity: 0.28; }
+      .dash { fill: none; stroke: #94a3b8; stroke-width: 2; stroke-dasharray: 8 7; }
+      .label { fill: #0f172a; font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; }
+      .text { fill: #334155; font-family: Arial, sans-serif; font-size: 14px; }
+      .small { fill: #64748b; font-family: Arial, sans-serif; font-size: 12px; }
+      .white { fill: #ffffff; font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; }
+      .note { fill: #047857; font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; }
+    </style>
+  </defs>
+
+  <rect class="canvas" width="1200" height="800"/>
+  <text class="label" x="50" y="54">Navigasi Utama — Admin HR</text>
+  <text class="small" x="50" y="80">Sidebar permanen pada desktop dan panel geser pada perangkat seluler.</text>
+
+  <text class="label" x="50" y="125">Desktop</text>
+  <rect class="frame" x="50" y="145" width="730" height="570" rx="14"/>
+  <rect class="sidebar" x="50" y="145" width="210" height="570" rx="14"/>
+  <rect class="primary" x="70" y="168" width="42" height="42" rx="10"/>
+  <text class="white" x="82" y="194">MA</text>
+  <text class="text" x="125" y="182">Medika Cuti</text>
+  <text class="small" x="125" y="202">Portal Admin HR</text>
+
+  <text class="small" x="70" y="250">BERANDA</text>
+  <rect class="accent" x="68" y="263" width="174" height="40" rx="9"/>
+  <text class="note" x="92" y="288">Ringkasan</text>
+  <text class="small" x="70" y="340">ORGANISASI</text>
+  <rect class="surface" x="68" y="352" width="174" height="40" rx="9"/>
+  <text class="text" x="83" y="377">Bagian Organisasi</text>
+  <rect class="surface" x="68" y="400" width="174" height="40" rx="9"/>
+  <text class="text" x="83" y="425">Master Karyawan</text>
+  <text class="small" x="70" y="478">CUTI KARYAWAN</text>
+  <rect class="surface" x="68" y="490" width="174" height="40" rx="9"/>
+  <text class="text" x="83" y="515">Persetujuan Akhir</text>
+  <rect class="surface" x="68" y="538" width="174" height="40" rx="9"/>
+  <text class="text" x="83" y="563">Hari Libur Nasional</text>
+  <rect class="muted" x="68" y="586" width="174" height="40" rx="9"/>
+  <text class="small" x="83" y="611">Rekap (belum aktif)</text>
+  <rect class="accent" x="68" y="646" width="174" height="49" rx="10"/>
+  <circle class="primary" cx="91" cy="670" r="14"/>
+  <text class="white" x="83" y="675">HR</text>
+  <text class="note" x="114" y="666">Nama Admin</text>
+  <text class="small" x="114" y="683">NIK</text>
+
+  <rect class="surface" x="260" y="145" width="520" height="70" rx="14"/>
+  <circle class="surface" cx="688" cy="180" r="19"/>
+  <circle class="accent" cx="735" cy="180" r="19"/>
+  <text class="note" x="727" y="185">HR</text>
+  <text class="label" x="290" y="263">Area Konten Admin HR</text>
+  <rect class="dash" x="290" y="285" width="460" height="390" rx="14"/>
+  <rect class="muted" x="320" y="320" width="250" height="25" rx="5"/>
+  <rect class="muted" x="320" y="368" width="190" height="100" rx="10"/>
+  <rect class="muted" x="530" y="368" width="190" height="100" rx="10"/>
+  <rect class="muted" x="320" y="490" width="400" height="145" rx="10"/>
+
+  <text class="label" x="840" y="125">Ponsel — sidebar terbuka</text>
+  <rect class="frame" x="840" y="145" width="310" height="570" rx="24"/>
+  <rect class="surface" x="840" y="145" width="310" height="68" rx="24"/>
+  <rect class="surface" x="859" y="162" width="36" height="36" rx="9"/>
+  <path d="M869 173h16M869 180h16M869 187h16" fill="none" stroke="#64748b" stroke-width="2"/>
+  <text class="text" x="915" y="185">Header Admin HR</text>
+  <circle class="accent" cx="1118" cy="179" r="17"/>
+  <text class="small" x="1109" y="183">HR</text>
+
+  <rect class="overlay" x="840" y="213" width="310" height="502" rx="0 0 24 24"/>
+  <rect class="sidebar" x="840" y="145" width="238" height="570" rx="24"/>
+  <rect class="primary" x="860" y="168" width="40" height="40" rx="10"/>
+  <text class="white" x="871" y="193">MA</text>
+  <text class="text" x="913" y="182">Medika Cuti</text>
+  <text class="small" x="913" y="201">Portal Admin HR</text>
+  <circle class="surface" cx="1050" cy="188" r="14"/>
+  <path d="M1044 182l12 12M1056 182l-12 12" stroke="#64748b" stroke-width="2"/>
+
+  <text class="small" x="860" y="250">BERANDA</text>
+  <rect class="accent" x="858" y="263" width="200" height="40" rx="9"/>
+  <text class="note" x="878" y="288">Ringkasan</text>
+  <text class="small" x="860" y="340">ORGANISASI</text>
+  <rect class="surface" x="858" y="352" width="200" height="40" rx="9"/>
+  <text class="text" x="878" y="377">Bagian Organisasi</text>
+  <rect class="surface" x="858" y="400" width="200" height="40" rx="9"/>
+  <text class="text" x="878" y="425">Master Karyawan</text>
+  <text class="small" x="860" y="478">CUTI KARYAWAN</text>
+  <rect class="surface" x="858" y="490" width="200" height="40" rx="9"/>
+  <text class="text" x="878" y="515">Persetujuan Akhir</text>
+  <rect class="surface" x="858" y="538" width="200" height="40" rx="9"/>
+  <text class="text" x="878" y="563">Hari Libur Nasional</text>
+  <rect class="accent" x="858" y="646" width="200" height="49" rx="10"/>
+  <text class="note" x="878" y="666">Nama Admin</text>
+  <text class="small" x="878" y="684">NIK · Keluar</text>
+
+  <text class="small" x="50" y="752">Keterangan: area abu-abu menunjukkan placeholder konten; garis putus-putus menunjukkan ruang konten dinamis.</text>
+</svg>
