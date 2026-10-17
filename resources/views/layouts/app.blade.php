@@ -6,6 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>@yield('judul', 'Sistem Cuti') - Klinik Utama Medika Antapani</title>
+        <link rel="icon" type="image/png" href="{{ asset('logo-cuti.png') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>

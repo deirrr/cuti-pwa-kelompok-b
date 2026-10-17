@@ -7,7 +7,7 @@
         <aside data-sidebar class="fixed inset-y-0 left-0 z-50 flex w-[270px] -translate-x-full flex-col border-r border-slate-200 bg-white transition-transform duration-300 dark:border-slate-800 dark:bg-slate-900 xl:translate-x-0">
             <div class="flex h-20 items-center justify-between border-b border-slate-100 px-6 dark:border-slate-800">
                 <a href="{{ route('admin_hr.dashboard') }}" class="flex min-w-0 items-center gap-3">
-                    <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-sm font-bold text-white shadow-lg shadow-emerald-600/20">MA</span>
+                    <img src="{{ asset('logo-cuti.png') }}" alt="Logo Medika Cuti" class="size-12 shrink-0 rounded-xl object-cover shadow-lg shadow-emerald-600/15">
                     <span class="min-w-0">
                         <span class="block truncate text-base font-bold tracking-tight text-slate-900 dark:text-white">Medika Cuti</span>
                         <span class="block truncate text-xs text-slate-500 dark:text-slate-400">Portal Admin HR</span>

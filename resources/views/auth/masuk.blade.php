@@ -13,7 +13,7 @@
         <div class="relative w-full max-w-md">
             <div class="mb-7 flex justify-center">
                 <a href="{{ route('login') }}" class="flex items-center gap-3">
-                    <span class="flex size-12 items-center justify-center rounded-2xl bg-emerald-600 text-sm font-bold text-white shadow-lg shadow-emerald-600/25">MA</span>
+                    <img src="{{ asset('logo-cuti.png') }}" alt="Logo Medika Cuti" class="size-16 rounded-2xl object-cover shadow-lg shadow-emerald-600/15">
                     <span>
                         <span class="block font-bold tracking-tight text-slate-900 dark:text-white">Medika Cuti</span>
                         <span class="block text-xs text-slate-500 dark:text-slate-400">Klinik Utama Medika Antapani</span>
