@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title description">
+  <title id="title">Wireframe persetujuan cuti oleh Atasan</title>
+  <desc id="description">Halaman Persetujuan Staff menampilkan antrean pengajuan, identitas pegawai, tanggal dan alasan cuti, catatan keputusan, serta tombol tolak dan setujui pada desktop dan ponsel.</desc>
+  <defs><style>
+    .bg{fill:#f8fafc}.frame{fill:#fff;stroke:#64748b;stroke-width:2}.surface{fill:#fff;stroke:#94a3b8;stroke-width:1.5}.muted{fill:#e2e8f0;stroke:#94a3b8;stroke-width:1.5}.accent{fill:#d1fae5;stroke:#059669;stroke-width:2}.warn{fill:#fef3c7;stroke:#f59e0b;stroke-width:1.5}.danger{fill:#fff;stroke:#ef4444;stroke-width:1.5}.primary{fill:#059669}.dash{fill:none;stroke:#94a3b8;stroke-width:2;stroke-dasharray:8 7}.h{fill:#0f172a;font:700 18px Arial}.t{fill:#334155;font:14px Arial}.s{fill:#64748b;font:12px Arial}.n{fill:#047857;font:700 13px Arial}.w{fill:#fff;font:700 14px Arial}.r{fill:#b91c1c;font:700 14px Arial}
+  </style></defs>
+  <rect class="bg" width="1200" height="800"/>
+  <text class="h" x="50" y="54">UI-ATS-02 &amp; UI-ATS-03 — Persetujuan Staff</text>
+  <text class="s" x="50" y="80">Daftar dan formulir keputusan disajikan dalam satu halaman agar Atasan dapat memproses antrean secara langsung.</text>
+
+  <text class="h" x="50" y="122">Desktop</text>
+  <rect class="frame" x="50" y="140" width="760" height="610" rx="14"/>
+  <text class="n" x="80" y="180">AREA ATASAN</text>
+  <text class="h" x="80" y="212">Persetujuan Staff</text>
+  <text class="s" x="80" y="237">Tinjau pengajuan Staff yang menjadikan Anda sebagai Atasan langsung.</text>
+
+  <rect class="surface" x="80" y="270" width="700" height="390" rx="14"/>
+  <line x1="485" y1="270" x2="485" y2="660" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text class="n" x="108" y="307">CUTI-2026-000012</text>
+  <text class="h" x="108" y="340">Siti Aminah</text>
+  <text class="s" x="108" y="363">Pelayanan Medis</text>
+  <rect class="warn" x="292" y="296" width="165" height="34" rx="17"/>
+  <text x="311" y="318" fill="#92400e" font-family="Arial" font-size="12" font-weight="700">Menunggu keputusan Anda</text>
+  <rect class="muted" x="108" y="390" width="340" height="72" rx="10"/>
+  <text class="s" x="128" y="418">TANGGAL CUTI</text>
+  <text class="h" x="128" y="446">20 Oktober 2026</text>
+  <text class="s" x="108" y="500">ALASAN</text>
+  <text class="t" x="108" y="526">Keperluan keluarga yang tidak dapat ditinggalkan.</text>
+  <text class="s" x="108" y="554">Pengajuan ditampilkan dari yang paling lama diajukan.</text>
+
+  <rect class="surface" x="510" y="296" width="242" height="310" rx="11"/>
+  <text class="h" x="530" y="332">Catatan keputusan</text>
+  <text class="s" x="530" y="354">Wajib diisi jika pengajuan ditolak.</text>
+  <rect class="muted" x="530" y="374" width="202" height="125" rx="9"/>
+  <text class="s" x="547" y="400">Tuliskan catatan...</text>
+  <rect class="danger" x="530" y="521" width="94" height="48" rx="9"/>
+  <text class="r" x="559" y="550">Tolak</text>
+  <rect class="primary" x="638" y="521" width="94" height="48" rx="9"/>
+  <text class="w" x="657" y="550">Setujui</text>
+
+  <rect class="dash" x="80" y="683" width="700" height="42" rx="10"/>
+  <text class="s" x="222" y="709">Keadaan kosong: “Tidak ada pengajuan yang menunggu.”</text>
+
+  <text class="h" x="855" y="122">Ponsel</text>
+  <rect class="frame" x="855" y="140" width="295" height="610" rx="24"/>
+  <text class="n" x="875" y="180">AREA ATASAN</text>
+  <text class="h" x="875" y="210">Persetujuan Staff</text>
+  <rect class="surface" x="875" y="240" width="255" height="475" rx="13"/>
+  <text class="n" x="893" y="274">CUTI-2026-000012</text>
+  <text class="h" x="893" y="304">Siti Aminah</text>
+  <text class="s" x="893" y="326">Pelayanan Medis</text>
+  <rect class="warn" x="893" y="345" width="180" height="32" rx="16"/>
+  <text x="912" y="366" fill="#92400e" font-family="Arial" font-size="12" font-weight="700">Menunggu keputusan Anda</text>
+  <rect class="muted" x="893" y="395" width="219" height="58" rx="9"/>
+  <text class="s" x="909" y="419">TANGGAL CUTI</text>
+  <text class="t" x="909" y="440">20 Oktober 2026</text>
+  <text class="s" x="893" y="481">ALASAN</text>
+  <text class="t" x="893" y="503">Keperluan keluarga.</text>
+  <text class="h" x="893" y="539">Catatan keputusan</text>
+  <rect class="muted" x="893" y="554" width="219" height="76" rx="9"/>
+  <text class="s" x="909" y="579">Wajib jika ditolak</text>
+  <rect class="danger" x="893" y="649" width="102" height="44" rx="9"/>
+  <text class="r" x="926" y="676">Tolak</text>
+  <rect class="primary" x="1010" y="649" width="102" height="44" rx="9"/>
+  <text class="w" x="1031" y="676">Setujui</text>
+</svg>

@@ -167,29 +167,17 @@ Halaman detail memperlihatkan data pengajuan dan urutan keputusan sebagai garis 
 
 ## Wireframe Daftar dan Keputusan Atasan
 
-```text
-+----------------------------------------------------------------+
-| Pengajuan Bawahan                                               |
-|----------------------------------------------------------------|
-| Cari [____________]  Jenis [Semua v]  Tanggal [____ - ____]    |
-|                                                                |
-| Pegawai      Nomor              Hari   Diajukan       Aksi      |
-| Siti A.      CUTI-2026-000012   2      20-09-2026    Tinjau    |
-+----------------------------------------------------------------+
+![Wireframe persetujuan Staff oleh Atasan](images/wireframes/atasan-persetujuan-staff.svg)
 
-+----------------------------------------------------------------+
-| Tinjau Pengajuan Bawahan                                        |
-|----------------------------------------------------------------|
-| Ringkasan pegawai, jenis, tanggal, alasan, dan saldo             |
-|                                                                |
-| Catatan keputusan                                               |
-| [__________________________________________________________]    |
-|                                                                |
-| [Tolak]                                      [Setujui]          |
-+----------------------------------------------------------------+
-```
+*Gambar 8. Wireframe daftar dan keputusan pengajuan cuti oleh Atasan.*
 
-Alasan wajib ketika Atasan menolak. Tombol keputusan tidak tersedia jika pengguna adalah pemilik pengajuan atau status bukan `menunggu_atasan`.
+Pengajuan berstatus `menunggu_atasan` ditampilkan dari yang paling lama diajukan. Setiap kartu memuat nomor pengajuan, nama dan bagian organisasi pegawai, tanggal cuti, alasan, serta formulir keputusan. Catatan bersifat opsional ketika disetujui dan wajib ketika ditolak.
+
+Pada desktop, ringkasan pengajuan dan formulir keputusan ditempatkan berdampingan. Pada ponsel, keduanya disusun vertikal agar informasi dapat dibaca dan tombol keputusan tetap mudah dijangkau. Setelah keputusan berhasil disimpan, kartu dikeluarkan dari antrean dan sistem menampilkan pesan keberhasilan.
+
+Jika tidak terdapat pengajuan, halaman menampilkan keadaan kosong yang menjelaskan bahwa seluruh pengajuan Staff sudah diproses. Tombol keputusan tidak tersedia jika pengguna bukan Atasan yang ditunjuk atau status pengajuan sudah berubah.
+
+Dashboard Atasan menggunakan rancangan dashboard Karyawan pada Gambar 4 dengan tambahan pintasan `Persetujuan Staff`. Riwayat keputusan Atasan dan antrean Manager Operasional masih merupakan rancangan lanjutan dan belum tersedia sebagai halaman tersendiri pada implementasi saat ini.
 
 ## Wireframe Dashboard dan Keputusan Admin HR
 
