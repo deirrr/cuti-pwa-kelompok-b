@@ -229,18 +229,11 @@ Rekap menyediakan filter periode, bagian organisasi, status, dan pegawai. Ekspor
 
 ## Wireframe Halaman Offline
 
-```text
-+--------------------------------------------------+
-|                   Tidak Ada Koneksi              |
-|                                                  |
-| Aplikasi memerlukan internet untuk memuat data,  |
-| mengirim pengajuan, dan memberikan keputusan.    |
-|                                                  |
-| [                  Coba Lagi                   ] |
-+--------------------------------------------------+
-```
+![Wireframe halaman offline](images/wireframes/pwa-halaman-offline.svg)
 
-Halaman offline tidak menampilkan data pribadi dari cache dan tidak menyediakan tombol untuk menyimpan transaksi.
+*Gambar 16. Wireframe halaman offline pada desktop dan ponsel.*
+
+Halaman offline menampilkan identitas aplikasi, penjelasan singkat mengenai kebutuhan koneksi, dan tombol `Coba Lagi`. Halaman ini tidak menampilkan data pribadi dari cache dan tidak menyediakan tombol untuk menyimpan transaksi. Pada ponsel, pesan dibuat lebih ringkas tanpa mengubah maksud atau tindakan yang tersedia.
 
 ## Status dan Label
 
