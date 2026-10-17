@@ -40,12 +40,16 @@ class PwaAssetsTest extends TestCase
             ['192x192', '512x512'],
             array_column($manifest['icons'], 'sizes'),
         );
+        $this->assertSame(
+            ['pwa-icons/icon-192.png', 'pwa-icons/icon-512.png'],
+            array_column($manifest['icons'], 'src'),
+        );
     }
 
     public function test_ikon_dan_halaman_offline_tersedia(): void
     {
-        $this->assertSame([192, 192], array_slice(getimagesize(public_path('icons/icon-192.png')), 0, 2));
-        $this->assertSame([512, 512], array_slice(getimagesize(public_path('icons/icon-512.png')), 0, 2));
+        $this->assertSame([192, 192], array_slice(getimagesize(public_path('pwa-icons/icon-192.png')), 0, 2));
+        $this->assertSame([512, 512], array_slice(getimagesize(public_path('pwa-icons/icon-512.png')), 0, 2));
         $this->assertFileExists(public_path('sw.js'));
         $this->assertStringContainsString(
             'Tidak ada koneksi',

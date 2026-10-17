@@ -9,7 +9,7 @@
 
         <title>@yield('judul', 'Sistem Cuti') - Klinik Utama Medika Antapani</title>
         <link rel="icon" type="image/png" href="{{ asset('logo-cuti.png') }}">
-        <link rel="apple-touch-icon" href="{{ asset('icons/icon-180.png') }}">
+        <link rel="apple-touch-icon" href="{{ asset('pwa-icons/icon-180.png') }}">
         <link rel="manifest" href="{{ asset('manifest.json') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])

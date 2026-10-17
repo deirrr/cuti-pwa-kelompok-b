@@ -1,4 +1,4 @@
-const CACHE_NAME = 'medika-cuti-static-v2';
+const CACHE_NAME = 'medika-cuti-static-v3';
 const CACHE_PREFIX = 'medika-cuti-static-';
 const scopeUrl = new URL(self.registration.scope);
 const scopePath = scopeUrl.pathname.endsWith('/') ? scopeUrl.pathname : `${scopeUrl.pathname}/`;
@@ -6,8 +6,8 @@ const offlineUrl = new URL('offline.html', scopeUrl).href;
 const precacheUrls = [
     offlineUrl,
     new URL('logo-cuti.png', scopeUrl).href,
-    new URL('icons/icon-192.png', scopeUrl).href,
-    new URL('icons/icon-512.png', scopeUrl).href,
+    new URL('pwa-icons/icon-192.png', scopeUrl).href,
+    new URL('pwa-icons/icon-512.png', scopeUrl).href,
 ];
 
 self.addEventListener('install', (event) => {
@@ -45,7 +45,7 @@ self.addEventListener('fetch', (event) => {
 
     const requestUrl = new URL(request.url);
     const staticDestinations = ['font', 'image', 'script', 'style'];
-    const staticPathPrefixes = [`${scopePath}build/`, `${scopePath}icons/`];
+    const staticPathPrefixes = [`${scopePath}build/`, `${scopePath}pwa-icons/`];
     const staticFiles = [`${scopePath}logo-cuti.png`];
     const isStaticFile = staticPathPrefixes.some((path) => requestUrl.pathname.startsWith(path))
         || staticFiles.includes(requestUrl.pathname);
@@ -91,8 +91,8 @@ self.addEventListener('push', (event) => {
     const options = {
         ...notificationOptions,
         body: payload.body || 'Ada pembaruan mengenai pengajuan cuti.',
-        icon: payload.icon || new URL('icons/icon-192.png', scopeUrl).href,
-        badge: payload.badge || new URL('icons/icon-192.png', scopeUrl).href,
+        icon: payload.icon || new URL('pwa-icons/icon-192.png', scopeUrl).href,
+        badge: payload.badge || new URL('pwa-icons/icon-192.png', scopeUrl).href,
         data: payload.data || { url: scopePath },
     };
 
