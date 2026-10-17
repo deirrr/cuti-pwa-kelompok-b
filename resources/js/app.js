@@ -3,14 +3,160 @@ const storedTheme = localStorage.getItem('tema');
 const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 const serviceWorkerUrl = document.querySelector('meta[name="service-worker-url"]')?.content;
+let serviceWorkerRegistrationPromise = null;
+
+const getServiceWorkerRegistration = () => {
+    if (! ('serviceWorker' in navigator) || ! serviceWorkerUrl) {
+        return Promise.reject(new Error('Service worker tidak didukung.'));
+    }
+
+    serviceWorkerRegistrationPromise ??= navigator.serviceWorker.register(serviceWorkerUrl);
+
+    return serviceWorkerRegistrationPromise;
+};
 
 if ('serviceWorker' in navigator && serviceWorkerUrl) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register(serviceWorkerUrl).catch((error) => {
+        getServiceWorkerRegistration().catch((error) => {
             console.error('Service worker gagal didaftarkan.', error);
         });
     });
 }
+
+const ubahBase64UrlMenjadiUint8Array = (base64Url) => {
+    const padding = '='.repeat((4 - (base64Url.length % 4)) % 4);
+    const base64 = (base64Url + padding).replaceAll('-', '+').replaceAll('_', '/');
+    const rawData = window.atob(base64);
+
+    return Uint8Array.from([...rawData].map((character) => character.charCodeAt(0)));
+};
+
+document.querySelectorAll('[data-push-notifications]').forEach((container) => {
+    const toggleButton = container.querySelector('[data-push-toggle]');
+    const status = container.querySelector('[data-push-status]');
+    const publicKey = container.dataset.vapidPublicKey;
+    const subscribeUrl = container.dataset.subscribeUrl;
+    const unsubscribeUrl = container.dataset.unsubscribeUrl;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+    let currentSubscription = null;
+
+    if (! toggleButton || ! status) {
+        return;
+    }
+
+    const updateInterface = (message) => {
+        status.textContent = message;
+        toggleButton.textContent = currentSubscription ? 'Nonaktifkan notifikasi' : 'Aktifkan notifikasi';
+        toggleButton.disabled = false;
+    };
+
+    const sendSubscription = async (url, method, subscription) => {
+        const response = await fetch(url, {
+            method,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify(subscription),
+        });
+
+        if (! response.ok) {
+            throw new Error('Server tidak dapat menyimpan pengaturan notifikasi.');
+        }
+    };
+
+    const subscriptionPayload = (subscription) => ({
+        endpoint: subscription.endpoint,
+        keys: subscription.toJSON().keys,
+        content_encoding: PushManager.supportedContentEncodings?.[0] || 'aes128gcm',
+    });
+
+    const initializePushNotifications = async () => {
+        if (! ('Notification' in window) || ! ('PushManager' in window) || ! publicKey || ! subscribeUrl || ! unsubscribeUrl || ! csrfToken) {
+            status.textContent = publicKey
+                ? 'Browser ini belum mendukung notifikasi perangkat.'
+                : 'Notifikasi perangkat belum dikonfigurasi oleh administrator.';
+
+            return;
+        }
+
+        if (Notification.permission === 'denied') {
+            status.textContent = 'Izin notifikasi diblokir. Aktifkan kembali melalui pengaturan browser.';
+
+            return;
+        }
+
+        try {
+            const registration = await getServiceWorkerRegistration();
+            currentSubscription = await registration.pushManager.getSubscription();
+
+            if (currentSubscription) {
+                await sendSubscription(subscribeUrl, 'POST', subscriptionPayload(currentSubscription));
+            }
+
+            updateInterface(currentSubscription
+                ? 'Aktif pada perangkat ini. Kamu akan menerima pembaruan meski aplikasi ditutup.'
+                : 'Aktifkan agar pembaruan cuti muncul langsung pada perangkat ini.');
+        } catch (error) {
+            console.error('Status notifikasi perangkat gagal diperiksa.', error);
+            status.textContent = 'Status notifikasi perangkat tidak dapat diperiksa.';
+        }
+    };
+
+    toggleButton.addEventListener('click', async () => {
+        toggleButton.disabled = true;
+        status.textContent = 'Menyimpan pengaturan notifikasi...';
+        let newSubscription = null;
+
+        try {
+            if (currentSubscription) {
+                await sendSubscription(unsubscribeUrl, 'DELETE', {
+                    endpoint: currentSubscription.endpoint,
+                });
+                await currentSubscription.unsubscribe();
+                currentSubscription = null;
+                updateInterface('Notifikasi dinonaktifkan pada perangkat ini.');
+
+                return;
+            }
+
+            const permission = await Notification.requestPermission();
+
+            if (permission !== 'granted') {
+                status.textContent = permission === 'denied'
+                    ? 'Izin notifikasi diblokir. Aktifkan kembali melalui pengaturan browser.'
+                    : 'Izin notifikasi belum diberikan.';
+
+                return;
+            }
+
+            const registration = await getServiceWorkerRegistration();
+            newSubscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: ubahBase64UrlMenjadiUint8Array(publicKey),
+            });
+
+            await sendSubscription(subscribeUrl, 'POST', subscriptionPayload(newSubscription));
+            currentSubscription = newSubscription;
+            updateInterface('Notifikasi berhasil diaktifkan pada perangkat ini.');
+        } catch (error) {
+            if (newSubscription && ! currentSubscription) {
+                await newSubscription.unsubscribe();
+            }
+
+            console.error('Pengaturan notifikasi perangkat gagal disimpan.', error);
+            status.textContent = 'Pengaturan gagal disimpan. Periksa koneksi lalu coba lagi.';
+        } finally {
+            if (Notification.permission !== 'denied') {
+                toggleButton.disabled = false;
+            }
+        }
+    });
+
+    initializePushNotifications();
+});
 
 let pwaInstallPrompt = null;
 const pwaInstallButtons = document.querySelectorAll('[data-pwa-install]');

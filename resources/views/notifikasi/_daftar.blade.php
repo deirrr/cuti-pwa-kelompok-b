@@ -22,6 +22,34 @@
         </div>
     @endif
 
+    <div
+        class="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:flex-row sm:items-center sm:justify-between"
+        data-push-notifications
+        data-vapid-public-key="{{ config('webpush.vapid.public_key') }}"
+        data-subscribe-url="{{ route('notifikasi_push.store') }}"
+        data-unsubscribe-url="{{ route('notifikasi_push.destroy') }}"
+    >
+        <div class="flex min-w-0 gap-4">
+            <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                <svg class="size-5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </span>
+            <div>
+                <h2 class="font-semibold text-slate-950 dark:text-white">Notifikasi perangkat</h2>
+                <p class="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400" data-push-status aria-live="polite">
+                    Memeriksa dukungan notifikasi pada perangkat ini...
+                </p>
+            </div>
+        </div>
+        <button
+            type="button"
+            class="shrink-0 rounded-xl bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-600/20 disabled:cursor-not-allowed disabled:opacity-50"
+            data-push-toggle
+            disabled
+        >
+            Aktifkan notifikasi
+        </button>
+    </div>
+
     <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
         @forelse ($notifikasi as $item)
             <article @class([

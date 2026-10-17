@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 
 #[Table('pengguna')]
 #[Fillable(['email', 'kata_sandi', 'peran', 'aktif', 'terakhir_masuk_pada'])]
@@ -20,7 +21,7 @@ use Illuminate\Notifications\Notifiable;
 class Pengguna extends Authenticatable
 {
     /** @use HasFactory<PenggunaFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, HasPushSubscriptions, Notifiable;
 
     public const CREATED_AT = 'dibuat_pada';
 

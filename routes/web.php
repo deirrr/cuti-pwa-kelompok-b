@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminHr\HariLiburController;
 use App\Http\Controllers\AdminHr\PegawaiController;
 use App\Http\Controllers\AdminHr\PersetujuanCutiController as AdminHrPersetujuanCutiController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LanggananPushController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PengajuanCutiController;
 use App\Http\Controllers\PersetujuanAtasanController;
@@ -26,6 +27,8 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
     Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
     Route::post('/notifikasi/baca-semua', [NotifikasiController::class, 'bacaSemua'])->name('notifikasi.baca_semua');
     Route::post('/notifikasi/{notifikasi}/baca', [NotifikasiController::class, 'baca'])->name('notifikasi.baca');
+    Route::post('/notifikasi-push/langganan', [LanggananPushController::class, 'store'])->name('notifikasi_push.store');
+    Route::delete('/notifikasi-push/langganan', [LanggananPushController::class, 'destroy'])->name('notifikasi_push.destroy');
 
     Route::view('/dashboard/karyawan', 'dashboard', ['jenisDashboard' => 'Karyawan'])
         ->middleware('peran:karyawan,atasan')

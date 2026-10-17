@@ -47,4 +47,14 @@ class PwaAssetsTest extends TestCase
             (string) file_get_contents(public_path('offline.html')),
         );
     }
+
+    public function test_service_worker_menangani_push_dan_klik_notifikasi(): void
+    {
+        $serviceWorker = (string) file_get_contents(public_path('sw.js'));
+
+        $this->assertStringContainsString("addEventListener('push'", $serviceWorker);
+        $this->assertStringContainsString("addEventListener('notificationclick'", $serviceWorker);
+        $this->assertStringContainsString('showNotification', $serviceWorker);
+        $this->assertStringContainsString('openWindow', $serviceWorker);
+    }
 }

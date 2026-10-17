@@ -12,6 +12,7 @@ use App\Notifications\PengajuanCutiDiajukan;
 use App\Notifications\StatusPengajuanCutiDiperbarui;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Support\Facades\Notification;
+use NotificationChannels\WebPush\WebPushChannel;
 use Tests\TestCase;
 
 class NotifikasiPengajuanCutiTest extends TestCase
@@ -189,6 +190,36 @@ class NotifikasiPengajuanCutiTest extends TestCase
             ->assertNotFound();
 
         $this->assertNull($notifikasi->fresh()->read_at);
+    }
+
+    public function test_notifikasi_status_juga_dikirim_melalui_web_push(): void
+    {
+        $bagian = BagianOrganisasi::factory()->create();
+        $staff = $this->buatPegawai(PeranPengguna::Karyawan, $bagian);
+        $pengajuan = PengajuanCuti::factory()->ditolak()->create([
+            'pegawai_id' => $staff->getKey(),
+            'tanggal_cuti' => '2026-10-05',
+        ]);
+        $notifikasi = new StatusPengajuanCutiDiperbarui(
+            $pengajuan,
+            'Pengajuan cuti ditolak',
+            'Pengajuan cuti tanggal 05-10-2026 ditolak oleh Admin HR.',
+            'cuti.index',
+        );
+
+        $this->assertContains(WebPushChannel::class, $notifikasi->via($staff->pengguna));
+        $this->assertSame([
+            'judul' => 'Pengajuan cuti ditolak',
+            'pesan' => 'Pengajuan cuti tanggal 05-10-2026 ditolak oleh Admin HR.',
+            'jenis' => 'status_diperbarui',
+            'pengajuan_cuti_id' => $pengajuan->getKey(),
+            'route_tujuan' => 'cuti.index',
+        ], $notifikasi->toArray($staff->pengguna));
+
+        $pesanPush = $notifikasi->toWebPush($staff->pengguna, $notifikasi)->toArray();
+
+        $this->assertSame('Pengajuan cuti ditolak', $pesanPush['title']);
+        $this->assertSame('/cuti', $pesanPush['data']['url']);
     }
 
     private function buatPegawai(

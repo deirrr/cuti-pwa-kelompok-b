@@ -1,4 +1,4 @@
-const CACHE_NAME = 'medika-cuti-static-v1';
+const CACHE_NAME = 'medika-cuti-static-v2';
 const CACHE_PREFIX = 'medika-cuti-static-';
 const scopeUrl = new URL(self.registration.scope);
 const scopePath = scopeUrl.pathname.endsWith('/') ? scopeUrl.pathname : `${scopeUrl.pathname}/`;
@@ -72,6 +72,58 @@ self.addEventListener('fetch', (event) => {
 
                 return networkResponse;
             });
+        }),
+    );
+});
+
+self.addEventListener('push', (event) => {
+    let payload = {};
+
+    if (event.data) {
+        try {
+            payload = event.data.json();
+        } catch {
+            payload = { body: event.data.text() };
+        }
+    }
+
+    const { title = 'Medika Cuti', ...notificationOptions } = payload;
+    const options = {
+        ...notificationOptions,
+        body: payload.body || 'Ada pembaruan mengenai pengajuan cuti.',
+        icon: payload.icon || new URL('icons/icon-192.png', scopeUrl).href,
+        badge: payload.badge || new URL('icons/icon-192.png', scopeUrl).href,
+        data: payload.data || { url: scopePath },
+    };
+
+    event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+
+    let targetUrl = new URL(scopePath, self.location.origin);
+
+    try {
+        const requestedUrl = new URL(event.notification.data?.url || scopePath, self.location.origin);
+
+        if (requestedUrl.origin === self.location.origin) {
+            targetUrl = requestedUrl;
+        }
+    } catch {
+    }
+
+    event.waitUntil(
+        self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(async (windowClients) => {
+            const applicationWindow = windowClients.find((client) => client.url.startsWith(self.location.origin));
+
+            if (applicationWindow) {
+                await applicationWindow.navigate(targetUrl.href);
+
+                return applicationWindow.focus();
+            }
+
+            return self.clients.openWindow(targetUrl.href);
         }),
     );
 });
