@@ -181,68 +181,51 @@ Dashboard Atasan menggunakan rancangan dashboard Karyawan pada Gambar 4 dengan t
 
 ## Wireframe Dashboard dan Keputusan Admin HR
 
-```text
-+----------------------------------------------------------------+
-| Dashboard Admin HR                                              |
-|----------------------------------------------------------------|
-| [Menunggu HR: 4] [Disetujui bulan ini: 12] [Ditolak: 2]        |
-|                                                                |
-| Antrean Persetujuan Akhir                                       |
-| Pegawai      Nomor              Atasan          Aksi            |
-| Budi S.      CUTI-2026-000015   Disetujui       Tinjau          |
-|                                                                |
-| Pintasan: [Pegawai] [Jenis Cuti] [Saldo] [Hari Libur] [Rekap]  |
-+----------------------------------------------------------------+
+![Wireframe dashboard Admin HR](images/wireframes/admin-dashboard.svg)
 
-+----------------------------------------------------------------+
-| Keputusan Akhir                                                 |
-|----------------------------------------------------------------|
-| Ringkasan pengajuan dan keputusan Atasan                        |
-| Pemeriksaan: tanggal valid | saldo cukup | tidak tumpang tindih |
-| Saldo saat ini: 10 hari -> setelah disetujui: 8 hari            |
-|                                                                |
-| Catatan keputusan                                               |
-| [__________________________________________________________]    |
-|                                                                |
-| [Tolak]                              [Setujui dan Kurangi Saldo] |
-+----------------------------------------------------------------+
-```
+*Gambar 9. Wireframe dashboard Admin HR.*
 
-Tombol keputusan akhir tidak tersedia bagi pemilik pengajuan. Konfirmasi persetujuan harus menjelaskan bahwa saldo akan berkurang setelah tindakan berhasil.
+Dashboard saat ini berfokus pada kesiapan data organisasi. Bagian utama memuat status sistem, sambutan, pintasan ke Master Karyawan, serta jumlah bagian organisasi, Staff, dan Atasan yang aktif.
+
+![Wireframe persetujuan akhir Admin HR](images/wireframes/admin-persetujuan-akhir.svg)
+
+*Gambar 10. Wireframe antrean dan keputusan akhir Admin HR.*
+
+Setiap kartu menampilkan identitas pemohon, tanggal dan alasan cuti, serta keputusan Atasan jika ada. Pengajuan milik Atasan ditandai sebagai pengajuan yang langsung masuk ke Admin HR. Catatan wajib ketika pengajuan ditolak. Persetujuan akhir memperbarui status dan saldo cuti melalui proses server.
 
 ## Wireframe Pengelolaan Data Admin HR
 
-```text
-+----------------------------------------------------------------+
-| Judul Data Master                         [ + Tambah ]           |
-|----------------------------------------------------------------|
-| Cari [____________] Status [Aktif v] Tahun [2026 v]             |
-|                                                                |
-| Kode/Nama             Informasi Utama        Status     Aksi     |
-| ...                   ...                    Aktif      Ubah     |
-|                                                                |
-| [Sebelumnya]  Halaman 1 dari 5  [Berikutnya]                   |
-+----------------------------------------------------------------+
-```
+![Wireframe Master Karyawan](images/wireframes/admin-master-karyawan.svg)
 
-Pola ini dipakai secara konsisten untuk pengguna dan pegawai, jenis cuti, saldo, serta hari libur. Penghapusan data yang memiliki riwayat diganti dengan penonaktifan.
+*Gambar 11. Wireframe daftar, detail, dan formulir Master Karyawan.*
+
+Master Karyawan menyediakan pencarian berdasarkan NIK, nama, atau email serta filter peran. Karyawan dikelompokkan berdasarkan bagian organisasi. Detail dibuka melalui dialog, sedangkan halaman tambah dan ubah menggunakan struktur formulir yang sama.
+
+![Wireframe Bagian Organisasi](images/wireframes/admin-bagian-organisasi.svg)
+
+*Gambar 12. Wireframe daftar dan formulir Bagian Organisasi.*
+
+Daftar menampilkan kode, nama bagian, jumlah pegawai, status, dan tindakan ubah. Form tambah dan ubah berisi informasi struktur yang sama agar pola pengelolaan tetap konsisten.
+
+![Wireframe Hari Libur Nasional](images/wireframes/admin-hari-libur.svg)
+
+*Gambar 13. Wireframe daftar dan formulir Hari Libur Nasional.*
+
+Admin HR dapat memilih tahun, menambah, mengubah, atau menghapus hari libur. Tanggal yang berstatus aktif tidak dapat dipilih pada kalender pengajuan cuti.
+
+![Wireframe Saldo Cuti Tahunan](images/wireframes/admin-saldo-cuti.svg)
+
+*Gambar 14. Wireframe rancangan lanjutan pengelolaan saldo cuti.*
+
+Daftar saldo menyediakan filter tahun dan pencarian pegawai. Form pengaturan memuat jatah tahunan, saldo tersedia, dan catatan penyesuaian. View sudah tersedia, tetapi route dan menu pengelolaan saldo belum diaktifkan pada implementasi saat ini.
 
 ## Wireframe Rekap
 
-```text
-+----------------------------------------------------------------+
-| Rekap Pengajuan                                                 |
-|----------------------------------------------------------------|
-| Periode [____ - ____] Bagian organisasi [Semua v]              |
-| Jenis [Semua v] Status [Semua v] Pegawai [____________]         |
-| [Terapkan Filter] [Reset]                      [Ekspor CSV]      |
-|                                                                |
-| Nomor | Pegawai | Bagian organisasi | Jenis | Hari | Status | Tanggal |
-| ...                                                            |
-+----------------------------------------------------------------+
-```
+![Wireframe Rekap Pengajuan](images/wireframes/admin-rekap.svg)
 
-Ekspor menggunakan filter dan hak akses yang sama dengan data pada layar.
+*Gambar 15. Wireframe rancangan lanjutan rekap pengajuan.*
+
+Rekap menyediakan filter periode, bagian organisasi, status, dan pegawai. Ekspor CSV harus menggunakan filter dan hak akses yang sama dengan data pada layar. Menu Rekap saat ini masih nonaktif dan belum memiliki route.
 
 ## Wireframe Halaman Offline
 
