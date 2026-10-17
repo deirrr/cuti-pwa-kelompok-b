@@ -75,12 +75,13 @@
                         <svg class="size-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
                     </button>
                 </form>
+
+                <x-pwa-install-button class="mt-6" />
             </section>
 
             <div class="mt-6 flex flex-wrap items-center justify-between gap-2 px-2 text-xs text-slate-500 dark:text-slate-400">
                 <p>Transaksi memerlukan koneksi internet.</p>
                 <div class="flex items-center gap-1">
-                    <x-pwa-install-button />
                     <button data-theme-toggle type="button" class="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 font-medium hover:bg-white hover:text-emerald-700 dark:hover:bg-slate-900 dark:hover:text-emerald-400">
                         <svg class="size-4 dark:hidden" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
                         <svg class="hidden size-4 dark:block" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>

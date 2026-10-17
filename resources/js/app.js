@@ -160,30 +160,59 @@ document.querySelectorAll('[data-push-notifications]').forEach((container) => {
 
 let pwaInstallPrompt = null;
 const pwaInstallButtons = document.querySelectorAll('[data-pwa-install]');
+const pwaInstallStatuses = document.querySelectorAll('[data-pwa-install-status]');
+const pwaInstalledMessages = document.querySelectorAll('[data-pwa-installed]');
+const pwaStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+const pwaIosDevice = /iphone|ipad|ipod/i.test(window.navigator.userAgent)
+    || (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
 
-const sembunyikanTombolInstalasi = () => {
+const tampilkanStatusTerpasang = () => {
     pwaInstallPrompt = null;
     pwaInstallButtons.forEach((button) => button.setAttribute('hidden', ''));
+    pwaInstallStatuses.forEach((status) => status.setAttribute('hidden', ''));
+    pwaInstalledMessages.forEach((message) => message.classList.remove('hidden'));
 };
+
+if (pwaStandaloneMode) {
+    tampilkanStatusTerpasang();
+}
 
 window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
     pwaInstallPrompt = event;
     pwaInstallButtons.forEach((button) => button.removeAttribute('hidden'));
+    pwaInstallStatuses.forEach((status) => {
+        status.textContent = 'Aplikasi siap dipasang pada perangkat ini.';
+    });
 });
 
 pwaInstallButtons.forEach((button) => {
     button.addEventListener('click', async () => {
         if (! pwaInstallPrompt) {
+            pwaInstallStatuses.forEach((status) => {
+                status.textContent = pwaIosDevice
+                    ? 'Di Safari, tekan Bagikan lalu pilih Tambahkan ke Layar Utama.'
+                    : 'Buka menu browser lalu pilih Instal aplikasi atau Tambahkan ke layar utama.';
+            });
+
             return;
         }
 
         await pwaInstallPrompt.prompt();
-        sembunyikanTombolInstalasi();
+        const { outcome } = await pwaInstallPrompt.userChoice;
+
+        if (outcome === 'accepted') {
+            tampilkanStatusTerpasang();
+        } else {
+            pwaInstallPrompt = null;
+            pwaInstallStatuses.forEach((status) => {
+                status.textContent = 'Pemasangan dibatalkan. Kamu dapat mencobanya kembali dari menu browser.';
+            });
+        }
     });
 });
 
-window.addEventListener('appinstalled', sembunyikanTombolInstalasi);
+window.addEventListener('appinstalled', tampilkanStatusTerpasang);
 
 root.classList.toggle('dark', storedTheme === 'gelap' || (storedTheme === null && prefersDarkTheme));
 
