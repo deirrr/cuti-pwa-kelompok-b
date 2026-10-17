@@ -162,20 +162,62 @@ let pwaInstallPrompt = null;
 const pwaInstallButtons = document.querySelectorAll('[data-pwa-install]');
 const pwaInstallStatuses = document.querySelectorAll('[data-pwa-install-status]');
 const pwaInstalledMessages = document.querySelectorAll('[data-pwa-installed]');
+const pwaInstallOpenButtons = document.querySelectorAll('[data-pwa-install-open]');
+const pwaInstallCloseButtons = document.querySelectorAll('[data-pwa-install-close]');
+const pwaInstallDialogs = document.querySelectorAll('[data-pwa-install-dialog]');
+const pwaInstallActions = document.querySelectorAll('[data-pwa-install-action]');
+const pwaAndroidInstructions = document.querySelectorAll('[data-pwa-install-android]');
+const pwaIosInstructions = document.querySelectorAll('[data-pwa-install-ios]');
 const pwaStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 const pwaIosDevice = /iphone|ipad|ipod/i.test(window.navigator.userAgent)
     || (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
 
+const bukaPanduanInstalasi = () => {
+    pwaInstallDialogs.forEach((dialog) => {
+        if (! dialog.open) {
+            dialog.showModal();
+        }
+    });
+};
+
+const tutupPanduanInstalasi = () => {
+    sessionStorage.setItem('panduan-pwa-ditutup', '1');
+    pwaInstallDialogs.forEach((dialog) => {
+        if (dialog.open) {
+            dialog.close();
+        }
+    });
+};
+
 const tampilkanStatusTerpasang = () => {
     pwaInstallPrompt = null;
     pwaInstallButtons.forEach((button) => button.setAttribute('hidden', ''));
-    pwaInstallStatuses.forEach((status) => status.setAttribute('hidden', ''));
+    pwaInstallOpenButtons.forEach((button) => button.setAttribute('hidden', ''));
+    pwaInstallDialogs.forEach((dialog) => {
+        if (dialog.open) {
+            dialog.close();
+        }
+    });
     pwaInstalledMessages.forEach((message) => message.classList.remove('hidden'));
 };
 
 if (pwaStandaloneMode) {
     tampilkanStatusTerpasang();
+} else {
+    pwaAndroidInstructions.forEach((instructions) => instructions.classList.toggle('hidden', pwaIosDevice));
+    pwaIosInstructions.forEach((instructions) => instructions.classList.toggle('hidden', ! pwaIosDevice));
+    pwaInstallActions.forEach((button) => button.classList.toggle('hidden', pwaIosDevice));
+
+    if (pwaInstallDialogs.length > 0 && sessionStorage.getItem('panduan-pwa-ditutup') === null) {
+        window.addEventListener('load', bukaPanduanInstalasi);
+    }
 }
+
+pwaInstallOpenButtons.forEach((button) => button.addEventListener('click', bukaPanduanInstalasi));
+pwaInstallCloseButtons.forEach((button) => button.addEventListener('click', tutupPanduanInstalasi));
+pwaInstallDialogs.forEach((dialog) => dialog.addEventListener('cancel', () => {
+    sessionStorage.setItem('panduan-pwa-ditutup', '1');
+}));
 
 window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
@@ -206,7 +248,7 @@ pwaInstallButtons.forEach((button) => {
         } else {
             pwaInstallPrompt = null;
             pwaInstallStatuses.forEach((status) => {
-                status.textContent = 'Pemasangan dibatalkan. Kamu dapat mencobanya kembali dari menu browser.';
+                status.textContent = 'Pemasangan dibatalkan. Tekan Pasang sekarang untuk mencoba kembali.';
             });
         }
     });

@@ -21,7 +21,9 @@ class PwaAssetsTest extends TestCase
             ->assertSee('service-worker-url', false)
             ->assertSee('data-pwa-install', false)
             ->assertSee('Pasang Medika Cuti')
-            ->assertSee('Buka Medika Cuti dari ikon pada layar utama.');
+            ->assertSee('data-pwa-install-dialog', false)
+            ->assertSee('Tambahkan ke Layar Utama')
+            ->assertSee('Pasang sekarang');
     }
 
     public function test_manifest_memiliki_identitas_dan_ikon_yang_dibutuhkan(): void
