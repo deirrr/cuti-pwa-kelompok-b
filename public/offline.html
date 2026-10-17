@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#047857">
+        <title>Tidak Ada Koneksi - Medika Cuti</title>
+        <style>
+            :root { color-scheme: light dark; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+            * { box-sizing: border-box; }
+            body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 24px; color: #0f172a; background: #f8fafc; }
+            main { width: min(100%, 480px); padding: 32px; text-align: center; border: 1px solid #e2e8f0; border-radius: 24px; background: #fff; box-shadow: 0 20px 50px rgba(15, 23, 42, .08); }
+            img { width: 96px; height: 96px; border-radius: 20px; object-fit: cover; }
+            h1 { margin: 24px 0 8px; font-size: 1.5rem; }
+            p { margin: 0; color: #475569; line-height: 1.65; }
+            button { margin-top: 24px; border: 0; border-radius: 12px; padding: 12px 20px; color: #fff; background: #047857; font: inherit; font-weight: 700; cursor: pointer; }
+            button:focus-visible { outline: 4px solid rgba(16, 185, 129, .25); outline-offset: 2px; }
+            small { display: block; margin-top: 20px; color: #94a3b8; line-height: 1.5; }
+            @media (prefers-color-scheme: dark) {
+                body { color: #f8fafc; background: #020617; }
+                main { border-color: #1e293b; background: #0f172a; box-shadow: none; }
+                p { color: #cbd5e1; }
+                small { color: #64748b; }
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <img src="./logo-cuti.png" alt="Logo Medika Cuti">
+            <h1>Tidak ada koneksi</h1>
+            <p>Medika Cuti memerlukan internet untuk memuat data, mengirim pengajuan, dan memberikan keputusan.</p>
+            <button type="button" onclick="window.location.reload()">Coba lagi</button>
+            <small>Data pribadi dan transaksi tidak disimpan untuk digunakan secara offline.</small>
+        </main>
+    </body>
+</html>

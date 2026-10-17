@@ -109,6 +109,7 @@
                     </div>
 
                     <div class="flex items-center gap-2">
+                        <x-pwa-install-button ringkas aria-label="Pasang aplikasi Medika Cuti" />
                         <x-notifikasi-bell :jumlah="$jumlahNotifikasiBelumDibaca" />
                         <button data-theme-toggle type="button" aria-label="Ubah tema" class="rounded-full p-2.5 text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-600/10 dark:text-slate-300 dark:hover:bg-slate-800">
                             <svg data-theme-light-icon class="size-5 dark:hidden" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>

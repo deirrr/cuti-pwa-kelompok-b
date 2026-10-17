@@ -1,0 +1,38 @@
+{
+    "id": "./",
+    "name": "Medika Cuti - Klinik Utama Medika Antapani",
+    "short_name": "Medika Cuti",
+    "description": "Aplikasi pengajuan dan persetujuan cuti Klinik Utama Medika Antapani.",
+    "lang": "id-ID",
+    "start_url": "./dashboard",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#f8fafc",
+    "theme_color": "#047857",
+    "icons": [
+        {
+            "src": "icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Dashboard",
+            "short_name": "Dashboard",
+            "url": "./dashboard"
+        },
+        {
+            "name": "Cuti Saya",
+            "short_name": "Cuti",
+            "url": "./cuti"
+        }
+    ]
+}

@@ -27,6 +27,7 @@
                             ])>Persetujuan Staff</a>
                         @endif
                     </nav>
+                    <x-pwa-install-button ringkas aria-label="Pasang aplikasi Medika Cuti" />
                     <x-notifikasi-bell :jumlah="$jumlahNotifikasiBelumDibaca" />
                     <button data-theme-toggle type="button" aria-label="Ubah tema" class="flex size-10 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">
                         <svg class="size-5 dark:hidden" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>

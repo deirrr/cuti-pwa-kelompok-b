@@ -2,6 +2,43 @@ const root = document.documentElement;
 const storedTheme = localStorage.getItem('tema');
 const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
+const serviceWorkerUrl = document.querySelector('meta[name="service-worker-url"]')?.content;
+
+if ('serviceWorker' in navigator && serviceWorkerUrl) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register(serviceWorkerUrl).catch((error) => {
+            console.error('Service worker gagal didaftarkan.', error);
+        });
+    });
+}
+
+let pwaInstallPrompt = null;
+const pwaInstallButtons = document.querySelectorAll('[data-pwa-install]');
+
+const sembunyikanTombolInstalasi = () => {
+    pwaInstallPrompt = null;
+    pwaInstallButtons.forEach((button) => button.setAttribute('hidden', ''));
+};
+
+window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    pwaInstallPrompt = event;
+    pwaInstallButtons.forEach((button) => button.removeAttribute('hidden'));
+});
+
+pwaInstallButtons.forEach((button) => {
+    button.addEventListener('click', async () => {
+        if (! pwaInstallPrompt) {
+            return;
+        }
+
+        await pwaInstallPrompt.prompt();
+        sembunyikanTombolInstalasi();
+    });
+});
+
+window.addEventListener('appinstalled', sembunyikanTombolInstalasi);
+
 root.classList.toggle('dark', storedTheme === 'gelap' || (storedTheme === null && prefersDarkTheme));
 
 document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
