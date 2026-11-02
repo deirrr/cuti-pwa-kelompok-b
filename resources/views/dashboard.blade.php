@@ -24,7 +24,7 @@
         </article>
     </section>
 
-    <section class="grid gap-5 md:grid-cols-2">
+    <section class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         <a href="{{ route('cuti.index') }}" class="group rounded-2xl bg-emerald-700 p-6 text-white shadow-lg shadow-emerald-900/10 transition hover:bg-emerald-800">
             <span class="flex size-11 items-center justify-center rounded-xl bg-white/15">
                 <svg class="size-5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v4m8-4v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z"/></svg>
@@ -40,6 +40,13 @@
                 </span>
                 <h2 class="mt-5 text-xl font-bold">Persetujuan Staff</h2>
                 <p class="mt-2 text-sm leading-6 text-slate-500">Tinjau pengajuan dari Staff yang berada di bawah tanggung jawab Anda.</p>
+            </a>
+            <a href="{{ route('rekap_staff.index') }}" class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-emerald-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-800">
+                <span class="flex size-11 items-center justify-center rounded-xl bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                    <svg class="size-5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9m6 10V5m6 14v-7m4 7H2"/></svg>
+                </span>
+                <h2 class="mt-5 text-xl font-bold">Rekap Staff</h2>
+                <p class="mt-2 text-sm leading-6 text-slate-500">Lihat, saring, ekspor, dan cetak riwayat cuti Staff di bawah tanggung jawab Anda.</p>
             </a>
         @endif
     </section>

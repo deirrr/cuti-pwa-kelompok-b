@@ -15,6 +15,7 @@ use App\Http\Controllers\LanggananPushController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PengajuanCutiController;
 use App\Http\Controllers\PersetujuanAtasanController;
+use App\Http\Controllers\RekapStaffController;
 use App\Http\Controllers\SesiController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,7 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
     Route::middleware('peran:atasan')->group(function () {
         Route::get('/persetujuan-atasan', [PersetujuanAtasanController::class, 'index'])->name('persetujuan_atasan.index');
         Route::post('/persetujuan-atasan/{pengajuanCuti}', [PersetujuanAtasanController::class, 'store'])->name('persetujuan_atasan.store');
+        Route::get('/rekap-staff', RekapStaffController::class)->name('rekap_staff.index');
     });
 
     Route::middleware('peran:admin_hr')->prefix('admin-hr')->name('admin_hr.')->group(function () {

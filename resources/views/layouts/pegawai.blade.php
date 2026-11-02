@@ -2,7 +2,7 @@
 
 @section('konten')
     <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-        <header class="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <header class="border-b border-slate-200 bg-white print:hidden dark:border-slate-800 dark:bg-slate-900">
             <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
                 <a href="{{ route('dashboard') }}" class="flex min-w-0 items-center gap-3">
                     <img src="{{ asset('logo-cuti.png') }}" alt="Logo Medika Cuti" class="size-11 shrink-0 rounded-xl object-cover shadow-sm">
@@ -25,6 +25,11 @@
                                 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' => request()->routeIs('persetujuan_atasan.*'),
                                 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800' => ! request()->routeIs('persetujuan_atasan.*'),
                             ])>Persetujuan Staff</a>
+                            <a href="{{ route('rekap_staff.index') }}" @class([
+                                'rounded-lg px-3 py-2 text-sm font-semibold transition',
+                                'bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' => request()->routeIs('rekap_staff.*'),
+                                'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800' => ! request()->routeIs('rekap_staff.*'),
+                            ])>Rekap Staff</a>
                         @endif
                     </nav>
                     <x-pwa-install-button ringkas aria-label="Pasang aplikasi Medika Cuti" />
@@ -44,6 +49,7 @@
                 <a href="{{ route('cuti.index') }}" class="shrink-0 rounded-lg px-3 py-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300">Cuti Saya</a>
                 @if (auth()->user()->peran === \App\Enums\PeranPengguna::Atasan)
                     <a href="{{ route('persetujuan_atasan.index') }}" class="shrink-0 rounded-lg px-3 py-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300">Persetujuan Staff</a>
+                    <a href="{{ route('rekap_staff.index') }}" class="shrink-0 rounded-lg px-3 py-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300">Rekap Staff</a>
                 @endif
             </nav>
         </header>

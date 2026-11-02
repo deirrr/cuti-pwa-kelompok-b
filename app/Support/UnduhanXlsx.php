@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use DateTimeInterface;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use ZipStream\CompressionMethod;
 use ZipStream\ZipStream;
@@ -22,8 +23,30 @@ class UnduhanXlsx
         iterable $baris,
         array $tipeKolom,
     ): StreamedResponse {
-        $data = collect($baris)->values()->all();
-        $berkas = $this->buatBerkas($judul, $periode, $judulKolom, $data, $tipeKolom);
+        return $this->downloadBanyakSheet($namaFile, [[
+            'nama' => 'Rekap',
+            'judul' => $judul,
+            'periode' => $periode,
+            'judul_kolom' => $judulKolom,
+            'baris' => $baris,
+            'tipe_kolom' => $tipeKolom,
+        ]]);
+    }
+
+    /**
+     * @param  list<array{
+     *     nama: string,
+     *     judul: string,
+     *     periode: string,
+     *     judul_kolom: list<string>,
+     *     baris: iterable<array<int, bool|DateTimeInterface|float|int|string|null>>,
+     *     tipe_kolom: list<'date'|'datetime'|'decimal'|'integer'|'text'>
+     * }>  $sheet
+     */
+    public function downloadBanyakSheet(string $namaFile, array $sheet): StreamedResponse
+    {
+        $sheetDinormalkan = $this->normalkanSheet($sheet);
+        $berkas = $this->buatBerkas($sheetDinormalkan);
 
         return response()->streamDownload(function () use ($berkas): void {
             $keluaran = fopen('php://temp', 'w+b');
@@ -62,6 +85,61 @@ class UnduhanXlsx
     }
 
     /**
+     * @param  list<array{
+     *     nama: string,
+     *     judul: string,
+     *     periode: string,
+     *     judul_kolom: list<string>,
+     *     baris: iterable<array<int, bool|DateTimeInterface|float|int|string|null>>,
+     *     tipe_kolom: list<'date'|'datetime'|'decimal'|'integer'|'text'>
+     * }>  $sheet
+     * @return list<array{
+     *     nama: string,
+     *     judul: string,
+     *     periode: string,
+     *     judul_kolom: list<string>,
+     *     baris: list<array<int, bool|DateTimeInterface|float|int|string|null>>,
+     *     tipe_kolom: list<'date'|'datetime'|'decimal'|'integer'|'text'>
+     * }>
+     */
+    private function normalkanSheet(array $sheet): array
+    {
+        if ($sheet === []) {
+            throw new InvalidArgumentException('Workbook harus memiliki minimal satu sheet.');
+        }
+
+        $namaTerpakai = [];
+
+        return collect($sheet)->map(function (array $item) use (&$namaTerpakai): array {
+            $nama = trim($item['nama']);
+            $kunciNama = mb_strtolower($nama);
+
+            if ($nama === '' || mb_strlen($nama) > 31 || preg_match('/[\\\\\/?*\[\]:]/u', $nama) === 1) {
+                throw new InvalidArgumentException("Nama sheet '{$nama}' tidak valid.");
+            }
+
+            if (in_array($kunciNama, $namaTerpakai, true)) {
+                throw new InvalidArgumentException("Nama sheet '{$nama}' tidak boleh duplikat.");
+            }
+
+            if ($item['judul_kolom'] === [] || count($item['judul_kolom']) !== count($item['tipe_kolom'])) {
+                throw new InvalidArgumentException("Kolom dan tipe data sheet '{$nama}' tidak sesuai.");
+            }
+
+            $namaTerpakai[] = $kunciNama;
+
+            return [
+                'nama' => $nama,
+                'judul' => $item['judul'],
+                'periode' => $item['periode'],
+                'judul_kolom' => array_values($item['judul_kolom']),
+                'baris' => collect($item['baris'])->map(fn (array $baris): array => array_values($baris))->values()->all(),
+                'tipe_kolom' => array_values($item['tipe_kolom']),
+            ];
+        })->values()->all();
+    }
+
+    /**
      * ZipStream 3.2.2 menulis field version-made-by sebagai versi 0.3 pada
      * central directory. Excel menolak nilai tersebut meskipun isi OOXML valid.
      */
@@ -75,35 +153,55 @@ class UnduhanXlsx
     }
 
     /**
-     * @param  list<string>  $judulKolom
-     * @param  list<array<int, bool|DateTimeInterface|float|int|string|null>>  $baris
-     * @param  list<'date'|'datetime'|'decimal'|'integer'|'text'>  $tipeKolom
+     * @param  list<array{
+     *     nama: string,
+     *     judul: string,
+     *     periode: string,
+     *     judul_kolom: list<string>,
+     *     baris: list<array<int, bool|DateTimeInterface|float|int|string|null>>,
+     *     tipe_kolom: list<'date'|'datetime'|'decimal'|'integer'|'text'>
+     * }>  $sheet
      * @return array<string, string>
      */
-    private function buatBerkas(string $judul, string $periode, array $judulKolom, array $baris, array $tipeKolom): array
+    private function buatBerkas(array $sheet): array
     {
         $dibuatPada = now()->translatedFormat('d F Y H:i').' WIB';
-        $kolomTerakhir = $this->hurufKolom(count($judulKolom));
-        $barisTerakhir = max(4, count($baris) + 4);
-
-        return [
-            '[Content_Types].xml' => $this->contentTypesXml(),
+        $berkas = [
+            '[Content_Types].xml' => $this->contentTypesXml(count($sheet)),
             '_rels/.rels' => $this->rootRelationshipsXml(),
             'docProps/app.xml' => $this->appPropertiesXml(),
-            'docProps/core.xml' => $this->corePropertiesXml($judul),
-            'xl/workbook.xml' => $this->workbookXml($kolomTerakhir, $barisTerakhir),
-            'xl/_rels/workbook.xml.rels' => $this->workbookRelationshipsXml(),
+            'docProps/core.xml' => $this->corePropertiesXml($sheet[0]['judul']),
+            'xl/workbook.xml' => $this->workbookXml($sheet),
+            'xl/_rels/workbook.xml.rels' => $this->workbookRelationshipsXml(count($sheet)),
             'xl/styles.xml' => $this->stylesXml(),
-            'xl/worksheets/sheet1.xml' => $this->worksheetXml($judul, $periode, $dibuatPada, $judulKolom, $baris, $tipeKolom),
         ];
+
+        foreach ($sheet as $index => $item) {
+            $berkas['xl/worksheets/sheet'.($index + 1).'.xml'] = $this->worksheetXml(
+                $item['judul'],
+                $item['periode'],
+                $dibuatPada,
+                $item['judul_kolom'],
+                $item['baris'],
+                $item['tipe_kolom'],
+            );
+        }
+
+        return $berkas;
     }
 
-    private function contentTypesXml(): string
+    private function contentTypesXml(int $jumlahSheet): string
     {
-        return <<<'XML'
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>
-XML;
+        $sheet = '';
+
+        for ($index = 1; $index <= $jumlahSheet; $index++) {
+            $sheet .= '<Override PartName="/xl/worksheets/sheet'.$index.'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
+        }
+
+        return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            .'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>'
+            .$sheet
+            .'<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>';
     }
 
     private function rootRelationshipsXml(): string
@@ -132,24 +230,53 @@ XML;
             .'<dcterms:created xsi:type="dcterms:W3CDTF">'.$waktu.'</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">'.$waktu.'</dcterms:modified></cp:coreProperties>';
     }
 
-    private function workbookXml(string $kolomTerakhir, int $barisTerakhir): string
+    /**
+     * @param  list<array{
+     *     nama: string,
+     *     judul: string,
+     *     periode: string,
+     *     judul_kolom: list<string>,
+     *     baris: list<array<int, bool|DateTimeInterface|float|int|string|null>>,
+     *     tipe_kolom: list<'date'|'datetime'|'decimal'|'integer'|'text'>
+     * }>  $sheet
+     */
+    private function workbookXml(array $sheet): string
     {
-        $rentangFilter = "'Rekap'!\$A\$4:\$".$kolomTerakhir.'$'.$barisTerakhir;
+        $daftarSheet = '';
+        $namaTerdefinisi = '';
+
+        foreach ($sheet as $index => $item) {
+            $sheetId = $index + 1;
+            $namaSheet = $this->escape($item['nama']);
+            $namaSheetFormula = str_replace("'", "''", $item['nama']);
+            $kolomTerakhir = $this->hurufKolom(count($item['judul_kolom']));
+            $barisTerakhir = max(4, count($item['baris']) + 4);
+            $rentangFilter = "'{$namaSheetFormula}'!\$A\$4:\$".$kolomTerakhir.'$'.$barisTerakhir;
+
+            $daftarSheet .= '<sheet name="'.$namaSheet.'" sheetId="'.$sheetId.'" state="visible" r:id="rId'.$sheetId.'"/>';
+            $namaTerdefinisi .= '<definedName name="_xlnm._FilterDatabase" localSheetId="'.$index.'" hidden="1">'.$rentangFilter.'</definedName>';
+        }
 
         return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
             .'<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
             .'<bookViews><workbookView visibility="visible" minimized="0" showHorizontalScroll="1" showVerticalScroll="1" showSheetTabs="1" firstSheet="0" activeTab="0" autoFilterDateGrouping="1"/></bookViews>'
-            .'<sheets><sheet name="Rekap" sheetId="1" state="visible" r:id="rId1"/></sheets>'
-            .'<definedNames><definedName name="_xlnm._FilterDatabase" localSheetId="0" hidden="1">'.$rentangFilter.'</definedName></definedNames>'
+            .'<sheets>'.$daftarSheet.'</sheets>'
+            .'<definedNames>'.$namaTerdefinisi.'</definedNames>'
             .'<calcPr calcId="0" fullCalcOnLoad="1"/></workbook>';
     }
 
-    private function workbookRelationshipsXml(): string
+    private function workbookRelationshipsXml(int $jumlahSheet): string
     {
-        return <<<'XML'
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="/xl/worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>
-XML;
+        $relasi = '';
+
+        for ($index = 1; $index <= $jumlahSheet; $index++) {
+            $relasi .= '<Relationship Id="rId'.$index.'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="/xl/worksheets/sheet'.$index.'.xml"/>';
+        }
+
+        $relasi .= '<Relationship Id="rId'.($jumlahSheet + 1).'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>';
+
+        return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
+            .'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'.$relasi.'</Relationships>';
     }
 
     private function stylesXml(): string
