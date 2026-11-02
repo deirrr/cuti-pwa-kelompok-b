@@ -5,7 +5,7 @@
 @section('konten-hr')
     <header class="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
         <div><div class="flex items-center gap-2 text-sm text-slate-500"><a href="{{ route('admin_hr.rekap.index') }}" class="font-medium hover:text-emerald-700">Rekap</a><span>/</span><span class="font-medium text-slate-800 dark:text-slate-200">Per Bagian</span></div><h1 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Penggunaan cuti per bagian</h1><p class="mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-400">Bandingkan hari cuti yang disetujui dan karyawan yang mengambil cuti di setiap bagian.</p></div>
-        <div class="flex flex-wrap gap-2 print:hidden">@include('admin-hr.rekap.partials.aksi-laporan', ['namaRute' => 'admin_hr.rekap.penggunaan_bagian'])<a href="{{ route('admin_hr.rekap.index') }}" class="inline-flex w-fit rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">← Kembali</a></div>
+        <div class="flex flex-wrap gap-2 print:hidden"><a href="{{ route('admin_hr.rekap.index') }}" class="inline-flex w-fit rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">← Kembali</a></div>
     </header>
 
     @if ($errors->any())<div role="alert" class="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"><p class="font-semibold">Filter laporan belum valid.</p><ul class="mt-2 list-disc pl-5">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
@@ -13,10 +13,11 @@
     <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm print:hidden dark:border-slate-800 dark:bg-slate-900 sm:p-6">
         <h2 class="font-bold text-slate-900 dark:text-white">Filter laporan</h2>
         <form method="GET" action="{{ route('admin_hr.rekap.penggunaan_bagian') }}" class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <input type="hidden" name="filter" value="1">
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300">Tanggal mulai<input type="date" name="tanggal_mulai" value="{{ old('tanggal_mulai', $tanggalMulai) }}" class="rounded-xl border border-slate-300 bg-white px-3 py-2.5 font-normal dark:border-slate-700 dark:bg-slate-950 dark:text-white"></label>
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300">Tanggal selesai<input type="date" name="tanggal_selesai" value="{{ old('tanggal_selesai', $tanggalSelesai) }}" class="rounded-xl border border-slate-300 bg-white px-3 py-2.5 font-normal dark:border-slate-700 dark:bg-slate-950 dark:text-white"></label>
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300">Bagian organisasi<select name="bagian_organisasi_id" class="rounded-xl border border-slate-300 bg-white px-3 py-2.5 font-normal dark:border-slate-700 dark:bg-slate-950 dark:text-white"><option value="">Semua bagian</option>@foreach ($daftarBagian as $bagian)<option value="{{ $bagian->getKey() }}" @selected((string) $bagianOrganisasiId === (string) $bagian->getKey())>{{ $bagian->nama }}</option>@endforeach</select></label>
-            <div class="flex gap-2 md:col-span-2 xl:col-span-3"><button class="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700">Terapkan Filter</button><a href="{{ route('admin_hr.rekap.penggunaan_bagian') }}" class="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-300">Reset</a></div>
+            <div class="md:col-span-2 xl:col-span-3">@include('admin-hr.rekap.partials.aksi-laporan', ['namaRute' => 'admin_hr.rekap.penggunaan_bagian'])</div>
         </form>
     </section>
 

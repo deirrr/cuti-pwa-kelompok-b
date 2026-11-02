@@ -123,6 +123,66 @@ class AdminHrRekapSisaCutiTest extends TestCase
             ->assertSee('Saldo 2026 belum diterbitkan');
     }
 
+    public function test_halaman_awal_hanya_menampilkan_tombol_tampilkan(): void
+    {
+        $bagian = BagianOrganisasi::factory()->create();
+        $adminHr = $this->buatPegawai(PeranPengguna::AdminHr, $bagian);
+
+        $response = $this->actingAs($adminHr->pengguna)
+            ->get(route('admin_hr.rekap.sisa_cuti'));
+
+        $response
+            ->assertOk()
+            ->assertSee('<input type="hidden" name="filter" value="1">', false)
+            ->assertSee('Tampilkan')
+            ->assertDontSee('Export Excel')
+            ->assertDontSee('Print')
+            ->assertDontSee('Terapkan Filter');
+    }
+
+    public function test_export_dan_print_muncul_setelah_filter_diterapkan(): void
+    {
+        $bagian = BagianOrganisasi::factory()->create();
+        $adminHr = $this->buatPegawai(PeranPengguna::AdminHr, $bagian);
+
+        $response = $this->actingAs($adminHr->pengguna)
+            ->get(route('admin_hr.rekap.sisa_cuti', [
+                'filter' => '1',
+                'tanggal_mulai' => '2026-01-01',
+                'tanggal_selesai' => '2026-10-15',
+                'status_pegawai' => 'semua',
+            ]));
+
+        $response
+            ->assertOk()
+            ->assertSee('Tampilkan')
+            ->assertSee('name="format" value="excel"', false)
+            ->assertSee('Export Excel')
+            ->assertSee('name="aksi" value="print"', false)
+            ->assertSee('Print')
+            ->assertDontSee('Terapkan Filter');
+    }
+
+    public function test_aksi_print_menampilkan_hasil_filter_dan_membuka_dialog_cetak(): void
+    {
+        $bagian = BagianOrganisasi::factory()->create();
+        $adminHr = $this->buatPegawai(PeranPengguna::AdminHr, $bagian);
+
+        $response = $this->actingAs($adminHr->pengguna)
+            ->get(route('admin_hr.rekap.sisa_cuti', [
+                'filter' => '1',
+                'aksi' => 'print',
+                'tanggal_mulai' => '2026-01-01',
+                'tanggal_selesai' => '2026-10-15',
+                'status_pegawai' => 'semua',
+            ]));
+
+        $response
+            ->assertOk()
+            ->assertSee('window.print()', false)
+            ->assertSee('Saldo cuti karyawan tahun 2026');
+    }
+
     public function test_tanggal_selesai_tidak_boleh_sebelum_tanggal_mulai(): void
     {
         $bagian = BagianOrganisasi::factory()->create();

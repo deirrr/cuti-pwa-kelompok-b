@@ -11,7 +11,7 @@
             <h1 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Rekap cuti berdasarkan status</h1>
             <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-400">Tinjau detail pengajuan dengan memilih satu atau beberapa status sekaligus.</p>
         </div>
-        <div class="flex flex-wrap gap-2 print:hidden">@include('admin-hr.rekap.partials.aksi-laporan', ['namaRute' => 'admin_hr.rekap.status_cuti'])<a href="{{ route('admin_hr.rekap.index') }}" class="inline-flex w-fit items-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800">← Kembali</a></div>
+        <div class="flex flex-wrap gap-2 print:hidden"><a href="{{ route('admin_hr.rekap.index') }}" class="inline-flex w-fit items-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800">← Kembali</a></div>
     </header>
 
     @if ($errors->any())
@@ -41,7 +41,7 @@
                     @endforeach
                 </div>
             </fieldset>
-            <div class="flex flex-wrap gap-2"><button type="submit" class="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700">Terapkan Filter</button><a href="{{ route('admin_hr.rekap.status_cuti') }}" class="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">Reset</a></div>
+            @include('admin-hr.rekap.partials.aksi-laporan', ['namaRute' => 'admin_hr.rekap.status_cuti'])
         </form>
     </section>
 

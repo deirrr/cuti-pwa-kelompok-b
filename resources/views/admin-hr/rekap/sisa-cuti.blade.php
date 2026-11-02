@@ -14,7 +14,6 @@
             <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-400">Bandingkan penggunaan cuti pada periode terpilih dengan saldo tahunan resmi setiap karyawan.</p>
         </div>
         <div class="flex flex-wrap gap-2 print:hidden">
-            @include('admin-hr.rekap.partials.aksi-laporan', ['namaRute' => 'admin_hr.rekap.sisa_cuti'])
             <a href="{{ route('admin_hr.rekap.index') }}" class="inline-flex w-fit items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-600/15 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"><svg class="size-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>Kembali</a>
         </div>
     </header>
@@ -37,6 +36,7 @@
         </div>
 
         <form method="GET" action="{{ route('admin_hr.rekap.sisa_cuti') }}" class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
+            <input type="hidden" name="filter" value="1">
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
                 Tanggal mulai
                 <input type="date" name="tanggal_mulai" value="{{ old('tanggal_mulai', $tanggalMulai) }}" class="rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm font-normal text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-600/10 dark:border-slate-700 dark:bg-slate-950 dark:text-white">
@@ -68,8 +68,7 @@
             </label>
 
             <div class="flex flex-wrap items-end gap-2 md:col-span-2 xl:col-span-6">
-                <button type="submit" class="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-700 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-600/20">Terapkan Filter</button>
-                <a href="{{ route('admin_hr.rekap.sisa_cuti') }}" class="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-600/15 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">Reset</a>
+                @include('admin-hr.rekap.partials.aksi-laporan', ['namaRute' => 'admin_hr.rekap.sisa_cuti'])
             </div>
         </form>
     </section>
