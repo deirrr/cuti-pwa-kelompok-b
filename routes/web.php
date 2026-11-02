@@ -5,6 +5,8 @@ use App\Http\Controllers\AdminHr\DashboardController as AdminHrDashboardControll
 use App\Http\Controllers\AdminHr\HariLiburController;
 use App\Http\Controllers\AdminHr\PegawaiController;
 use App\Http\Controllers\AdminHr\PersetujuanCutiController as AdminHrPersetujuanCutiController;
+use App\Http\Controllers\AdminHr\RekapController;
+use App\Http\Controllers\AdminHr\RekapSisaCutiController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LanggananPushController;
 use App\Http\Controllers\NotifikasiController;
@@ -66,6 +68,8 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
         Route::put('/karyawan/{pegawai}', [PegawaiController::class, 'update'])->name('pegawai.update');
         Route::get('/persetujuan-cuti', [AdminHrPersetujuanCutiController::class, 'index'])->name('persetujuan.index');
         Route::post('/persetujuan-cuti/{pengajuanCuti}', [AdminHrPersetujuanCutiController::class, 'store'])->name('persetujuan.store');
+        Route::get('/rekap', RekapController::class)->name('rekap.index');
+        Route::get('/rekap/sisa-cuti', RekapSisaCutiController::class)->name('rekap.sisa_cuti');
         Route::resource('/hari-libur', HariLiburController::class)
             ->except('show')
             ->parameters(['hari-libur' => 'hariLibur'])

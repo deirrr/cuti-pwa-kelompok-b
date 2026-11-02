@@ -69,12 +69,14 @@
                         <span class="size-2 rounded-full bg-red-500"></span>
                         Hari Libur Nasional
                     </a>
-                    @foreach (['Rekap'] as $menu)
-                        <span class="flex cursor-not-allowed items-center gap-3 rounded-xl px-3 py-3 text-sm text-slate-400 dark:text-slate-600">
-                            <span class="size-2 rounded-full bg-slate-300 dark:bg-slate-700"></span>
-                            {{ $menu }}
-                        </span>
-                    @endforeach
+                    <a href="{{ route('admin_hr.rekap.index') }}" @class([
+                        'flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition',
+                        'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300' => request()->routeIs('admin_hr.rekap.*'),
+                        'text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white' => ! request()->routeIs('admin_hr.rekap.*'),
+                    ])>
+                        <span class="size-2 rounded-full bg-blue-500"></span>
+                        Rekap
+                    </a>
                 </div>
             </nav>
 
