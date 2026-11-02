@@ -9,11 +9,13 @@ use App\Http\Requests\AdminHr\FilterRekapSisaCutiRequest;
 use App\Models\BagianOrganisasi;
 use App\Models\Pegawai;
 use App\Models\SaldoCuti;
+use App\Support\UnduhanXlsx;
 use Illuminate\Contracts\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class RekapSisaCutiController extends Controller
 {
-    public function __invoke(FilterRekapSisaCutiRequest $request): View
+    public function __invoke(FilterRekapSisaCutiRequest $request, UnduhanXlsx $unduhanXlsx): View|StreamedResponse
     {
         $data = $request->validated();
         $tanggalMulai = $request->tanggalMulai();
@@ -89,6 +91,28 @@ class RekapSisaCutiController extends Controller
                     : null,
             ];
         });
+
+        if ($request->string('format')->toString() === 'excel') {
+            return $unduhanXlsx->download(
+                "rekap-sisa-cuti-{$tanggalMulai->toDateString()}-sampai-{$tanggalSelesai->toDateString()}.xlsx",
+                'Rekap Sisa Cuti',
+                $tanggalMulai->translatedFormat('d F Y').' sampai '.$tanggalSelesai->translatedFormat('d F Y'),
+                ['NIK', 'Nama', 'Bagian', 'Status Pegawai', 'Jatah Awal', 'Terpakai Periode', 'Terpakai Tahun', 'Menunggu Periode', 'Sisa Saat Ini', 'Saldo Efektif'],
+                $rekap->map(fn (array $item): array => [
+                    $item['nomor_induk'],
+                    $item['nama'],
+                    $item['bagian'],
+                    $item['aktif'] ? 'Aktif' : 'Nonaktif',
+                    $item['jatah_awal'],
+                    $item['cuti_disetujui_periode'],
+                    $item['cuti_disetujui_tahun'],
+                    $item['cuti_menunggu_periode'],
+                    $item['saldo_tersedia'],
+                    $item['saldo_efektif'],
+                ]),
+                ['text', 'text', 'text', 'text', 'integer', 'integer', 'integer', 'integer', 'integer', 'integer'],
+            );
+        }
 
         return view('admin-hr.rekap.sisa-cuti', [
             'rekap' => $rekap,

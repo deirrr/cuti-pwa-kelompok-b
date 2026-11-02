@@ -140,6 +140,41 @@ class AdminHrRekapSisaCutiTest extends TestCase
             ]);
     }
 
+    public function test_admin_hr_dapat_mengunduh_rekap_sisa_cuti_sebagai_xlsx(): void
+    {
+        $bagian = BagianOrganisasi::factory()->create(['nama' => 'Keperawatan']);
+        $adminHr = $this->buatPegawai(PeranPengguna::AdminHr, $bagian);
+        $staff = $this->buatPegawai(PeranPengguna::Karyawan, $bagian, ['nomor_induk' => 'PGW-001', 'nama' => 'Siti Aminah']);
+        SaldoCuti::factory()->for($staff)->create(['tahun' => 2026, 'jatah_awal' => 12, 'saldo_tersedia' => 8]);
+
+        $response = $this->actingAs($adminHr->pengguna)->get(route('admin_hr.rekap.sisa_cuti', [
+            'tanggal_mulai' => '2026-01-01',
+            'tanggal_selesai' => '2026-10-15',
+            'format' => 'excel',
+        ]));
+
+        $response
+            ->assertDownload('rekap-sisa-cuti-2026-01-01-sampai-2026-10-15.xlsx')
+            ->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $konten = $response->streamedContent();
+        $this->assertStringStartsWith('PK', $konten);
+        $this->assertStringNotContainsString("PK\x06\x06", $konten, 'Arsip XLSX tidak boleh memakai ZIP64.');
+        $this->assertStringNotContainsString("PK\x01\x02\x03\x06", $konten, 'Versi pembuat ZIP harus didukung Excel.');
+        $this->assertStringContainsString("PK\x01\x02\x0A\x03", $konten);
+        $this->assertStringContainsString('Rekap Sisa Cuti', $konten);
+        $this->assertStringContainsString('Siti Aminah', $konten);
+        $this->assertStringContainsString('Target="/xl/worksheets/sheet1.xml"', $konten);
+        $this->assertStringContainsString(
+            '<definedName name="_xlnm._FilterDatabase" localSheetId="0" hidden="1">\'Rekap\'!$A$4:$J$5</definedName>',
+            $konten,
+        );
+        $this->assertLessThan(
+            strpos($konten, '<mergeCells'),
+            strpos($konten, '<autoFilter'),
+            'Elemen autoFilter harus ditulis sebelum mergeCells agar sesuai dengan urutan SpreadsheetML.',
+        );
+    }
+
     public function test_periode_laporan_harus_berada_dalam_tahun_yang_sama(): void
     {
         $bagian = BagianOrganisasi::factory()->create();

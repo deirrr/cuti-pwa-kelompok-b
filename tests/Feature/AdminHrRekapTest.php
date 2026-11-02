@@ -29,6 +29,9 @@ class AdminHrRekapTest extends TestCase
             ->assertViewIs('admin-hr.rekap.index')
             ->assertSee('href="'.route('admin_hr.rekap.index').'"', false)
             ->assertSee('href="'.route('admin_hr.rekap.sisa_cuti').'"', false)
+            ->assertSee('href="'.route('admin_hr.rekap.status_cuti').'"', false)
+            ->assertSee('href="'.route('admin_hr.rekap.penggunaan_bagian').'"', false)
+            ->assertSee('href="'.route('admin_hr.rekap.tren_bulanan').'"', false)
             ->assertSeeInOrder([
                 'Rekap Sisa Cuti',
                 'Rekap Cuti Berdasarkan Status',

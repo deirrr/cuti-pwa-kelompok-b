@@ -1,0 +1,30 @@
+@extends('layouts.admin-hr')
+
+@section('judul', 'Penggunaan Cuti per Bagian')
+
+@section('konten-hr')
+    <header class="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+        <div><div class="flex items-center gap-2 text-sm text-slate-500"><a href="{{ route('admin_hr.rekap.index') }}" class="font-medium hover:text-emerald-700">Rekap</a><span>/</span><span class="font-medium text-slate-800 dark:text-slate-200">Per Bagian</span></div><h1 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Penggunaan cuti per bagian</h1><p class="mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-400">Bandingkan hari cuti yang disetujui dan karyawan yang mengambil cuti di setiap bagian.</p></div>
+        <div class="flex flex-wrap gap-2 print:hidden">@include('admin-hr.rekap.partials.aksi-laporan', ['namaRute' => 'admin_hr.rekap.penggunaan_bagian'])<a href="{{ route('admin_hr.rekap.index') }}" class="inline-flex w-fit rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">← Kembali</a></div>
+    </header>
+
+    @if ($errors->any())<div role="alert" class="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"><p class="font-semibold">Filter laporan belum valid.</p><ul class="mt-2 list-disc pl-5">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+
+    <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm print:hidden dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+        <h2 class="font-bold text-slate-900 dark:text-white">Filter laporan</h2>
+        <form method="GET" action="{{ route('admin_hr.rekap.penggunaan_bagian') }}" class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300">Tanggal mulai<input type="date" name="tanggal_mulai" value="{{ old('tanggal_mulai', $tanggalMulai) }}" class="rounded-xl border border-slate-300 bg-white px-3 py-2.5 font-normal dark:border-slate-700 dark:bg-slate-950 dark:text-white"></label>
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300">Tanggal selesai<input type="date" name="tanggal_selesai" value="{{ old('tanggal_selesai', $tanggalSelesai) }}" class="rounded-xl border border-slate-300 bg-white px-3 py-2.5 font-normal dark:border-slate-700 dark:bg-slate-950 dark:text-white"></label>
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300">Bagian organisasi<select name="bagian_organisasi_id" class="rounded-xl border border-slate-300 bg-white px-3 py-2.5 font-normal dark:border-slate-700 dark:bg-slate-950 dark:text-white"><option value="">Semua bagian</option>@foreach ($daftarBagian as $bagian)<option value="{{ $bagian->getKey() }}" @selected((string) $bagianOrganisasiId === (string) $bagian->getKey())>{{ $bagian->nama }}</option>@endforeach</select></label>
+            <div class="flex gap-2 md:col-span-2 xl:col-span-3"><button class="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700">Terapkan Filter</button><a href="{{ route('admin_hr.rekap.penggunaan_bagian') }}" class="rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-300">Reset</a></div>
+        </form>
+    </section>
+
+    @php $kartu = [['Bagian ditampilkan', $ringkasan['jumlah_bagian']], ['Karyawan mengambil cuti', $ringkasan['jumlah_pegawai_cuti']], ['Hari cuti disetujui', $ringkasan['jumlah_hari_cuti']], ['Rata-rata hari/karyawan', number_format($ringkasan['rata_rata_hari'], 1, ',', '.')]]; @endphp
+    <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">@foreach ($kartu as [$label, $nilai])<article class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900"><p class="text-sm font-medium text-slate-500">{{ $label }}</p><p class="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{{ $nilai }}</p></article>@endforeach</section>
+
+    <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div class="border-b border-slate-200 px-5 py-4 dark:border-slate-800"><h2 class="font-bold text-slate-900 dark:text-white">Perbandingan antarbagian</h2><p class="mt-1 text-xs text-slate-500">Hanya menghitung tanggal cuti berstatus Disetujui pada periode {{ \Carbon\CarbonImmutable::parse($tanggalMulai)->translatedFormat('d M Y') }}–{{ \Carbon\CarbonImmutable::parse($tanggalSelesai)->translatedFormat('d M Y') }}</p></div>
+        <div class="overflow-x-auto"><table class="w-full min-w-[760px] text-left text-sm"><thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950/60"><tr><th class="px-5 py-3">Bagian</th><th class="px-5 py-3 text-center">Pegawai aktif</th><th class="px-5 py-3 text-center">Mengambil cuti</th><th class="px-5 py-3 text-center">Hari cuti</th><th class="px-5 py-3 text-center">Rata-rata</th></tr></thead><tbody class="divide-y divide-slate-100 dark:divide-slate-800">@forelse ($rekap as $item)<tr class="text-slate-700 dark:text-slate-300"><td class="px-5 py-4"><span class="font-semibold text-slate-900 dark:text-white">{{ $item['nama'] }}</span>@unless ($item['aktif'])<span class="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-xs">Nonaktif</span>@endunless</td><td class="px-5 py-4 text-center">{{ $item['jumlah_pegawai_aktif'] }}</td><td class="px-5 py-4 text-center">{{ $item['jumlah_pegawai_cuti'] }}</td><td class="px-5 py-4 text-center font-bold text-emerald-700 dark:text-emerald-300">{{ $item['jumlah_hari_cuti'] }}</td><td class="px-5 py-4 text-center">{{ number_format($item['rata_rata_hari'], 1, ',', '.') }}</td></tr>@empty<tr><td colspan="5" class="px-5 py-12 text-center text-slate-500">Tidak ada bagian yang sesuai dengan filter.</td></tr>@endforelse</tbody></table></div>
+    </section>
+@endsection

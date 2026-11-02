@@ -27,21 +27,21 @@
                 'deskripsi' => 'Tinjau pengajuan berdasarkan satu atau beberapa status dalam periode yang dipilih.',
                 'warna' => 'blue',
                 'ikon' => 'M4 6h16M4 12h10M4 18h7M18 15v6M15 18h6',
-                'rute' => null,
+                'rute' => 'admin_hr.rekap.status_cuti',
             ],
             [
                 'judul' => 'Penggunaan Cuti per Bagian',
                 'deskripsi' => 'Bandingkan jumlah hari cuti dan jumlah karyawan yang mengambil cuti pada setiap bagian.',
                 'warna' => 'violet',
                 'ikon' => 'M4 21V10l8-5 8 5v11M8 21v-6h8v6M9 10h.01M15 10h.01',
-                'rute' => null,
+                'rute' => 'admin_hr.rekap.penggunaan_bagian',
             ],
             [
                 'judul' => 'Tren Cuti Bulanan',
                 'deskripsi' => 'Lihat pola jumlah cuti setiap bulan untuk membantu evaluasi dan perencanaan operasional.',
                 'warna' => 'amber',
                 'ikon' => 'M3 3v18h18M7 16l4-5 3 3 5-7',
-                'rute' => null,
+                'rute' => 'admin_hr.rekap.tren_bulanan',
             ],
         ];
     @endphp

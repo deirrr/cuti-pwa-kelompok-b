@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('konten')
-    <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
-        <div data-sidebar-overlay data-sidebar-close class="fixed inset-0 z-40 hidden bg-slate-950/50 backdrop-blur-sm xl:hidden"></div>
+    <div class="min-h-screen bg-slate-50 print:min-h-0 print:bg-white dark:bg-slate-950">
+        <div data-sidebar-overlay data-sidebar-close class="fixed inset-0 z-40 hidden bg-slate-950/50 backdrop-blur-sm print:hidden xl:hidden"></div>
 
-        <aside data-sidebar class="fixed inset-y-0 left-0 z-50 flex w-[270px] -translate-x-full flex-col border-r border-slate-200 bg-white transition-transform duration-300 dark:border-slate-800 dark:bg-slate-900 xl:translate-x-0">
+        <aside data-sidebar class="fixed inset-y-0 left-0 z-50 flex w-[270px] -translate-x-full flex-col border-r border-slate-200 bg-white transition-transform duration-300 print:hidden dark:border-slate-800 dark:bg-slate-900 xl:translate-x-0">
             <div class="flex h-20 items-center justify-between border-b border-slate-100 px-6 dark:border-slate-800">
                 <a href="{{ route('admin_hr.dashboard') }}" class="flex min-w-0 items-center gap-3">
                     <img src="{{ asset('logo-cuti.png') }}" alt="Logo Medika Cuti" class="size-12 shrink-0 rounded-xl object-cover shadow-lg shadow-emerald-600/15">
@@ -101,8 +101,8 @@
             </div>
         </aside>
 
-        <div class="min-w-0 xl:pl-[270px]">
-            <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-900/90">
+        <div class="min-w-0 print:pl-0 xl:pl-[270px]">
+            <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur print:hidden dark:border-slate-800 dark:bg-slate-900/90">
                 <div class="flex h-20 items-center justify-between gap-4 px-5 sm:px-8 lg:px-10">
                     <div class="flex min-w-0 items-center gap-3">
                         <button data-sidebar-open type="button" aria-label="Buka navigasi" class="rounded-full p-2.5 text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-600/10 dark:text-slate-300 dark:hover:bg-slate-800 xl:hidden">
@@ -129,7 +129,7 @@
                 </div>
             </header>
 
-            <main class="mx-auto flex max-w-[1440px] flex-col gap-8 px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
+            <main class="mx-auto flex max-w-[1440px] flex-col gap-8 px-5 py-8 print:max-w-none print:gap-5 print:p-0 sm:px-8 lg:px-10 lg:py-10">
                 @yield('konten-hr')
             </main>
         </div>

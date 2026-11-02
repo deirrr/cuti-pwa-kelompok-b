@@ -13,10 +13,10 @@
             <h1 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Rekap sisa cuti</h1>
             <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-400">Bandingkan penggunaan cuti pada periode terpilih dengan saldo tahunan resmi setiap karyawan.</p>
         </div>
-        <a href="{{ route('admin_hr.rekap.index') }}" class="inline-flex w-fit items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-600/15 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800">
-            <svg class="size-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
-            Kembali ke Rekap
-        </a>
+        <div class="flex flex-wrap gap-2 print:hidden">
+            @include('admin-hr.rekap.partials.aksi-laporan', ['namaRute' => 'admin_hr.rekap.sisa_cuti'])
+            <a href="{{ route('admin_hr.rekap.index') }}" class="inline-flex w-fit items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-600/15 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"><svg class="size-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>Kembali</a>
+        </div>
     </header>
 
     @if ($errors->any())
@@ -30,7 +30,7 @@
         </div>
     @endif
 
-    <section aria-labelledby="filter-rekap" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-6">
+    <section aria-labelledby="filter-rekap" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm print:hidden dark:border-slate-800 dark:bg-slate-900 sm:p-6">
         <div>
             <h2 id="filter-rekap" class="text-base font-bold text-slate-900 dark:text-white">Filter laporan</h2>
             <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Tanggal mulai dan selesai harus berada dalam tahun yang sama.</p>
@@ -112,8 +112,8 @@
             <span class="text-xs font-medium text-slate-500 dark:text-slate-400">{{ $rekap->count() }} karyawan</span>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full min-w-[1120px] text-left text-sm">
+        <div class="overflow-x-auto print:overflow-visible">
+            <table class="w-full min-w-[1120px] text-left text-sm print:min-w-0 print:text-[10px]">
                 <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950/60 dark:text-slate-400">
                     <tr>
                         <th scope="col" class="px-5 py-3 font-semibold">Karyawan</th>

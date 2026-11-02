@@ -6,7 +6,10 @@ use App\Http\Controllers\AdminHr\HariLiburController;
 use App\Http\Controllers\AdminHr\PegawaiController;
 use App\Http\Controllers\AdminHr\PersetujuanCutiController as AdminHrPersetujuanCutiController;
 use App\Http\Controllers\AdminHr\RekapController;
+use App\Http\Controllers\AdminHr\RekapPenggunaanBagianController;
 use App\Http\Controllers\AdminHr\RekapSisaCutiController;
+use App\Http\Controllers\AdminHr\RekapStatusCutiController;
+use App\Http\Controllers\AdminHr\RekapTrenBulananController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LanggananPushController;
 use App\Http\Controllers\NotifikasiController;
@@ -70,6 +73,9 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
         Route::post('/persetujuan-cuti/{pengajuanCuti}', [AdminHrPersetujuanCutiController::class, 'store'])->name('persetujuan.store');
         Route::get('/rekap', RekapController::class)->name('rekap.index');
         Route::get('/rekap/sisa-cuti', RekapSisaCutiController::class)->name('rekap.sisa_cuti');
+        Route::get('/rekap/status-cuti', RekapStatusCutiController::class)->name('rekap.status_cuti');
+        Route::get('/rekap/penggunaan-bagian', RekapPenggunaanBagianController::class)->name('rekap.penggunaan_bagian');
+        Route::get('/rekap/tren-bulanan', RekapTrenBulananController::class)->name('rekap.tren_bulanan');
         Route::resource('/hari-libur', HariLiburController::class)
             ->except('show')
             ->parameters(['hari-libur' => 'hariLibur'])
